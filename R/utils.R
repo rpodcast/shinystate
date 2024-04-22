@@ -6,18 +6,23 @@ bookmark_fun <- function(state) {
 bookmarked_fun <- function(url, board, storage_id) {
   url <- sub("^[^?]+", "", url, perl = TRUE)
   shiny::updateQueryString(url)
-
   df <- tibble::tibble(
     storage_id = storage_id,
     url = url,
     timestamp = Sys.time()
   )
 
-  session_df <- pins::pin_read(board, "sessions")
-  pins::pin_write(
-    rbind(session_df, df),
-    "sessions"
-  )
+  # check for existing session entries
+  if ("sessions" %in% pins::pin_list(board)) {
+    existing_df <- pins::pin_read(board, "sessions")
+    df <- rbind(
+      existing_df,
+      df
+    )
+  }
+  print(df)
+
+  pins::pin_write(board, df, "sessions")
 }
 
 restore_fun <- function(state) {

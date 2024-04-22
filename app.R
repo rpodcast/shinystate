@@ -6,15 +6,16 @@ source("R/StorageClass.R")
 ui <- function(req) {
   fluidPage(
     textInput("txt", "Input text"),
-    bookmarkButton(id = "bookmark1")
+    textInput("storage_id", "Enter storage ID"),
+    bookmarkButton(id = "bookmark1"),
+    tableOutput("session_table")
   )
 }
 
 server <- function(input, output, session) {
-  shiny::setBookmarkExclude(c("bookmark1"))
+  shiny::setBookmarkExclude(c("bookmark1", "storage_id"))
 
-  p <- StorageClass$new("test123")
-  p$bookmark_init()
+  p <- StorageClass$new(storage_dir = "storage_dir")
   p$greet()
 
   lastUpdateTime <- NULL
@@ -28,10 +29,20 @@ server <- function(input, output, session) {
   })
 
   observeEvent(input$bookmark1, {
+    p$bookmark_init(input$storage_id)
     session$doBookmark()
+    p$trigger_session()
   })
 
-  #shiny::enableBookmarking("server")
+  sessions_df <- reactive({
+    p$triggers$session
+    p$get_sessions()
+  })
+
+  output$session_table <- renderTable({
+    req(sessions_df())
+    sessions_df()
+  })
 }
 
 shinyApp(ui, server)
