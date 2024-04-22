@@ -14,7 +14,7 @@
 let
  pkgs = import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/d764f230634fa4f86dc8d01c6af9619c7cc5d225.tar.gz") {};
  rpkgs = builtins.attrValues {
-  inherit (pkgs.rPackages) shiny fs languageserver pins s3fs;
+  inherit (pkgs.rPackages) shiny fs languageserver pins archive s3fs;
 };
    system_packages = builtins.attrValues {
   inherit (pkgs) R glibcLocales vscodium nix;
