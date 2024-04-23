@@ -1,15 +1,21 @@
+get_sessions <- function(storage_dir) {
+  if (fs::file_exists(fs::path(storage_dir, "sessions.csv"))) {
+    read.csv(fs::path(storage_dir, "sessions.csv"))
+  }
+}
+
 bookmark_fun <- function(state) {
   message_file <- fs::path(state$dir, "message.txt")
   cat(as.character(Sys.time()), file = message_file)
 }
 
 bookmarked_fun <- function(url, board, storage_id, storage_dir) {
-  #url <- sub("^[^?]+", "", url, perl = TRUE)
-  #shiny::updateQueryString(url)
+  url <- sub("^[^?]+", "", url, perl = TRUE)
+  shiny::updateQueryString(url)
   df <- tibble::tibble(
     storage_id = storage_id,
-    url = url
-    #timestamp = Sys.time()
+    url = url,
+    timestamp = Sys.time()
   )
 
   if (fs::file_exists(fs::path(storage_dir, "sessions.csv"))) {
