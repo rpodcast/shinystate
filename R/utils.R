@@ -3,26 +3,31 @@ bookmark_fun <- function(state) {
   cat(as.character(Sys.time()), file = message_file)
 }
 
-bookmarked_fun <- function(url, board, storage_id) {
-  url <- sub("^[^?]+", "", url, perl = TRUE)
-  shiny::updateQueryString(url)
+bookmarked_fun <- function(url, board, storage_id, storage_dir) {
+  #url <- sub("^[^?]+", "", url, perl = TRUE)
+  #shiny::updateQueryString(url)
   df <- tibble::tibble(
     storage_id = storage_id,
-    url = url,
-    timestamp = Sys.time()
+    url = url
+    #timestamp = Sys.time()
   )
 
-  # check for existing session entries
-  if ("sessions" %in% pins::pin_list(board)) {
-    existing_df <- pins::pin_read(board, "sessions")
-    df <- rbind(
-      existing_df,
-      df
-    )
+  if (fs::file_exists(fs::path(storage_dir, "sessions.csv"))) {
+    existing_df <- read.csv(fs::path(storage_dir, "sessions.csv"))
+    df <- rbind(existing_df, df)
   }
-  print(df)
+  write.csv(df, fs::path(storage_dir, "sessions.csv"), row.names = FALSE)
 
-  pins::pin_write(board, df, "sessions")
+  # check for existing session entries
+  # if ("sessions" %in% pins::pin_list(board)) {
+  #   existing_df <- pins::pin_read(board, "sessions")
+  #   df <- rbind(
+  #     existing_df,
+  #     df
+  #   )
+  # }
+  # print(df)
+  # pins::pin_write(board, df, "sessions")
 }
 
 restore_fun <- function(state) {

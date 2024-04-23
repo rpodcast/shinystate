@@ -52,7 +52,8 @@ StorageClass <- R6::R6Class( # nolint
           bookmarked_fun(
             url = url,
             board = self$board_sessions,
-            storage_id = storage_id
+            storage_id = storage_id,
+            storage_dir = self$storage_dir
           )
         }
       )
@@ -62,9 +63,12 @@ StorageClass <- R6::R6Class( # nolint
       self$triggers$session <- self$triggers$session + 1
     },
     get_sessions = function() {
-      if ("sessions" %in% pins::pin_list(self$board_sessions)) {
-        pins::pin_read(self$board_sessions, "sessions")
+      if (fs::file_exists(fs::path(self$storage_dir, "sessions.csv"))) {
+        read.csv(fs::path(self$storage_dir, "sessions.csv"))
       }
+      # if ("sessions" %in% pins::pin_list(self$board_sessions)) {
+      #   pins::pin_read(self$board_sessions, "sessions")
+      # }
     }
     # sessions_rv = function() {
     #   if ("sessions" %in% pins::pin_list(self$board_sessions)) {

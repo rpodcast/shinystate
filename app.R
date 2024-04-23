@@ -5,9 +5,10 @@ source("R/StorageClass.R")
 
 ui <- function(req) {
   fluidPage(
-    textInput("txt", "Input text"),
+    #textInput("txt", "Input text"),
+    checkboxInput("x", label = "Check me", value = FALSE),
     textInput("storage_id", "Enter storage ID"),
-    bookmarkButton(id = "bookmark1"),
+    actionButton(inputId = "bookmark1", label = "Save"),
     tableOutput("session_table")
   )
 }
@@ -20,13 +21,13 @@ server <- function(input, output, session) {
 
   lastUpdateTime <- NULL
 
-  observeEvent(input$txt, {
-    updateTextInput(
-      session, 
-      "txt",
-      label = glue::glue("Input text (Changed {as.character(Sys.time())})")
-    )
-  })
+  # observeEvent(input$txt, {
+  #   updateTextInput(
+  #     session, 
+  #     "txt",
+  #     label = glue::glue("Input text (Changed {as.character(Sys.time())})")
+  #   )
+  # })
 
   observeEvent(input$bookmark1, {
     p$bookmark_init(input$storage_id)
