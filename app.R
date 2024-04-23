@@ -18,7 +18,11 @@ ui <- function(req) {
 server <- function(input, output, session) {
   shiny::setBookmarkExclude(c("bookmark1", "storage_id"))
 
-  p <- StorageClass$new(storage_dir = "storage_dir")
+  p <- StorageClass$new(
+    board_sessions = pins::board_folder(storage_dir),
+    local_storage_dir = "storage_dir"
+  )
+  
   p$bookmark_init("my_storage")
   p$greet()
 
@@ -26,7 +30,7 @@ server <- function(input, output, session) {
 
   observeEvent(input$txt, {
     updateTextInput(
-      session, 
+      session,
       "txt",
       label = glue::glue("Input text (Changed {as.character(Sys.time())})")
     )
@@ -40,7 +44,6 @@ server <- function(input, output, session) {
   sessions_df <- reactive({
     p$triggers$session
     p$get_sessions()
-    #get_sessions(storage_dir)
   })
 
   output$session_table <- renderTable({
