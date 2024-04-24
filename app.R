@@ -4,6 +4,7 @@ source("R/utils.R")
 source("R/StorageClass.R")
 
 storage_dir <- "storage_dir"
+bookmark_file_dir <- "bookmark_file_dir"
 
 ui <- function(req) {
   fluidPage(
@@ -20,7 +21,7 @@ server <- function(input, output, session) {
 
   p <- StorageClass$new(
     board_sessions = pins::board_folder(storage_dir),
-    local_storage_dir = "storage_dir"
+    local_storage_dir = "bookmark_file_dir"
   )
   
   p$bookmark_init("my_storage")
@@ -37,7 +38,8 @@ server <- function(input, output, session) {
   })
 
   observeEvent(input$bookmark1, {
-    session$doBookmark()
+    #session$doBookmark()
+    p$snapshot()
     p$trigger_session()
   })
 

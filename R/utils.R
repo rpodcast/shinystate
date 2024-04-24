@@ -117,13 +117,12 @@ upload_archive <- function(
   #   storage_id,
   #   shiny_session_id
   # )
-
   bundle_tmp_path <- fs::path_temp(fs::path_ext_set(pin_name, "tar.gz"))
   withr::defer(fs::file_delete(bundle_tmp_path))
 
   archive::archive_write_dir(
     bundle_tmp_path, 
-    fs::path(local_storage_dir, "shiny_bookmarks", shiny_session_id)
+    fs::path(local_storage_dir, storage_id, "shiny_bookmarks", shiny_session_id)
   )
 
   pins::pin_upload(
