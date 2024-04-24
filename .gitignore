@@ -1,3 +1,5 @@
 result
 storage_dir/*
 !storage_dir/README.md
+bookmark_file_dir/*
+!bookmark_file_dir/README.md
