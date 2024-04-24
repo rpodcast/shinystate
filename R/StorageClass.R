@@ -45,10 +45,12 @@ StorageClass <- R6::R6Class( # nolint
       self$triggers$session <- self$triggers$session + 1
     },
     get_sessions = function() {
+      self$triggers$session
       import_sessions(self$board_sessions)
     },
     snapshot = function(session = shiny::getDefaultReactiveDomain()) {
       session$doBookmark()
+      self$trigger_session()
     }
   )
 )
