@@ -1,0 +1,19 @@
+{
+    "shinyapp": {
+        "prefix": "shinyapp",
+        "body": [
+            "library(shiny)",
+            "library(bslib)",
+            "",
+            "ui <- page_${1:sidebar}(",
+            "  ${0}",
+            ")",
+            "",
+            "server <- function(input, output, session) {",
+            "",
+            "}",
+            "",
+            "shinyApp(ui, server)"
+        ]
+    }
+}
