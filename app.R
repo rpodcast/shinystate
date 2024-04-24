@@ -1,4 +1,7 @@
+options(shiny.devmode = TRUE)
 library(shiny)
+library(bslib)
+library(rlang)
 
 source("R/utils.R")
 source("R/StorageClass.R")
@@ -6,52 +9,94 @@ source("R/StorageClass.R")
 storage_dir <- "storage_dir"
 bookmark_file_dir <- "bookmark_file_dir"
 
-ui <- function(req) {
-  fluidPage(
-    textInput("txt", "Input text"),
-    #checkboxInput("x", label = "Check me", value = FALSE),
-    #textInput("storage_id", "Enter storage ID"),
-    actionButton(inputId = "bookmark1", label = "Save"),
-    tableOutput("session_table")
+ui <- page_sidebar(
+  title = "Sessions Demo",
+  theme = bs_theme(
+    base_font = font_google("Roboto", local = FALSE)
+  ),
+  sidebar = sidebar(
+    title = NULL,
+    selectInput(
+      "vars",
+      "Variables to display",
+      choices = c("area", "peri", "shape", "perm"),
+      selected = NULL,
+      multiple = TRUE,
+      selectize = TRUE
+    ),
+    actionButton(
+      "bookmark1",
+      label = "Save session"
+    ),
+    actionButton(
+      "restore",
+      label = "Restore session"
+    )
+  ),
+  navset_card_underline(
+    id = "tabs",
+    nav_panel(
+      title = "Plot",
+      value = "plot",
+      plotOutput("plot")
+    ),
+    nav_panel(
+      title = "Summary",
+      value = "summary",
+      verbatimTextOutput("summary")
+    ),
+    nav_panel(
+      title = "Table",
+      value = "table",
+      tableOutput("table")
+    )
   )
-}
+)
 
 server <- function(input, output, session) {
-  shiny::setBookmarkExclude(c("bookmark1", "storage_id"))
-
+  shiny::setBookmarkExclude(c("bookmark1", "restore", "storage_id"))
   p <- StorageClass$new(
     board_sessions = pins::board_folder(storage_dir),
     local_storage_dir = "bookmark_file_dir"
   )
-  
   p$bookmark_init("my_storage")
   p$greet()
 
-  lastUpdateTime <- NULL
-
-  observeEvent(input$txt, {
-    updateTextInput(
-      session,
-      "txt",
-      label = glue::glue("Input text (Changed {as.character(Sys.time())})")
-    )
+  data <- reactive({
+    if (length(input$vars) == 0) {
+      return(rock)
+    } else {
+      rock[, input$vars]
+    }
   })
+
+  output$plot <- renderPlot({
+    req(data())
+    plot(data())
+  })
+
+  output$summary <- renderPrint({
+    req(data())
+    summary(data())
+  })
+
+  output$table <- renderTable({
+    req(data())
+    data()
+  }, rownames = TRUE)
 
   observeEvent(input$bookmark1, {
-    #session$doBookmark()
     p$snapshot()
-    p$trigger_session()
   })
 
-  sessions_df <- reactive({
-    p$triggers$session
-    p$get_sessions()
-  })
+  # sessions_df <- reactive({
+  #   p$get_sessions()
+  # })
 
-  output$session_table <- renderTable({
-    req(sessions_df())
-    sessions_df()
-  })
+  # output$session_table <- renderTable({
+  #   req(sessions_df())
+  #   sessions_df()
+  # })
 }
 
 shinyApp(ui, server)
