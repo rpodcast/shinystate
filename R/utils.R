@@ -63,7 +63,7 @@ bookmark_fun <- function(state) {
   }
 }
 
-bookmarked_fun <- function(url, board_sessions) {
+bookmarked_fun <- function(url, board_sessions, session_metadata = NULL) {
   id <- parse_bookmark_id(url)
   df <- create_session_df(url = url)
 
@@ -170,41 +170,41 @@ bookmark_modal_load_ui <- function(id) {
   )
 }
 
-bookmark_init <- function(filepath = file.path("shinysessions", "bookmarks.sqlite")) {
-  if (!dir.exists(dirname(filepath))) {
-    dir.create(dirname(filepath))
-  }
+# bookmark_init <- function(filepath = file.path("shinysessions", "bookmarks.sqlite")) {
+#   if (!dir.exists(dirname(filepath))) {
+#     dir.create(dirname(filepath))
+#   }
   
-  bookmark_pool <- local({
-    pool <- dbPool(SQLite(), dbname = filepath)
-    onStop(function() {
-      poolClose(pool)
-    })
-    pool
-  })
+#   bookmark_pool <- local({
+#     pool <- dbPool(SQLite(), dbname = filepath)
+#     onStop(function() {
+#       poolClose(pool)
+#     })
+#     pool
+#   })
   
-  bookmarks <- reactivePoll(1000, NULL,
-    function() {
-      file.info(filepath)$mtime
-    },
-    function() {
-      bookmark_pool %>% tbl("bookmarks") %>%
-        arrange(desc(timestamp)) %>%
-        collect() %>%
-        mutate(
-          timestamp = friendly_time(as.POSIXct(timestamp, origin = "1970-01-01")),
-          link = sprintf("<a href=\"%s\">%s</a>",
-            htmltools::htmlEscape(url, TRUE),
-            htmltools::htmlEscape(label, TRUE))
-        )
-    }
-  )
+#   bookmarks <- reactivePoll(1000, NULL,
+#     function() {
+#       file.info(filepath)$mtime
+#     },
+#     function() {
+#       bookmark_pool %>% tbl("bookmarks") %>%
+#         arrange(desc(timestamp)) %>%
+#         collect() %>%
+#         mutate(
+#           timestamp = friendly_time(as.POSIXct(timestamp, origin = "1970-01-01")),
+#           link = sprintf("<a href=\"%s\">%s</a>",
+#             htmltools::htmlEscape(url, TRUE),
+#             htmltools::htmlEscape(label, TRUE))
+#         )
+#     }
+#   )
   
-  list(
-    pool = bookmark_pool,
-    reader = bookmarks
-  )
-}
+#   list(
+#     pool = bookmark_pool,
+#     reader = bookmarks
+#   )
+# }
 
 bookmark_mod <- function(id, storage) {
   shiny::moduleServer(
