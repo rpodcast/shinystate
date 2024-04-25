@@ -4,7 +4,7 @@ StorageClass <- R6::R6Class( # nolint
     board_sessions = NULL,
     board_name = "sessions",
     local_storage_dir = NULL,
-    #session_metadata = NULL,
+    session_metadata = NULL,
     triggers = shiny::reactiveValues(session = 0),
     initialize = function(
       board_sessions = NULL,
