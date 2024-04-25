@@ -15,16 +15,17 @@ import_sessions <- function(board_sessions) {
   pins::pin_read(board_sessions, name = "sessions")
 }
 
-create_session_df <- function(url) {
+create_session_df <- function(url, session_metadata = NULL) {
   id <- parse_bookmark_id(url)
   url <- sub("^[^?]+", "", url, perl = TRUE)
   shiny::updateQueryString(url)
-  # custom_vars <- c(
-  #   list(id = id, url = url),
-  #   session_metadata
-  # )
+  custom_vars <- c(
+    list(id = id, url = url),
+    session_metadata
+  )
 
-  df <- tibble::tibble(id = id, url = url)
+  #df <- tibble::tibble(id = id, url = url)
+  df <- tibble::tibble(!!!custom_vars)
   return(df)
 }
 
