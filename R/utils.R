@@ -2,6 +2,8 @@ parse_bookmark_id <- function(url) {
   stringr::str_extract(url, "(?<=\\=).*")
 }
 
+gen_session_link <- function()
+
 save_session <- function(df, board_sessions, name = "sessions") {
   pins::pin_write(board_sessions, df, name)
 }
@@ -16,6 +18,20 @@ import_sessions <- function(board_sessions, name = "sessions") {
   # }
   if (empty_sessions(board_sessions, name)) return(NULL)
   pins::pin_read(board_sessions, name)
+}
+
+create_session_df <- function(url, storage_id, name) {
+  id <- parse_bookmark_id(url)
+  url <- sub("^[^?]+", "", url, perl = TRUE)
+  shiny::updateQueryString(url)
+  df <- tibble::tibble(
+    name = name,
+    storage_id = storage_id,
+    url = url,
+    id = id,
+    timestamp = Sys.time()
+  )
+  return(df)
 }
 
 save_interface <- function(
@@ -47,14 +63,15 @@ bookmark_fun <- function(state) {
 bookmarked_fun <- function(url, storage_id, board_sessions, name = "sessions", local_storage_dir = NULL) {
   message(url)
   id <- parse_bookmark_id(url)
-  url <- sub("^[^?]+", "", url, perl = TRUE)
-  shiny::updateQueryString(url)
-  df <- tibble::tibble(
-    storage_id = storage_id,
-    url = url,
-    id = id,
-    timestamp = Sys.time()
-  )
+  df <- create_session_df(url, storage_id, name = shiny::getShinyOption("session_name"))
+  # url <- sub("^[^?]+", "", url, perl = TRUE)
+  # shiny::updateQueryString(url)
+  # df <- tibble::tibble(
+  #   storage_id = storage_id,
+  #   url = url,
+  #   id = id,
+  #   timestamp = Sys.time()
+  # )
 
   if (!empty_sessions(board_sessions, name)) {
     df <- rbind(
@@ -172,12 +189,24 @@ bookmark_modal_load_ui <- function(id) {
   )
 }
 
-bookmark_mod <- function(id) {
+bookmark_mod <- function(id, storage) {
   shiny::moduleServer(
     id,
     function(input, output, session) {
       # TODO: Add more code for restore
       ns <- session$ns
+
+      # restore session modal
+      shiny::observeEvent(input$show_load_modal, {
+        shiny::showModal(
+          shiny::modalDialog(
+            shiny::tableOutput(ns("sessions_table")),
+            size = "xl"
+          )
+        )
+      })
+
+      # save session modal
       shiny::observeEvent(input$show_save_modal, {
         shiny::showModal(
           shiny::modalDialog(
@@ -186,6 +215,7 @@ bookmark_mod <- function(id) {
               "Give this session a name"
             ),
             easyClose = TRUE,
+            size = "m",
             footer = tagList(
               shiny::modalButton("Cancel"),
               shiny::actionButton(
@@ -195,6 +225,16 @@ bookmark_mod <- function(id) {
             )
           )
         )
+      })
+
+      # sessions table
+      output$sessions_table <- shiny::renderTable({
+        storage$get_sessions()
+      })
+
+      # save session
+      observeEvent(input$save, {
+        storage$snapshot(name = input$save_name)
       })
     }
   )

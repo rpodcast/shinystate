@@ -49,12 +49,12 @@ ui <- page_sidebar(
 
 server <- function(input, output, session) {
   shiny::setBookmarkExclude(c("bookmark1", "restore", "storage_id"))
-  p <- StorageClass$new(
+  storage <- StorageClass$new(
     board_sessions = pins::board_folder(storage_dir),
     local_storage_dir = "bookmark_file_dir"
   )
-  p$bookmark_init("my_storage")
-  p$greet()
+  storage$bookmark_init("my_storage")
+  #storage$greet()
 
   data <- reactive({
     if (length(input$vars) == 0) {
@@ -79,7 +79,7 @@ server <- function(input, output, session) {
     data()
   }, rownames = TRUE)
 
-  bookmark_mod("bookmark")
+  bookmark_mod("bookmark", storage)
 
   # observeEvent(input$bookmark1, {
   #   p$snapshot()
