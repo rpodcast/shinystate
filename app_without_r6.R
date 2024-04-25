@@ -3,18 +3,22 @@ options(shiny.autoload.r = FALSE)
 library(shiny)
 library(bslib)
 library(rlang)
+library(DBI)
+library(RSQLite)
+library(pool)
+library(dplyr)
+library(lubridate)
 
 source("R/utils.R")
-source("R/StorageClass.R")
+#source("R/StorageClass.R")
 
 storage_dir <- "storage_dir"
 bookmark_file_dir <- "bookmark_file_dir"
 
-storage <- StorageClass$new(
-  board_sessions = pins::board_folder(storage_dir),
-  local_storage_dir = "bookmark_file_dir"
-)
-#storage$bookmark_init("my_storage")
+shiny::shinyOptions(save.interface = save_interface)
+shiny::shinyOptions(load.interface = load_interface)
+
+bmi <- bookmark_init()
 
 ui <- page_sidebar(
   title = "Sessions Demo",
@@ -59,12 +63,13 @@ ui <- page_sidebar(
 )
 
 server <- function(input, output, session) {
-  shiny::setBookmarkExclude(c("bookmark1", "restore", "storage_id"))
-  # storage <- StorageClass$new(
-  #   board_sessions = pins::board_folder(storage_dir),
-  #   local_storage_dir = "bookmark_file_dir"
-  # )
-  storage$bookmark_init("my_storage")
+  #shiny::setBookmarkExclude(c("bookmark1", "restore", "storage_id"))
+  bookmark_mod("bookmark", bmi)
+#   storage <- StorageClass$new(
+#     board_sessions = pins::board_folder(storage_dir),
+#     local_storage_dir = "bookmark_file_dir"
+#   )
+#   storage$bookmark_init("my_storage")
   #storage$greet()
 
   data <- reactive({
@@ -89,21 +94,8 @@ server <- function(input, output, session) {
     req(data())
     data()
   }, rownames = TRUE)
-
-  bookmark_mod("bookmark", storage)
-
-  # observeEvent(input$bookmark1, {
-  #   p$snapshot()
-  # })
-
-  # sessions_df <- reactive({
-  #   p$get_sessions()
-  # })
-
-  # output$session_table <- renderTable({
-  #   req(sessions_df())
-  #   sessions_df()
-  # })
 }
+
+enableBookmarking("server")
 
 shinyApp(ui, server)
