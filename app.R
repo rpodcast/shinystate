@@ -24,14 +24,8 @@ ui <- page_sidebar(
       multiple = TRUE,
       selectize = TRUE
     ),
-    actionButton(
-      "bookmark1",
-      label = "Save session"
-    ),
-    actionButton(
-      "restore",
-      label = "Restore session"
-    )
+    bookmark_modal_save_ui("bookmark"),
+    bookmark_modal_load_ui("bookmark")
   ),
   navset_card_underline(
     id = "tabs",
@@ -85,9 +79,11 @@ server <- function(input, output, session) {
     data()
   }, rownames = TRUE)
 
-  observeEvent(input$bookmark1, {
-    p$snapshot()
-  })
+  bookmark_mod("bookmark")
+
+  # observeEvent(input$bookmark1, {
+  #   p$snapshot()
+  # })
 
   # sessions_df <- reactive({
   #   p$get_sessions()

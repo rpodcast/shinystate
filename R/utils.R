@@ -155,3 +155,47 @@ download_archive <- function(
     fs::file_copy(local_path, new_path = fs::path(download_dir, fs::path_ext_set(pin_name, "tar.gz")))
   }
 }
+
+bookmark_modal_save_ui <- function(id) {
+  ns <- shiny::NS(id)
+
+  tagList(
+    shiny::actionButton(ns("show_save_modal"), "Save session")
+  )
+}
+
+bookmark_modal_load_ui <- function(id) {
+  ns <- shiny::NS(id)
+
+  tagList(
+    shiny::actionButton(ns("show_load_modal"), "Restore session")
+  )
+}
+
+bookmark_mod <- function(id) {
+  shiny::moduleServer(
+    id,
+    function(input, output, session) {
+      # TODO: Add more code for restore
+      ns <- session$ns
+      shiny::observeEvent(input$show_save_modal, {
+        shiny::showModal(
+          shiny::modalDialog(
+            shiny::textInput(
+              ns("save_name"),
+              "Give this session a name"
+            ),
+            easyClose = TRUE,
+            footer = tagList(
+              shiny::modalButton("Cancel"),
+              shiny::actionButton(
+                ns("save"),
+                "Save"
+              )
+            )
+          )
+        )
+      })
+    }
+  )
+}
