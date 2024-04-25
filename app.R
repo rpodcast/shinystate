@@ -24,6 +24,10 @@ ui <- page_sidebar(
       multiple = TRUE,
       selectize = TRUE
     ),
+    textInput(
+      "sidebar_text",
+      "Enter text",
+    ),
     bookmark_modal_save_ui("bookmark"),
     bookmark_modal_load_ui("bookmark")
   ),

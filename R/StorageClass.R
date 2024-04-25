@@ -27,8 +27,9 @@ StorageClass <- R6::R6Class( # nolint
       shiny::shinyOptions(storage_id = storage_id)
       shiny::shinyOptions(save.interface = save_interface)
       shiny::shinyOptions(load.interface = load_interface)
-      shiny::onBookmark(bookmark_fun)
-      shiny::onRestore(restore_fun)
+      
+      #shiny::onBookmark(bookmark_fun)
+      #shiny::onRestore(restore_fun)
       shiny::onBookmarked(
         function(url) {
           bookmarked_fun(

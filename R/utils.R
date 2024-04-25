@@ -2,7 +2,9 @@ parse_bookmark_id <- function(url) {
   stringr::str_extract(url, "(?<=\\=).*")
 }
 
-gen_session_link <- function()
+gen_session_link <- function(id, url) {
+  tags$a(href = url, id)
+}
 
 save_session <- function(df, board_sessions, name = "sessions") {
   pins::pin_write(board_sessions, df, name)
@@ -20,15 +22,15 @@ import_sessions <- function(board_sessions, name = "sessions") {
   pins::pin_read(board_sessions, name)
 }
 
-create_session_df <- function(url, storage_id, name) {
+create_session_df <- function(url, storage_id, name = NULL) {
   id <- parse_bookmark_id(url)
   url <- sub("^[^?]+", "", url, perl = TRUE)
   shiny::updateQueryString(url)
   df <- tibble::tibble(
-    name = name,
+    id = id,
     storage_id = storage_id,
     url = url,
-    id = id,
+    name = name,
     timestamp = Sys.time()
   )
   return(df)
@@ -41,16 +43,18 @@ save_interface <- function(
   storage_id = shiny::getShinyOption("storage_id")
 ) {
     state_dir <- fs::path(local_storage_dir, storage_id, "shiny_bookmarks", id)
+    message(state_dir)
     if (!fs::dir_exists(state_dir)) fs::dir_create(state_dir)
     callback(state_dir)
   }
 
 load_interface <- function(
-  id, 
+  id,
   callback,
   local_storage_dir = shiny::getShinyOption("local_storage_dir"),
   storage_id = shiny::getShinyOption("storage_id")
 ) {
+  message("entered load_interface")
   state_dir <- fs::path(local_storage_dir, storage_id, "shiny_bookmarks", id)
   callback(state_dir)
 }
@@ -195,12 +199,13 @@ bookmark_mod <- function(id, storage) {
     function(input, output, session) {
       # TODO: Add more code for restore
       ns <- session$ns
-
+      shiny::setBookmarkExclude(c("save_name", "save", "show_save_modal", "show_load_modal"))
       # restore session modal
       shiny::observeEvent(input$show_load_modal, {
         shiny::showModal(
           shiny::modalDialog(
-            shiny::tableOutput(ns("sessions_table")),
+            shiny::uiOutput(ns("sessions_list")),
+            #shiny::tableOutput(ns("sessions_table")),
             size = "xl"
           )
         )
@@ -232,9 +237,20 @@ bookmark_mod <- function(id, storage) {
         storage$get_sessions()
       })
 
+      # sessions list
+      output$sessions_list <- shiny::renderUI({
+        df <- storage$get_sessions()
+        tagList(
+          purrr::map2(df$id, df$url, ~{
+            gen_session_link(id = .x, url = .y)
+          })
+        )
+      })
+
       # save session
       observeEvent(input$save, {
         storage$snapshot(name = input$save_name)
+        shiny::removeModal()
       })
     }
   )
