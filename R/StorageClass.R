@@ -4,19 +4,16 @@ StorageClass <- R6::R6Class( # nolint
     board_sessions = NULL,
     board_name = "sessions",
     local_storage_dir = NULL,
-    local_project_dir = NULL,
-    storage_dir = NULL,
-    session_metadata = NULL,
+    #session_metadata = NULL,
     triggers = shiny::reactiveValues(session = 0),
     initialize = function(
-      board_name = "sessions",
       board_sessions = NULL,
       local_storage_dir = NULL) {
       # create storage directory and pins board
       if (is.null(local_storage_dir)) local_storage_dir <- fs::path_temp("shinysessions")
       if (is.null(board_sessions)) board_sessions <- pins::board_temp()
       self$board_sessions <- board_sessions
-      self$board_name <- board_name
+      #self$board_name <- board_name
       self$local_storage_dir <- local_storage_dir
 
       # override shiny options for bookmark state
@@ -31,10 +28,10 @@ StorageClass <- R6::R6Class( # nolint
       #fs::dir_create(self$local_storage_dir, storage_id, "shiny_bookmarks")
       
       # override shiny options for bookmark state
-      shiny::shinyOptions(local_storage_dir = self$local_storage_dir)
+      #shiny::shinyOptions(local_storage_dir = self$local_storage_dir)
       # shiny::shinyOptions(storage_id = storage_id)
-      # shiny::shinyOptions(save.interface = save_interface)
-      # shiny::shinyOptions(load.interface = load_interface)
+      shiny::shinyOptions(save.interface = save_interface)
+      shiny::shinyOptions(load.interface = load_interface)
       
       shiny::onBookmark(bookmark_fun)
       shiny::onRestore(restore_fun)
@@ -43,7 +40,6 @@ StorageClass <- R6::R6Class( # nolint
           bookmarked_fun(
             url = url,
             board = self$board_sessions,
-            board_name = self$board_name,
             session_metadata = self$session_metadata
           )
         }
@@ -55,17 +51,10 @@ StorageClass <- R6::R6Class( # nolint
     },
     get_sessions = function() {
       self$triggers$session
-      import_sessions(self$board_sessions, self$board_name)
+      import_sessions(self$board_sessions)
     },
     add_session_metadata = function(session_metadata) {
       self$session_metadata <- session_metadata
-    },
-    get_active_project = function() {
-      if (is.null(shiny::getShinyOption("local_project_dir"))) {
-        return(NULL)
-      } else {
-        return(shiny::getShinyOption("local_project_dir"))
-      }
     },
     snapshot = function(session = shiny::getDefaultReactiveDomain()) {
       session$doBookmark()
