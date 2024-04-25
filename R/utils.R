@@ -10,21 +10,21 @@ empty_sessions <- function(board_sessions, board_name = "sessions") {
   !board_name %in% pins::pin_list(board_sessions)
 }
 
-import_sessions <- function(board_sessions, board_name = "sessions") {
-  if (empty_sessions(board_sessions, board_name)) return(NULL)
-  pins::pin_read(board_sessions, board_name)
+import_sessions <- function(board_sessions) {
+  if (empty_sessions(board_sessions, "sessions")) return(NULL)
+  pins::pin_read(board_sessions, name = "sessions")
 }
 
-create_session_df <- function(url, session_metadata = NULL) {
+create_session_df <- function(url) {
   id <- parse_bookmark_id(url)
   url <- sub("^[^?]+", "", url, perl = TRUE)
   shiny::updateQueryString(url)
-  custom_vars <- c(
-    list(id = id, url = url),
-    session_metadata
-  )
+  # custom_vars <- c(
+  #   list(id = id, url = url),
+  #   session_metadata
+  # )
 
-  df <- tibble::tibble(!!!custom_vars)
+  df <- tibble::tibble(id = id, url = url)
   return(df)
 }
 
@@ -63,18 +63,18 @@ bookmark_fun <- function(state) {
   }
 }
 
-bookmarked_fun <- function(url, board_sessions, board_name = "sessions", session_metadata = NULL) {
+bookmarked_fun <- function(url, board_sessions) {
   id <- parse_bookmark_id(url)
-  df <- create_session_df(url = url, session_metadata = session_metadata)
+  df <- create_session_df(url = url)
 
-  if (!empty_sessions(board_sessions, board_name)) {
+  if (!empty_sessions(board_sessions)) {
     df <- rbind(
-      import_sessions(board_sessions, board_name),
+      import_sessions(board_sessions),
       df
     )
   }
 
-  save_session(df, board_sessions, board_name)
+  save_session(df, board_sessions)
   #upload_archive(board_sessions, local_storage_dir, storage_id, id)
 }
 
@@ -167,6 +167,42 @@ bookmark_modal_load_ui <- function(id) {
 
   tagList(
     shiny::actionButton(ns("show_load_modal"), "Restore session")
+  )
+}
+
+bookmark_init <- function(filepath = file.path("shinysessions", "bookmarks.sqlite")) {
+  if (!dir.exists(dirname(filepath))) {
+    dir.create(dirname(filepath))
+  }
+  
+  bookmark_pool <- local({
+    pool <- dbPool(SQLite(), dbname = filepath)
+    onStop(function() {
+      poolClose(pool)
+    })
+    pool
+  })
+  
+  bookmarks <- reactivePoll(1000, NULL,
+    function() {
+      file.info(filepath)$mtime
+    },
+    function() {
+      bookmark_pool %>% tbl("bookmarks") %>%
+        arrange(desc(timestamp)) %>%
+        collect() %>%
+        mutate(
+          timestamp = friendly_time(as.POSIXct(timestamp, origin = "1970-01-01")),
+          link = sprintf("<a href=\"%s\">%s</a>",
+            htmltools::htmlEscape(url, TRUE),
+            htmltools::htmlEscape(label, TRUE))
+        )
+    }
+  )
+  
+  list(
+    pool = bookmark_pool,
+    reader = bookmarks
   )
 }
 
