@@ -66,7 +66,7 @@ bookmark_fun <- function(state) {
 
 bookmarked_fun <- function(url, board_sessions, session_metadata = NULL) {
   id <- parse_bookmark_id(url)
-  df <- create_session_df(url = url)
+  df <- create_session_df(url = url, session_metadata = session_metadata)
 
   if (!empty_sessions(board_sessions)) {
     df <- rbind(
