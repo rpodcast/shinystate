@@ -13,7 +13,7 @@ source("modules/bookmark_module.R")
 source("modules/summarize_module.R")
 
 storage <- StorageClass$new(local_storage_dir = "storage_dir")
-bmi <- bookmark_init(filepath = file.path(shiny::getShinyOption("local_storage_dir"), "bookmarks.sqlite"))
+storage$bookmark_init()
 
 ui <- function(req) {
   tagList(
@@ -71,7 +71,7 @@ ui <- function(req) {
 }
 
 server <- function(input, output, session) {
-  callModule(bookmark_mod, "bookmark", bmi,
+  callModule(bookmark_mod, "bookmark", storage$bmi_storage,
     thumbnailFunc = function() { do_plot() }
   )()
   

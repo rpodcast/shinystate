@@ -80,6 +80,7 @@ StorageClass <- R6::R6Class( # nolint
   "StorageClass",
   public = list(
     local_storage_dir = NULL,
+    bmi_storage = NULL,
     initialize = function(local_storage_dir = NULL) {
       if (is.null(local_storage_dir)) {
         local_storage_dir <- fs::path_temp("shinysessions")
@@ -88,5 +89,42 @@ StorageClass <- R6::R6Class( # nolint
       shiny::shinyOptions(local_storage_dir = local_storage_dir)
       shiny::shinyOptions(save.interface = saveInterfaceLocal)
       shiny::shinyOptions(load.interface = loadInterfaceLocal)
+    },
+    bookmark_init = function() {
+      filepath <- file.path(self$local_storage_dir, "bookmarks.sqlite")
+
+      if (!dir.exists(dirname(filepath))) {
+        dir.create(dirname(filepath))
+      }
+      
+      bookmark_pool <- local({
+        pool <- dbPool(SQLite(), dbname = filepath)
+        onStop(function() {
+          poolClose(pool)
+        })
+        pool
+      })
+      
+      bookmarks <- reactivePoll(1000, NULL,
+        function() {
+          file.info(filepath)$mtime
+        },
+        function() {
+          bookmark_pool %>% tbl("bookmarks") %>%
+            arrange(desc(timestamp)) %>%
+            collect() %>%
+            mutate(
+              timestamp = friendly_time(as.POSIXct(timestamp, origin = "1970-01-01")),
+              link = sprintf("<a href=\"%s\">%s</a>",
+                htmltools::htmlEscape(url, TRUE),
+                htmltools::htmlEscape(label, TRUE))
+            )
+        }
+      )
+      
+      self$bmi_storage <- list(
+        pool = bookmark_pool,
+        reader = bookmarks
+      )
     }
   ))
