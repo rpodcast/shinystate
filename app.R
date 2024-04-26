@@ -129,6 +129,6 @@ server <- function(input, output, session) {
   )
 }
 
-enableBookmarking("server")
-
-shinyApp(ui, server)
+shinyApp(ui, server, onStart = function() {
+  shiny::enableBookmarking("server")
+})
