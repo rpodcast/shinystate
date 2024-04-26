@@ -62,3 +62,16 @@ on_bookmarked <- function(url, thumbnailFunc, save_name, pool, session = shiny::
   
   dbWriteTable(pool, "bookmarks", df, append = TRUE)
 }
+
+set_onbookmarked <- function() {
+  function() {
+    onBookmarked(function(url) {
+      on_bookmarked(
+        url = url,
+        thumbnailFunc = thumbnailFunc,
+        save_name = input$save_name,
+        pool = instance$pool
+      )
+    })
+  }
+}

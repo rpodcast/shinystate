@@ -69,6 +69,7 @@ ui <- function(req) {
 }
 
 server <- function(input, output, session) {
+  set_onbookmarked()
   callModule(bookmark_mod, "bookmark", bmi,
     thumbnailFunc = function() { do_plot() }
   )()
