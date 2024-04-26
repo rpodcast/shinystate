@@ -34,41 +34,39 @@ set_bookmark_options <- function(local_storage_dir = NULL) {
   shiny::shinyOptions(load.interface = loadInterfaceLocal)
 }
 
-on_bookmarked <- function(url, thumbnailFunc, save_name, pool, session = shiny::getDefaultReactiveDomain()) {
+create_session_data <- function(url, metadata_list = NULL) {
   url <- sub("^[^?]+", "", url, perl = TRUE)
   shiny::updateQueryString(url)
-  
-  thumbnail <- if (!is.null(thumbnailFunc)) {
-    pngfile <- plotPNG(function() {
-      try(thumbnailFunc(), silent = TRUE)
-    }, height = 300)
-    on.exit(unlink(pngfile), add = TRUE)
-    base64enc::dataURI(mime = "image/png", file = pngfile)
-  } else {
-    NA_character_
-  }
+
+  metadata_list <- c(
+    url,
+    timestamp = Sys.time(),
+    metadata_list
+  )
+
+  df <- tibble::tibble(!!!metadata_list)
+  return(df)
+}
+
+on_bookmarked <- function(url, save_name, pool) {
+  url <- sub("^[^?]+", "", url, perl = TRUE)
+  shiny::updateQueryString(url)
   
   df <- data.frame(
     timestamp = Sys.time(),
     url = url,
     label = save_name,
-    author = if (!is.null(session$user))
-      session$user
-    else
-      paste("Anonymous @", session$request$REMOTE_ADDR),
-    thumbnail = thumbnail,
     stringsAsFactors = FALSE
   )
   
   dbWriteTable(pool, "bookmarks", df, append = TRUE)
 }
 
-set_onbookmarked <- function(thumbnailFunc, save_name, pool) {
+set_onbookmarked <- function(save_name, pool) {
   function() {
     onBookmarked(function(url) {
       on_bookmarked(
         url = url,
-        thumbnailFunc = thumbnailFunc,
         save_name = save_name,
         pool = pool
       )
@@ -130,9 +128,8 @@ StorageClass <- R6::R6Class( # nolint
     snapshot = function(session = shiny::getDefaultReactiveDomain()) {
       session$doBookmark()
     },
-    register_metadata = function(thumbnailFunc, save_name, pool) {
+    register_metadata = function(save_name, pool) {
       set_onbookmarked(
-        thumbnailFunc = thumbnailFunc,
         save_name = save_name,
         pool = pool
       )

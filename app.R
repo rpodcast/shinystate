@@ -71,9 +71,7 @@ ui <- function(req) {
 }
 
 server <- function(input, output, session) {
-  callModule(bookmark_mod, "bookmark", storage,
-    thumbnailFunc = function() { do_plot() }
-  )()
+  callModule(bookmark_mod, "bookmark", storage)()
   
   datasetExpr <- reactive(expr(mtcars %>% mutate(cyl = factor(cyl))))
   filterExpr <- callModule(filter_mod, "filter", datasetExpr)

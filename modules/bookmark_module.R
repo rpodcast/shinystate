@@ -28,7 +28,7 @@ bookmark_load_ui <- function(id) {
   )  
 }
 
-bookmark_mod <- function(input, output, session, storage, thumbnailFunc) {
+bookmark_mod <- function(input, output, session, storage) {
   ns <- session$ns
   session_df <- reactive({
     message("entered session_df")
@@ -141,7 +141,7 @@ bookmark_mod <- function(input, output, session, storage, thumbnailFunc) {
     )
   })
   
-  storage$register_metadata(thumbnailFunc, input$save_name, storage$bmi_storage$pool)
+  storage$register_metadata(input$save_name, storage$bmi_storage$pool)
 }
 
 
