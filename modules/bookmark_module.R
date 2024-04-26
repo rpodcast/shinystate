@@ -25,45 +25,8 @@ bookmark_load_ui <- function(id) {
   ns <- NS(id)
   tagList(
     uiOutput(ns("saved_sessions"))
-  )
-  
+  )  
 }
-
-# bookmark_init <- function(filepath = file.path("shinysessions", "bookmarks.sqlite")) {
-#   if (!dir.exists(dirname(filepath))) {
-#     dir.create(dirname(filepath))
-#   }
-  
-#   bookmark_pool <- local({
-#     pool <- dbPool(SQLite(), dbname = filepath)
-#     onStop(function() {
-#       poolClose(pool)
-#     })
-#     pool
-#   })
-  
-#   bookmarks <- reactivePoll(1000, NULL,
-#     function() {
-#       file.info(filepath)$mtime
-#     },
-#     function() {
-#       bookmark_pool %>% tbl("bookmarks") %>%
-#         arrange(desc(timestamp)) %>%
-#         collect() %>%
-#         mutate(
-#           timestamp = friendly_time(as.POSIXct(timestamp, origin = "1970-01-01")),
-#           link = sprintf("<a href=\"%s\">%s</a>",
-#             htmltools::htmlEscape(url, TRUE),
-#             htmltools::htmlEscape(label, TRUE))
-#         )
-#     }
-#   )
-  
-#   list(
-#     pool = bookmark_pool,
-#     reader = bookmarks
-#   )
-# }
 
 bookmark_mod <- function(input, output, session, storage, thumbnailFunc) {
   ns <- session$ns
@@ -90,36 +53,34 @@ bookmark_mod <- function(input, output, session, storage, thumbnailFunc) {
     )
   })
   
-  output$saved_sessions <- renderUI({
-    fluidRow(
-      storage$bmi_storage$reader() %>%
-        select(url, label, author, timestamp, thumbnail) %>%
-        rowwise() %>%
-        do(ui = with(., {
-          tags$div(class = "col-md-4",
-            tags$div(class = "thumbnail",
-              if (!is.null(thumbnail) && isTRUE(!is.na(thumbnail))) {
-                tags$a(href = url, tags$img(src = thumbnail))
-              },
-              tags$div(class = "caption",
-                tags$h4(tags$a(href = url, label)),
-                tags$p(
-                  author,
-                  tags$br(),
-                  tags$small(timestamp)
-                )
-              )
-            )
-          )
-        })) %>%
-        pull(ui)
-    )
-  })
+  # output$saved_sessions <- renderUI({
+  #   fluidRow(
+  #     storage$bmi_storage$reader() %>%
+  #       select(url, label, author, timestamp, thumbnail) %>%
+  #       rowwise() %>%
+  #       do(ui = with(., {
+  #         tags$div(class = "col-md-4",
+  #           tags$div(class = "thumbnail",
+  #             if (!is.null(thumbnail) && isTRUE(!is.na(thumbnail))) {
+  #               tags$a(href = url, tags$img(src = thumbnail))
+  #             },
+  #             tags$div(class = "caption",
+  #               tags$h4(tags$a(href = url, label)),
+  #               tags$p(
+  #                 author,
+  #                 tags$br(),
+  #                 tags$small(timestamp)
+  #               )
+  #             )
+  #           )
+  #         )
+  #       })) %>%
+  #       pull(ui)
+  #   )
+  # })
 
   output$saved_sessions <- renderUI({
-    df <- storage$bmi_storage$reader() %>%
-      select(url, label, author, timestamp, thumbnail) %>%
-      collect()
+    df <- session_df()
 
     radioButtons(
       ns("session_choice"),

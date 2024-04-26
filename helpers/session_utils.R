@@ -114,10 +114,7 @@ StorageClass <- R6::R6Class( # nolint
             arrange(desc(timestamp)) %>%
             collect() %>%
             mutate(
-              timestamp = friendly_time(as.POSIXct(timestamp, origin = "1970-01-01")),
-              link = sprintf("<a href=\"%s\">%s</a>",
-                htmltools::htmlEscape(url, TRUE),
-                htmltools::htmlEscape(label, TRUE))
+              timestamp = friendly_time(as.POSIXct(timestamp, origin = "1970-01-01"))
             )
         }
       )
