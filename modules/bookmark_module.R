@@ -165,7 +165,7 @@ bookmark_mod <- function(input, output, session, storage, thumbnailFunc) {
           stop("Please specify a bookmark name")
         } else {
           removeModal()
-          session$doBookmark()
+          storage$snapshot()
           showNotification(
             "Session successfully saved"
           )
