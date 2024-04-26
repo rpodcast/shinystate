@@ -66,7 +66,7 @@ bookmark_init <- function(filepath = file.path("shinysessions", "bookmarks.sqlit
 }
 
 bookmark_mod <- function(input, output, session, instance, thumbnailFunc) {
-  
+
   session_df <- reactive({
     message("entered session_df")
     req(instance$reader())
@@ -161,16 +161,7 @@ bookmark_mod <- function(input, output, session, instance, thumbnailFunc) {
     )
   })
   
-  function() {
-    onBookmarked(function(url) {
-      on_bookmarked(
-        url = url,
-        thumbnailFunc = thumbnailFunc,
-        save_name = input$save_name,
-        pool = instance$pool
-      )
-    })
-  }
+  set_onbookmarked(url, thumbnailFunc, input$save_name, instance$pool)
 }
 
 
