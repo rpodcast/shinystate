@@ -119,6 +119,10 @@ bookmark_mod <- function(input, output, session, instance, thumbnailFunc) {
   
   observeEvent(input$show_load_modal, {
     showModal(modalDialog(size = "xl", easyClose = TRUE, title = "Restore session",
+      footer = tagList(
+        modalButton("Cancel"),
+        actionButton(session$ns("restore"), "Restore", class = "btn-primary")
+      ),
       #tags$style(".modal-body { max-height: 900px; overflow-y: scroll; }"),
       #uiOutput(session$ns("saved_sessions")),
       uiOutput(session$ns("saved_sessions_placeholder"))
