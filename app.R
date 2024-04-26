@@ -11,7 +11,8 @@ source("modules/select_module.R")
 source("modules/filter_module.R")
 source("modules/bookmark_module.R")
 source("modules/summarize_module.R")
-set_bookmark_options(local_storage_dir = "storage_dir")
+
+storage <- StorageClass$new(local_storage_dir = "storage_dir")
 bmi <- bookmark_init(filepath = file.path(shiny::getShinyOption("local_storage_dir"), "bookmarks.sqlite"))
 
 ui <- function(req) {

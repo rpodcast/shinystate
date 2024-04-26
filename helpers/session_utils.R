@@ -75,3 +75,18 @@ set_onbookmarked <- function(url, thumbnailFunc, save_name, pool) {
     })
   }
 }
+
+StorageClass <- R6::R6Class( # nolint
+  "StorageClass",
+  public = list(
+    local_storage_dir = NULL,
+    initialize = function(local_storage_dir = NULL) {
+      if (is.null(local_storage_dir)) {
+        local_storage_dir <- fs::path_temp("shinysessions")
+      }
+      self$local_storage_dir <- local_storage_dir
+      shiny::shinyOptions(local_storage_dir = local_storage_dir)
+      shiny::shinyOptions(save.interface = saveInterfaceLocal)
+      shiny::shinyOptions(load.interface = loadInterfaceLocal)
+    }
+  ))
