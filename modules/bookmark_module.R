@@ -159,32 +159,12 @@ bookmark_mod <- function(input, output, session, instance, thumbnailFunc) {
   
   function() {
     onBookmarked(function(url) {
-      url <- sub("^[^?]+", "", url, perl = TRUE)
-      updateQueryString(url)
-      
-      thumbnail <- if (!is.null(thumbnailFunc)) {
-        pngfile <- plotPNG(function() {
-          try(thumbnailFunc(), silent = TRUE)
-        }, height = 300)
-        on.exit(unlink(pngfile), add = TRUE)
-        base64enc::dataURI(mime = "image/png", file = pngfile)
-      } else {
-        NA_character_
-      }
-      
-      df <- data.frame(
-        timestamp = Sys.time(),
+      on_bookmarked(
         url = url,
-        label = input$save_name,
-        author = if (!is.null(session$user))
-          session$user
-        else
-          paste("Anonymous @", session$request$REMOTE_ADDR),
-        thumbnail = thumbnail,
-        stringsAsFactors = FALSE
+        thumbnailFunc = thumbnailFunc,
+        save_name = input$save_name,
+        pool = instance$pool
       )
-      
-      dbWriteTable(instance$pool, "bookmarks", df, append = TRUE)
     })
   }
 }
