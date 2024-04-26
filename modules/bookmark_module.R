@@ -29,41 +29,41 @@ bookmark_load_ui <- function(id) {
   
 }
 
-bookmark_init <- function(filepath = file.path("shinysessions", "bookmarks.sqlite")) {
-  if (!dir.exists(dirname(filepath))) {
-    dir.create(dirname(filepath))
-  }
+# bookmark_init <- function(filepath = file.path("shinysessions", "bookmarks.sqlite")) {
+#   if (!dir.exists(dirname(filepath))) {
+#     dir.create(dirname(filepath))
+#   }
   
-  bookmark_pool <- local({
-    pool <- dbPool(SQLite(), dbname = filepath)
-    onStop(function() {
-      poolClose(pool)
-    })
-    pool
-  })
+#   bookmark_pool <- local({
+#     pool <- dbPool(SQLite(), dbname = filepath)
+#     onStop(function() {
+#       poolClose(pool)
+#     })
+#     pool
+#   })
   
-  bookmarks <- reactivePoll(1000, NULL,
-    function() {
-      file.info(filepath)$mtime
-    },
-    function() {
-      bookmark_pool %>% tbl("bookmarks") %>%
-        arrange(desc(timestamp)) %>%
-        collect() %>%
-        mutate(
-          timestamp = friendly_time(as.POSIXct(timestamp, origin = "1970-01-01")),
-          link = sprintf("<a href=\"%s\">%s</a>",
-            htmltools::htmlEscape(url, TRUE),
-            htmltools::htmlEscape(label, TRUE))
-        )
-    }
-  )
+#   bookmarks <- reactivePoll(1000, NULL,
+#     function() {
+#       file.info(filepath)$mtime
+#     },
+#     function() {
+#       bookmark_pool %>% tbl("bookmarks") %>%
+#         arrange(desc(timestamp)) %>%
+#         collect() %>%
+#         mutate(
+#           timestamp = friendly_time(as.POSIXct(timestamp, origin = "1970-01-01")),
+#           link = sprintf("<a href=\"%s\">%s</a>",
+#             htmltools::htmlEscape(url, TRUE),
+#             htmltools::htmlEscape(label, TRUE))
+#         )
+#     }
+#   )
   
-  list(
-    pool = bookmark_pool,
-    reader = bookmarks
-  )
-}
+#   list(
+#     pool = bookmark_pool,
+#     reader = bookmarks
+#   )
+# }
 
 bookmark_mod <- function(input, output, session, storage, thumbnailFunc) {
   ns <- session$ns
