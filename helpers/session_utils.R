@@ -25,3 +25,8 @@ loadInterfaceLocal <- function(id, callback) {
   stateDir <- fs::path(root_dir, "shiny_bookmarks", id)
   callback(stateDir)
 }
+
+set_bookmark_options <- function() {
+  shiny::shinyOptions(save.interface = saveInterfaceLocal)
+  shiny::shinyOptions(load.interface = loadInterfaceLocal)
+}

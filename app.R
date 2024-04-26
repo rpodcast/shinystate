@@ -1,109 +1,137 @@
-options(shiny.devmode = TRUE)
 options(shiny.autoload.r = FALSE)
 library(shiny)
-library(bslib)
-library(rlang)
+library(dplyr)
+library(dbplyr)
+library(DT)
 
-source("R/utils.R")
-source("R/StorageClass.R")
+source("helpers/format.R")
+source("helpers/utils.R")
+source("helpers/session_utils.R")
+source("modules/select_module.R")
+source("modules/filter_module.R")
+source("modules/bookmark_module.R")
+source("modules/summarize_module.R")
 
-storage_dir <- "storage_dir"
-bookmark_file_dir <- "bookmark_file_dir"
+set_bookmark_options()
+#shiny::shinyOptions(save.interface = saveInterfaceLocal)
+#shiny::shinyOptions(load.interface = loadInterfaceLocal)
 
-storage <- StorageClass$new(
-  board_sessions = pins::board_folder(storage_dir),
-  local_storage_dir = "bookmark_file_dir"
-)
-#storage$bookmark_init("my_storage")
+bmi <- bookmark_init()
 
-ui <- page_sidebar(
-  title = "Sessions Demo",
-  theme = bs_theme(
-    base_font = font_google("Roboto", local = FALSE)
-  ),
-  sidebar = sidebar(
-    title = NULL,
-    selectInput(
-      "vars",
-      "Variables to display",
-      choices = c("area", "peri", "shape", "perm"),
-      selected = NULL,
-      multiple = TRUE,
-      selectize = TRUE
+ui <- function(req) {
+  tagList(
+    # Bootstrap header
+    tags$header(class = "navbar navbar-default navbar-static-top",
+      tags$div(class = "container-fluid",
+        tags$div(class = "navbar-header",
+          tags$div(class = "navbar-brand", "R/Pharma demo")
+        ),
+        # Links for restoring/loading sessions
+        tags$ul(class = "nav navbar-nav navbar-right",
+          tags$li(
+            bookmark_modal_load_ui("bookmark")
+          ),
+          tags$li(
+            bookmark_modal_save_ui("bookmark")
+          )
+        )
+      )
     ),
-    textInput(
-      "sidebar_text",
-      "Enter text",
-    ),
-    bookmark_modal_save_ui("bookmark"),
-    bookmark_modal_load_ui("bookmark")
-  ),
-  navset_card_underline(
-    id = "tabs",
-    nav_panel(
-      title = "Plot",
-      value = "plot",
-      plotOutput("plot")
-    ),
-    nav_panel(
-      title = "Summary",
-      value = "summary",
-      verbatimTextOutput("summary")
-    ),
-    nav_panel(
-      title = "Table",
-      value = "table",
-      tableOutput("table")
+    fluidPage(
+      sidebarLayout(position = "right",
+        column(width = 4,
+          wellPanel(
+            select_vars_ui("select")
+          ),
+          wellPanel(
+            filter_ui("filter")
+          ),
+          wellPanel(
+            p(downloadButton("download", "Download report", class = "btn-primary")),
+            tags$details(
+              tags$summary(style = "outline: none; cursor: pointer;", "Code preview"),
+              verbatimTextOutput("code")
+            )
+          )
+        ),
+        mainPanel(
+          tabsetPanel(id = "tabs",
+            tabPanel("Plot", tags$br(),
+              plotOutput("plot", height = 600)
+            ),
+            tabPanel("Summary", tags$br(),
+              verbatimTextOutput("summary")
+            ),
+            tabPanel("Table", tags$br(),
+              tableOutput("table")
+            )
+          )
+        )
+      )
     )
   )
-)
+}
 
 server <- function(input, output, session) {
-  shiny::setBookmarkExclude(c("bookmark1", "restore", "storage_id"))
-  # storage <- StorageClass$new(
-  #   board_sessions = pins::board_folder(storage_dir),
-  #   local_storage_dir = "bookmark_file_dir"
-  # )
-  storage$bookmark_init("my_storage")
-  #storage$greet()
-
+  callModule(bookmark_mod, "bookmark", bmi,
+    thumbnailFunc = function() { do_plot() }
+  )()
+  
+  datasetExpr <- reactive(expr(mtcars %>% mutate(cyl = factor(cyl))))
+  filterExpr <- callModule(filter_mod, "filter", datasetExpr)
+  selectExpr <- callModule(select_vars, "select",
+    reactive(names(eval_clean(datasetExpr()))), filterExpr)
+  
   data <- reactive({
-    if (length(input$vars) == 0) {
-      return(rock)
-    } else {
-      rock[, input$vars]
-    }
-  })
-
-  output$plot <- renderPlot({
-    req(data())
-    plot(data())
-  })
-
-  output$summary <- renderPrint({
-    req(data())
-    summary(data())
+    resultExpr <- selectExpr()
+    df <- eval_clean(resultExpr)
+    validate(need(nrow(df) > 0, "No data matches the filter"))
+    df
   })
 
   output$table <- renderTable({
-    req(data())
     data()
   }, rownames = TRUE)
-
-  bookmark_mod("bookmark", storage)
-
-  # observeEvent(input$bookmark1, {
-  #   p$snapshot()
-  # })
-
-  # sessions_df <- reactive({
-  #   p$get_sessions()
-  # })
-
-  # output$session_table <- renderTable({
-  #   req(sessions_df())
-  #   sessions_df()
-  # })
+  
+  do_plot <- function() {
+    plot(data())
+  }
+  
+  output$plot <- renderPlot({
+    do_plot()
+  })
+  
+  output$summary <- renderPrint({
+    summary(data())
+  })
+  
+  output$code <- renderText({
+    format_tidy_code(selectExpr())
+  })
+  
+  output$download <- downloadHandler(
+    filename = "report.zip",
+    content = function(file) {
+      withProgress(message = "Compiling report...", value = NULL,
+        make_report_bundle("rmd-template.txt",
+          title = "My great report",
+          author = "Joe Cheng",
+          description = "This is a high quality report!",
+          body_expr = expr({
+            df <- !!selectExpr()
+            plot(df)
+            summary(df)
+            knitr::kable(df)
+          }),
+          packages = c("dplyr"),
+          files = NULL,
+          output_file = file
+        )
+      )
+    }
+  )
 }
+
+enableBookmarking("server")
 
 shinyApp(ui, server)

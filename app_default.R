@@ -12,8 +12,9 @@ source("modules/filter_module.R")
 source("modules/bookmark_module.R")
 source("modules/summarize_module.R")
 
-shiny::shinyOptions(save.interface = saveInterfaceLocal)
-shiny::shinyOptions(load.interface = loadInterfaceLocal)
+set_bookmark_options()
+#shiny::shinyOptions(save.interface = saveInterfaceLocal)
+#shiny::shinyOptions(load.interface = loadInterfaceLocal)
 
 bmi <- bookmark_init()
 
