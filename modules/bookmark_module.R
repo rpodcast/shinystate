@@ -131,7 +131,7 @@ bookmark_mod <- function(input, output, session, storage, thumbnailFunc) {
 
   observeEvent(input$restore, {
     req(input$session_choice)
-    session$sendCustomMessage("redirect", list(url = input$session_choice))
+    storage$restore(input$session_choice)
   })
   
   shiny::setBookmarkExclude(c("show_save_modal", "show_load_modal", "save_name", "save", "session_choice", "restore"))

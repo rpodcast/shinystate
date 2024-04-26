@@ -126,5 +126,8 @@ StorageClass <- R6::R6Class( # nolint
         pool = bookmark_pool,
         reader = bookmarks
       )
+    },
+    restore = function(url, session = shiny::getDefaultReactiveDomain()) {
+      session$sendCustomMessage("redirect", list(url = url))
     }
   ))
