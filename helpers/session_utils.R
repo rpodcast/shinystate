@@ -63,7 +63,7 @@ on_bookmarked <- function(url, thumbnailFunc, save_name, pool, session = shiny::
   dbWriteTable(pool, "bookmarks", df, append = TRUE)
 }
 
-set_onbookmarked <- function(url, thumbnailFunc, save_name, pool) {
+set_onbookmarked <- function(thumbnailFunc, save_name, pool) {
   function() {
     onBookmarked(function(url) {
       on_bookmarked(
@@ -130,9 +130,8 @@ StorageClass <- R6::R6Class( # nolint
     snapshot = function(session = shiny::getDefaultReactiveDomain()) {
       session$doBookmark()
     },
-    register_metadata = function(url, thumbnailFunc, save_name, pool) {
+    register_metadata = function(thumbnailFunc, save_name, pool) {
       set_onbookmarked(
-        url = url,
         thumbnailFunc = thumbnailFunc,
         save_name = save_name,
         pool = pool
