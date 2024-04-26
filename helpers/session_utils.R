@@ -74,11 +74,16 @@ set_onbookmarked <- function(save_name, pool) {
   }
 }
 
+save_session <- function(sessions_df, board_sessions) {
+  pins::pin_write(board_sessions, sessions_df, name = "sessions")
+}
+
 StorageClass <- R6::R6Class( # nolint
   "StorageClass",
   public = list(
     local_storage_dir = NULL,
     bmi_storage = NULL,
+    board_sessions = NULL,
     initialize = function(local_storage_dir = NULL) {
       if (is.null(local_storage_dir)) {
         local_storage_dir <- fs::path_temp("shinysessions")
@@ -87,6 +92,9 @@ StorageClass <- R6::R6Class( # nolint
       shiny::shinyOptions(local_storage_dir = local_storage_dir)
       shiny::shinyOptions(save.interface = saveInterfaceLocal)
       shiny::shinyOptions(load.interface = loadInterfaceLocal)
+
+      # initialize local pins board for session metadata
+      self$board_sessions <- pins::board_folder(local_storage_dir)
     },
     bookmark_init = function() {
       filepath <- file.path(self$local_storage_dir, "bookmarks.sqlite")
