@@ -65,12 +65,12 @@ bookmark_init <- function(filepath = file.path("shinysessions", "bookmarks.sqlit
   )
 }
 
-bookmark_mod <- function(input, output, session, instance, thumbnailFunc) {
+bookmark_mod <- function(input, output, session, storage, thumbnailFunc) {
   ns <- session$ns
   session_df <- reactive({
     message("entered session_df")
-    req(instance$reader())
-    instance$reader() %>%
+    req(storage$bmi_storage$reader())
+    storage$bmi_storage$reader() %>%
       select(url, label, author, timestamp) %>%
       mutate(url2 = glue::glue("<a href={url}>{label}</a>"))
   })
@@ -92,7 +92,7 @@ bookmark_mod <- function(input, output, session, instance, thumbnailFunc) {
   
   output$saved_sessions <- renderUI({
     fluidRow(
-      instance$reader() %>%
+      storage$bmi_storage$reader() %>%
         select(url, label, author, timestamp, thumbnail) %>%
         rowwise() %>%
         do(ui = with(., {
@@ -117,7 +117,7 @@ bookmark_mod <- function(input, output, session, instance, thumbnailFunc) {
   })
 
   output$saved_sessions <- renderUI({
-    df <- instance$reader() %>%
+    df <- storage$bmi_storage$reader() %>%
       select(url, label, author, timestamp, thumbnail) %>%
       collect()
 
@@ -180,7 +180,7 @@ bookmark_mod <- function(input, output, session, instance, thumbnailFunc) {
     )
   })
   
-  set_onbookmarked(url, thumbnailFunc, input$save_name, instance$pool)
+  set_onbookmarked(url, thumbnailFunc, input$save_name, storage$bmi_storage$pool)
 }
 
 
