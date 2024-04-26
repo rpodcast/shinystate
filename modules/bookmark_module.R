@@ -180,7 +180,7 @@ bookmark_mod <- function(input, output, session, storage, thumbnailFunc) {
     )
   })
   
-  set_onbookmarked(url, thumbnailFunc, input$save_name, storage$bmi_storage$pool)
+  storage$register_metadata(url, thumbnailFunc, input$save_name, storage$bmi_storage$pool)
 }
 
 

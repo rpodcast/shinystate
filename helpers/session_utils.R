@@ -132,5 +132,13 @@ StorageClass <- R6::R6Class( # nolint
     },
     snapshot = function(session = shiny::getDefaultReactiveDomain()) {
       session$doBookmark()
+    },
+    register_metadata = function(url, thumbnailFunc, save_name, pool) {
+      set_onbookmarked(
+        url = url,
+        thumbnailFunc = thumbnailFunc,
+        save_name = save_name,
+        pool = pool
+      )
     }
   ))
