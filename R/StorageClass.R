@@ -21,18 +21,8 @@ StorageClass <- R6::R6Class( # nolint
       shiny::shinyOptions(save.interface = save_interface)
       shiny::shinyOptions(load.interface = load_interface)
     },
-    greet = function() {
-      message(glue::glue("Hello, your storage directory is {self$storage_dir}"))
-    },
-    bookmark_init = function() {
-      #fs::dir_create(self$local_storage_dir, storage_id, "shiny_bookmarks")
-      
-      # override shiny options for bookmark state
-      #shiny::shinyOptions(local_storage_dir = self$local_storage_dir)
-      # shiny::shinyOptions(storage_id = storage_id)
-      shiny::shinyOptions(save.interface = save_interface)
-      shiny::shinyOptions(load.interface = load_interface)
-      
+    bookmark_init = function() {      
+      # override shiny callbacks for bookmark/restore
       shiny::onBookmark(bookmark_fun)
       shiny::onRestore(restore_fun)
       shiny::onBookmarked(
