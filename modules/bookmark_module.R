@@ -66,7 +66,7 @@ bookmark_init <- function(filepath = file.path("shinysessions", "bookmarks.sqlit
 }
 
 bookmark_mod <- function(input, output, session, instance, thumbnailFunc) {
-
+  ns <- session$ns
   session_df <- reactive({
     message("entered session_df")
     req(instance$reader())
@@ -77,7 +77,8 @@ bookmark_mod <- function(input, output, session, instance, thumbnailFunc) {
   
   output$saved_sessions_placeholder <- renderUI({
     fluidRow(
-      DT::dataTableOutput(session$ns("saved_sessions_table"))
+      #DT::dataTableOutput(session$ns("saved_sessions_table"))
+      uiOutput(ns("saved_sessions"))
     )
   })
   
@@ -114,8 +115,26 @@ bookmark_mod <- function(input, output, session, instance, thumbnailFunc) {
         pull(ui)
     )
   })
+
+  output$saved_sessions <- renderUI({
+    df <- instance$reader() %>%
+      select(url, label, author, timestamp, thumbnail) %>%
+      collect()
+
+    radioButtons(
+      ns("session_choice"),
+      "Choose Session",
+      choiceNames = df$label,
+      choiceValues = df$url
+    )
+  })
+
+  observeEvent(input$restore, {
+    req(input$session_choice)
+    session$sendCustomMessage("redirect", list(url = input$session_choice))
+  })
   
-  shiny::setBookmarkExclude(c("show_save_modal", "show_load_modal", "save_name", "save"))
+  shiny::setBookmarkExclude(c("show_save_modal", "show_load_modal", "save_name", "save", "session_choice", "restore"))
   
   observeEvent(input$show_load_modal, {
     showModal(modalDialog(size = "xl", easyClose = TRUE, title = "Restore session",
