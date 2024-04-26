@@ -1,6 +1,6 @@
 saveInterfaceLocal <- function(id, callback) {
-  root_dir <- file.path("shinysessions")
-  
+  root_dir <- file.path(shiny::getShinyOption("local_storage_dir"))
+
   if (is.null(root_dir)) {
     root_dir <- fs::file_temp()
   }
@@ -15,8 +15,7 @@ saveInterfaceLocal <- function(id, callback) {
 }
 
 loadInterfaceLocal <- function(id, callback) {
-  # grab key variables from ShinyOptions
-  root_dir <- file.path("shinysessions")
+  root_dir <- file.path(shiny::getShinyOption("local_storage_dir"))
 
   if (is.null(root_dir)) {
     root_dir <- fs::file_temp()
@@ -26,7 +25,11 @@ loadInterfaceLocal <- function(id, callback) {
   callback(stateDir)
 }
 
-set_bookmark_options <- function() {
+set_bookmark_options <- function(local_storage_dir = NULL) {
+  if (is.null(local_storage_dir)) {
+    local_storage_dir <- fs::path_temp("shinysessions")
+  }
+  shiny::shinyOptions(local_storage_dir = local_storage_dir)
   shiny::shinyOptions(save.interface = saveInterfaceLocal)
   shiny::shinyOptions(load.interface = loadInterfaceLocal)
 }
