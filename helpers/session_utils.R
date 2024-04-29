@@ -109,27 +109,46 @@ StorageClass <- R6::R6Class( # nolint
 
       # initialize local pins board for session metadata
       self$board_sessions <- pins::board_folder(local_storage_dir)
-    },
-    bookmark_init = function() {
-      bookmarks <- shiny::reactivePoll(
-        intervalMillis = 1000,
-        session = NULL,
-        checkFunc = function() {
-          if (empty_sessions(self$board_sessions)) {
-            return(NULL)
-          } else {
-            pins::pin_meta(self$board_sessions, "sessions")$pin_hash
-          }
-        },
-        valueFunc = function() {
-          import_sessions(self$board_sessions)
-        }
-      )
+
+      # initialize app checking function for updated session data
       self$bmi_storage <- list(
         pool = self$board_sessions,
-        reader = bookmarks
+        reader = shiny::reactivePoll(
+          intervalMillis = 1000,
+          session = NULL,
+          checkFunc = function() {
+            if (empty_sessions(self$board_sessions)) {
+              return(NULL)
+            } else {
+              pins::pin_meta(self$board_sessions, "sessions")$pin_hash
+            }
+          },
+          valueFunc = function() {
+            import_sessions(self$board_sessions)
+          }
+        )
       )
     },
+    # bookmark_init = function() {
+    #   bookmarks <- shiny::reactivePoll(
+    #     intervalMillis = 1000,
+    #     session = NULL,
+    #     checkFunc = function() {
+    #       if (empty_sessions(self$board_sessions)) {
+    #         return(NULL)
+    #       } else {
+    #         pins::pin_meta(self$board_sessions, "sessions")$pin_hash
+    #       }
+    #     },
+    #     valueFunc = function() {
+    #       import_sessions(self$board_sessions)
+    #     }
+    #   )
+    #   self$bmi_storage <- list(
+    #     pool = self$board_sessions,
+    #     reader = bookmarks
+    #   )
+    # },
     # bookmark_init = function() {
     #   filepath <- file.path(self$local_storage_dir, "bookmarks.sqlite")
 
