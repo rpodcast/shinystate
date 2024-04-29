@@ -34,7 +34,7 @@ bookmark_mod <- function(input, output, session, storage) {
     message("entered session_df")
     req(storage$bmi_storage$reader())
     storage$bmi_storage$reader() %>%
-      select(url, label, author, timestamp) %>%
+      select(url, label, timestamp) %>%
       mutate(url2 = glue::glue("<a href={url}>{label}</a>"))
   })
   
