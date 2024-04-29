@@ -141,7 +141,12 @@ bookmark_mod <- function(input, output, session, storage) {
     )
   })
   
-  storage$register_metadata(input$save_name, storage$bmi_storage$pool)
+  return(
+    list(
+      save_name = reactive({input$save_name}),
+      pool = storage$bmi_storage$pool
+    )
+  )
 }
 
 

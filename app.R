@@ -71,8 +71,8 @@ ui <- function(req) {
 }
 
 server <- function(input, output, session) {
-  callModule(bookmark_mod, "bookmark", storage)()
-  
+  bookmark_res <- callModule(bookmark_mod, "bookmark", storage)
+  storage$register_metadata(save_name = bookmark_res$save_name(), pool = bookmark_res$pool)
   datasetExpr <- reactive(expr(mtcars %>% mutate(cyl = factor(cyl))))
   filterExpr <- callModule(filter_mod, "filter", datasetExpr)
   selectExpr <- callModule(select_vars, "select",

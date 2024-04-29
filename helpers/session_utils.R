@@ -77,6 +77,7 @@ on_bookmarked <- function(url, save_name, pool) {
 }
 
 set_onbookmarked <- function(save_name, pool) {
+  message("Entered set_onbookmarked")
   function() {
     onBookmarked(function(url) {
       on_bookmarked(
@@ -193,6 +194,6 @@ StorageClass <- R6::R6Class( # nolint
       set_onbookmarked(
         save_name = save_name,
         pool = pool
-      )
+      )()
     }
   ))
