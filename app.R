@@ -12,7 +12,8 @@ source("modules/filter_module.R")
 source("modules/bookmark_module.R")
 source("modules/summarize_module.R")
 
-storage <- StorageClass$new(local_storage_dir = "storage_dir")
+#storage <- StorageClass$new(local_storage_dir = "storage_dir")
+storage <- StorageClass$new()
 #storage$bookmark_init()
 
 ui <- function(req) {
