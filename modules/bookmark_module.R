@@ -31,7 +31,6 @@ bookmark_load_ui <- function(id) {
 bookmark_mod <- function(input, output, session, storage) {
   ns <- session$ns
   session_df <- reactive({
-    message("entered session_df")
     req(storage$bmi_storage$reader())
     storage$bmi_storage$reader()
   })

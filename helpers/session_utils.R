@@ -59,7 +59,6 @@ create_session_data <- function(url, session_metadata = NULL) {
 }
 
 on_bookmarked <- function(url, session_metadata, pool) {
-  message(session_metadata)
   url <- sub("^[^?]+", "", url, perl = TRUE)
   shiny::updateQueryString(url)
 
@@ -72,7 +71,6 @@ on_bookmarked <- function(url, session_metadata, pool) {
 }
 
 set_onbookmarked <- function(pool) {
-  message("Entered set_onbookmarked")
   function() {
     onBookmarked(function(url) {
       on_bookmarked(
