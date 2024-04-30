@@ -60,7 +60,7 @@ create_session_data <- function(url, metadata_list = NULL) {
 on_bookmarked <- function(url, save_name, pool) {
   url <- sub("^[^?]+", "", url, perl = TRUE)
   shiny::updateQueryString(url)
-  
+  save_name <- shiny::getShinyOption("save_name")
   df <- data.frame(
     timestamp = Sys.time(),
     url = url,
@@ -187,7 +187,8 @@ StorageClass <- R6::R6Class( # nolint
     restore = function(url, session = shiny::getDefaultReactiveDomain()) {
       session$sendCustomMessage("redirect", list(url = url))
     },
-    snapshot = function(session = shiny::getDefaultReactiveDomain()) {
+    snapshot = function(save_name, session = shiny::getDefaultReactiveDomain()) {
+      shiny::shinyOptions(save_name = save_name)
       session$doBookmark()
     },
     register_metadata = function(save_name, pool) {
