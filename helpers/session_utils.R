@@ -191,10 +191,10 @@ StorageClass <- R6::R6Class( # nolint
       shiny::shinyOptions(save_name = save_name)
       session$doBookmark()
     },
-    register_metadata = function(save_name, pool) {
+    register_metadata = function() {
       set_onbookmarked(
-        save_name = save_name,
-        pool = pool
+        save_name = shiny::getShinyOption("save_name"),
+        pool = self$bmi_storage$pool
       )()
     }
   ))
