@@ -76,7 +76,8 @@ on_bookmarked <- function(url, session_metadata, pool) {
   #dbWriteTable(pool, "bookmarks", df, append = TRUE)
   pins::pin_write(
     board = pool, 
-    x = rbind(import_sessions(pool), df), 
+    #x = rbind(import_sessions(pool), df), 
+    x = dplyr::bind_rows(import_sessions(pool), df),
     name = "sessions"
   )
 }

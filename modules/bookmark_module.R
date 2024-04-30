@@ -38,7 +38,7 @@ bookmark_mod <- function(input, output, session, storage) {
   
   output$saved_sessions_placeholder <- renderUI({
     fluidRow(
-      #DT::dataTableOutput(session$ns("saved_sessions_table"))
+      DT::dataTableOutput(session$ns("saved_sessions_table")),
       uiOutput(ns("saved_sessions"))
     )
   })
@@ -47,7 +47,8 @@ bookmark_mod <- function(input, output, session, storage) {
     req(session_df())
     DT::datatable(
       session_df(),
-      escape = FALSE
+      escape = FALSE,
+      selection = "single"
     )
   })
   
@@ -127,11 +128,11 @@ bookmark_mod <- function(input, output, session, storage) {
           removeModal()
           #storage$snapshot(save_name = input$save_name)
           storage$snapshot(
-            session_metadata = NULL
-            # session_metadata = list(
-            #   save_name = input$save_name,
-            #   timestamp = Sys.time()
-            # )
+            #session_metadata = NULL
+            session_metadata = list(
+              save_name = input$save_name,
+              timestamp = Sys.time()
+            )
           )
           showNotification(
             "Session successfully saved"
