@@ -83,8 +83,9 @@ bookmark_mod <- function(input, output, session, storage) {
     radioButtons(
       ns("session_choice"),
       "Choose Session",
-      choiceNames = df$save_name,
-      choiceValues = df$url
+      choices = df$url
+      # choiceNames = df$save_name,
+      # choiceValues = df$url
     )
   })
 
@@ -126,10 +127,11 @@ bookmark_mod <- function(input, output, session, storage) {
           removeModal()
           #storage$snapshot(save_name = input$save_name)
           storage$snapshot(
-            session_metadata = list(
-              save_name = input$save_name,
-              timestamp = Sys.time()
-            )
+            session_metadata = NULL
+            # session_metadata = list(
+            #   save_name = input$save_name,
+            #   timestamp = Sys.time()
+            # )
           )
           showNotification(
             "Session successfully saved"
