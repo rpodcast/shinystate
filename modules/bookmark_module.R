@@ -33,9 +33,7 @@ bookmark_mod <- function(input, output, session, storage) {
   session_df <- reactive({
     message("entered session_df")
     req(storage$bmi_storage$reader())
-    storage$bmi_storage$reader() %>%
-      select(url, label, timestamp) %>%
-      mutate(url2 = glue::glue("<a href={url}>{label}</a>"))
+    storage$bmi_storage$reader()
   })
   
   output$saved_sessions_placeholder <- renderUI({
@@ -85,7 +83,7 @@ bookmark_mod <- function(input, output, session, storage) {
     radioButtons(
       ns("session_choice"),
       "Choose Session",
-      choiceNames = df$label,
+      choiceNames = df$save_name,
       choiceValues = df$url
     )
   })
@@ -126,7 +124,13 @@ bookmark_mod <- function(input, output, session, storage) {
           stop("Please specify a bookmark name")
         } else {
           removeModal()
-          storage$snapshot(save_name = input$save_name)
+          #storage$snapshot(save_name = input$save_name)
+          storage$snapshot(
+            session_metadata = list(
+              save_name = input$save_name,
+              timestamp = Sys.time()
+            )
+          )
           showNotification(
             "Session successfully saved"
           )

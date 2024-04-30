@@ -43,31 +43,34 @@ empty_sessions <- function(board_sessions) {
   !"sessions" %in% pins::pin_list(board_sessions)
 }
 
-create_session_data <- function(url, metadata_list = NULL) {
+create_session_data <- function(url, session_metadata = NULL) {
   url <- sub("^[^?]+", "", url, perl = TRUE)
   shiny::updateQueryString(url)
 
-  metadata_list <- c(
-    url,
-    timestamp = Sys.time(),
-    metadata_list
+  session_metadata <- c(
+    url = url,
+    #timestamp = Sys.time(),
+    session_metadata
   )
 
-  df <- tibble::tibble(!!!metadata_list)
+  df <- tibble::tibble(!!!session_metadata)
   return(df)
 }
 
-on_bookmarked <- function(url, save_name, pool) {
+on_bookmarked <- function(url, session_metadata, pool) {
   url <- sub("^[^?]+", "", url, perl = TRUE)
   shiny::updateQueryString(url)
-  save_name <- shiny::getShinyOption("save_name")
-  df <- data.frame(
-    timestamp = Sys.time(),
-    url = url,
-    label = save_name,
-    stringsAsFactors = FALSE
-  )
+  #save_name <- shiny::getShinyOption("save_name")
+  #session_metadata <- shiny::getShinyOption("session_metadata")
+
+  # df <- data.frame(
+  #   timestamp = Sys.time(),
+  #   url = url,
+  #   label = save_name,
+  #   stringsAsFactors = FALSE
+  # )
   
+  df <- create_session_data(url, session_metadata)
   #dbWriteTable(pool, "bookmarks", df, append = TRUE)
   pins::pin_write(
     board = pool, 
@@ -76,13 +79,14 @@ on_bookmarked <- function(url, save_name, pool) {
   )
 }
 
-set_onbookmarked <- function(save_name, pool) {
+set_onbookmarked <- function(session_metadata, pool) {
   message("Entered set_onbookmarked")
   function() {
     onBookmarked(function(url) {
       on_bookmarked(
         url = url,
-        save_name = save_name,
+        session_metadata = session_metadata,
+        #save_name = save_name,
         pool = pool
       )
     })
@@ -187,14 +191,15 @@ StorageClass <- R6::R6Class( # nolint
     restore = function(url, session = shiny::getDefaultReactiveDomain()) {
       session$sendCustomMessage("redirect", list(url = url))
     },
-    snapshot = function(save_name, session = shiny::getDefaultReactiveDomain()) {
-      shiny::shinyOptions(save_name = save_name)
+    snapshot = function(session_metadata = NULL, session = shiny::getDefaultReactiveDomain()) {
+      shiny::shinyOptions(session_metadata = session_metadata)
       session$doBookmark()
     },
     register_metadata = function() {
       set_onbookmarked(
-        save_name = shiny::getShinyOption("save_name"),
-        pool = self$bmi_storage$pool
+        #save_name = shiny::getShinyOption("save_name"),
+        session_metadata = shiny::getShinyOption("session_metadata"),
+        pool = self$board_sessions
       )()
     }
   ))
