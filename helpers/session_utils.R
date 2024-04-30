@@ -54,10 +54,12 @@ create_session_data <- function(url, session_metadata = NULL) {
   )
 
   df <- tibble::tibble(!!!session_metadata)
+  if (!is.null(session_metadata)) shiny::shinyOptions(session_metadata = NULL)
   return(df)
 }
 
 on_bookmarked <- function(url, session_metadata, pool) {
+  message(session_metadata)
   url <- sub("^[^?]+", "", url, perl = TRUE)
   shiny::updateQueryString(url)
   #save_name <- shiny::getShinyOption("save_name")
@@ -79,13 +81,13 @@ on_bookmarked <- function(url, session_metadata, pool) {
   )
 }
 
-set_onbookmarked <- function(session_metadata, pool) {
+set_onbookmarked <- function(pool) {
   message("Entered set_onbookmarked")
   function() {
     onBookmarked(function(url) {
       on_bookmarked(
         url = url,
-        session_metadata = session_metadata,
+        session_metadata = shiny::getShinyOption("session_metadata"),
         #save_name = save_name,
         pool = pool
       )
@@ -197,8 +199,6 @@ StorageClass <- R6::R6Class( # nolint
     },
     register_metadata = function() {
       set_onbookmarked(
-        #save_name = shiny::getShinyOption("save_name"),
-        session_metadata = shiny::getShinyOption("session_metadata"),
         pool = self$board_sessions
       )()
     }
