@@ -51,32 +51,6 @@ bookmark_mod <- function(input, output, session, storage) {
       selection = "single"
     )
   })
-  
-  # output$saved_sessions <- renderUI({
-  #   fluidRow(
-  #     storage$bmi_storage$reader() %>%
-  #       select(url, label, author, timestamp, thumbnail) %>%
-  #       rowwise() %>%
-  #       do(ui = with(., {
-  #         tags$div(class = "col-md-4",
-  #           tags$div(class = "thumbnail",
-  #             if (!is.null(thumbnail) && isTRUE(!is.na(thumbnail))) {
-  #               tags$a(href = url, tags$img(src = thumbnail))
-  #             },
-  #             tags$div(class = "caption",
-  #               tags$h4(tags$a(href = url, label)),
-  #               tags$p(
-  #                 author,
-  #                 tags$br(),
-  #                 tags$small(timestamp)
-  #               )
-  #             )
-  #           )
-  #         )
-  #       })) %>%
-  #       pull(ui)
-  #   )
-  # })
 
   output$saved_sessions <- renderUI({
     df <- session_df()
@@ -103,8 +77,6 @@ bookmark_mod <- function(input, output, session, storage) {
         modalButton("Cancel"),
         actionButton(session$ns("restore"), "Restore", class = "btn-primary")
       ),
-      #tags$style(".modal-body { max-height: 900px; overflow-y: scroll; }"),
-      #uiOutput(session$ns("saved_sessions")),
       uiOutput(session$ns("saved_sessions_placeholder"))
     ))
   })
@@ -147,13 +119,6 @@ bookmark_mod <- function(input, output, session, storage) {
       }
     )
   })
-  
-  # return(
-  #   list(
-  #     save_name = reactive({input$save_name}),
-  #     pool = storage$bmi_storage$pool
-  #   )
-  # )
 }
 
 

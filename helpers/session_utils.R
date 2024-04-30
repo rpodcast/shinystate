@@ -62,21 +62,10 @@ on_bookmarked <- function(url, session_metadata, pool) {
   message(session_metadata)
   url <- sub("^[^?]+", "", url, perl = TRUE)
   shiny::updateQueryString(url)
-  #save_name <- shiny::getShinyOption("save_name")
-  #session_metadata <- shiny::getShinyOption("session_metadata")
 
-  # df <- data.frame(
-  #   timestamp = Sys.time(),
-  #   url = url,
-  #   label = save_name,
-  #   stringsAsFactors = FALSE
-  # )
-  
   df <- create_session_data(url, session_metadata)
-  #dbWriteTable(pool, "bookmarks", df, append = TRUE)
   pins::pin_write(
     board = pool, 
-    #x = rbind(import_sessions(pool), df), 
     x = dplyr::bind_rows(import_sessions(pool), df),
     name = "sessions"
   )
@@ -89,7 +78,6 @@ set_onbookmarked <- function(pool) {
       on_bookmarked(
         url = url,
         session_metadata = shiny::getShinyOption("session_metadata"),
-        #save_name = save_name,
         pool = pool
       )
     })
@@ -137,60 +125,6 @@ StorageClass <- R6::R6Class( # nolint
         )
       )
     },
-    # bookmark_init = function() {
-    #   bookmarks <- shiny::reactivePoll(
-    #     intervalMillis = 1000,
-    #     session = NULL,
-    #     checkFunc = function() {
-    #       if (empty_sessions(self$board_sessions)) {
-    #         return(NULL)
-    #       } else {
-    #         pins::pin_meta(self$board_sessions, "sessions")$pin_hash
-    #       }
-    #     },
-    #     valueFunc = function() {
-    #       import_sessions(self$board_sessions)
-    #     }
-    #   )
-    #   self$bmi_storage <- list(
-    #     pool = self$board_sessions,
-    #     reader = bookmarks
-    #   )
-    # },
-    # bookmark_init = function() {
-    #   filepath <- file.path(self$local_storage_dir, "bookmarks.sqlite")
-
-    #   if (!dir.exists(dirname(filepath))) {
-    #     dir.create(dirname(filepath))
-    #   }
-      
-    #   bookmark_pool <- local({
-    #     pool <- dbPool(SQLite(), dbname = filepath)
-    #     onStop(function() {
-    #       poolClose(pool)
-    #     })
-    #     pool
-    #   })
-      
-    #   bookmarks <- reactivePoll(1000, NULL,
-    #     function() {
-    #       file.info(filepath)$mtime
-    #     },
-    #     function() {
-    #       bookmark_pool %>% tbl("bookmarks") %>%
-    #         arrange(desc(timestamp)) %>%
-    #         collect() %>%
-    #         mutate(
-    #           timestamp = friendly_time(as.POSIXct(timestamp, origin = "1970-01-01"))
-    #         )
-    #     }
-    #   )
-      
-    #   self$bmi_storage <- list(
-    #     pool = bookmark_pool,
-    #     reader = bookmarks
-    #   )
-    # },
     restore = function(url, session = shiny::getDefaultReactiveDomain()) {
       session$sendCustomMessage("redirect", list(url = url))
     },
