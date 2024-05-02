@@ -1,21 +1,16 @@
-options(shiny.autoload.r = FALSE)
 library(shiny)
 library(dplyr)
-library(dbplyr)
 library(DT)
 
 source("helpers/format.R")
 source("helpers/utils.R")
-source("helpers/session_utils.R")
 source("modules/select_module.R")
 source("modules/filter_module.R")
 source("modules/bookmark_module.R")
 source("modules/summarize_module.R")
 
-shiny::shinyOptions(save.interface = saveInterfaceLocal)
-shiny::shinyOptions(load.interface = loadInterfaceLocal)
-
-bmi <- bookmark_init()
+storage <- StorageClass$new(local_storage_dir = "storage_dir")
+#storage <- StorageClass$new(local_storage_dir = "storage_dir")
 
 ui <- function(req) {
   tagList(
@@ -36,7 +31,9 @@ ui <- function(req) {
         )
       )
     ),
+    #tags$script(src = "redirect.js"),
     fluidPage(
+      use_shinystate(),
       sidebarLayout(position = "right",
         column(width = 4,
           wellPanel(
@@ -44,13 +41,6 @@ ui <- function(req) {
           ),
           wellPanel(
             filter_ui("filter")
-          ),
-          wellPanel(
-            p(downloadButton("download", "Download report", class = "btn-primary")),
-            tags$details(
-              tags$summary(style = "outline: none; cursor: pointer;", "Code preview"),
-              verbatimTextOutput("code")
-            )
           )
         ),
         mainPanel(
@@ -72,10 +62,8 @@ ui <- function(req) {
 }
 
 server <- function(input, output, session) {
-  callModule(bookmark_mod, "bookmark", bmi,
-    thumbnailFunc = function() { do_plot() }
-  )()
-  
+  callModule(bookmark_mod, "bookmark", storage)
+  storage$register_metadata()
   datasetExpr <- reactive(expr(mtcars %>% mutate(cyl = factor(cyl))))
   filterExpr <- callModule(filter_mod, "filter", datasetExpr)
   selectExpr <- callModule(select_vars, "select",
@@ -107,30 +95,8 @@ server <- function(input, output, session) {
   output$code <- renderText({
     format_tidy_code(selectExpr())
   })
-  
-  output$download <- downloadHandler(
-    filename = "report.zip",
-    content = function(file) {
-      withProgress(message = "Compiling report...", value = NULL,
-        make_report_bundle("rmd-template.txt",
-          title = "My great report",
-          author = "Joe Cheng",
-          description = "This is a high quality report!",
-          body_expr = expr({
-            df <- !!selectExpr()
-            plot(df)
-            summary(df)
-            knitr::kable(df)
-          }),
-          packages = c("dplyr"),
-          files = NULL,
-          output_file = file
-        )
-      )
-    }
-  )
 }
 
-enableBookmarking("server")
-
-shinyApp(ui, server)
+shinyApp(ui, server, onStart = function() {
+  shiny::enableBookmarking("server")
+})
