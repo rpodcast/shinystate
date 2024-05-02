@@ -1,1 +1,7 @@
-This repository contains a minimal example for extending Shiny's built-in bookmarkable state feature
+
+# shinystate
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of shinystate is to allow Shiny application authors to customize features of the bookmarkable state capabilities.
