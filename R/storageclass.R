@@ -12,8 +12,9 @@ StorageClass <- R6::R6Class( # nolint
 #' @param local_storage_dir file path to use for storing bookmarkable state
 #'   files. If not specified, a temporary directory on the host system
 #'   will be used.
-#' @param bmi_storage TODO may move to private
-#' @param board_sessions TODO may move to private
+#' @param board_sessions Optional pre-created board object created with the
+#'   pins package. If missing, a folder-based pin board will be created using
+#'   the `local_storage_dir` path.
   public = list(
     local_storage_dir = NULL,
     board_sessions = NULL,
@@ -33,6 +34,8 @@ StorageClass <- R6::R6Class( # nolint
         self$board_sessions <- board_sessions
       }
     },
+  #' @details
+  #' Obtain saved bookmarkable state session metadata
     get_sessions = function() {
       import_sessions(self$board_sessions)
     },
@@ -65,6 +68,11 @@ StorageClass <- R6::R6Class( # nolint
       shiny::shinyOptions(session_metadata = session_metadata)
       session$doBookmark()
     },
+  #' @details
+  #' Delete a previous snapshot of bookmarkable state
+  #' 
+  #' @param url character with the unique URL assigned to the bookmarkable
+  #'   state session.
     delete = function(url) {
       delete_session(url, board = self$board_sessions)
     },
