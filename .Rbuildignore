@@ -5,3 +5,4 @@ bookmark_file_dir
 default.nix
 result
 \.gitignore
+\.Renviron
