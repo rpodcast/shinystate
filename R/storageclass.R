@@ -62,6 +62,15 @@ StorageClass <- R6::R6Class( # nolint
   #'   state session.
   #' @param session The Shiny session to associate with the restore operation
     restore = function(url, session = shiny::getDefaultReactiveDomain()) {
+      # download shiny bookmark files from board if not available locally
+      id <- session_id_from_url(url)
+      if (!fs::dir_exists(fs::path(self$local_storage_dir, "shiny_bookmarks", id))) {
+        download_bookmark_bundle(
+          self$local_storage_dir,
+          shiny_bookmark_id = id,
+          board = self$bmi_storage$pool
+        )
+      }
       session$sendCustomMessage("redirect", list(url = url))
     },
   #' @details
