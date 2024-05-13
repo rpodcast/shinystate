@@ -65,6 +65,9 @@ StorageClass <- R6::R6Class( # nolint
       shiny::shinyOptions(session_metadata = session_metadata)
       session$doBookmark()
     },
+    delete = function(url) {
+      delete_session(url, board = self$board_sessions)
+    },
   #' @details
   #' Register bookmarkable state storage data collection
     register_metadata = function() {

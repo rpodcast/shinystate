@@ -59,6 +59,24 @@ import_sessions <- function(board_sessions) {
   pins::pin_read(board_sessions, name = "sessions")
 }
 
+delete_session <- function(url, board) {
+  shiny_bookmark_id <- session_id_from_url(url)
+  current_sessions_df <- import_sessions(board)
+  if (!url %in% current_sessions_df$url) {
+    message("selected session not in sessions data frame. Nothing to do")
+  } else {
+    new_sessions_df <- dplyr::filter(current_sessions_df, url != !!url)
+    pins::pin_delete(
+      board = board,
+      names = shiny_bookmark_id
+    )
+    upload_sessions(
+      new_sessions_df,
+      board = board
+    )
+  }
+}
+
 upload_sessions <- function(sessions_df, board, name = "sessions", quiet = TRUE) {
   if (quiet) {
     suppressMessages(
