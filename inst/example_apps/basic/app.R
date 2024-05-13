@@ -29,7 +29,7 @@ server <- function(input, output, session) {
   })
 
   observeEvent(input$restore, {
-    session_df <- storage$bmi_storage$reader()
+    session_df <- storage$get_sessions()
     storage$restore(tail(session_df$url, n = 1))
   })
 
