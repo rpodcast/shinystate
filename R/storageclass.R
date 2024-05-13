@@ -18,7 +18,7 @@ StorageClass <- R6::R6Class( # nolint
     local_storage_dir = NULL,
     bmi_storage = NULL,
     board_sessions = NULL,
-    initialize = function(local_storage_dir = NULL) {
+    initialize = function(local_storage_dir = NULL, board_sessions = NULL) {
       if (is.null(local_storage_dir)) {
         local_storage_dir <- fs::path_temp("shinysessions")
         #local_storage_dir <- fs::file_temp(pattern = "shinysessions")
@@ -29,7 +29,12 @@ StorageClass <- R6::R6Class( # nolint
       shiny::shinyOptions(load.interface = loadInterfaceLocal)
 
       # initialize local pins board for session metadata
-      self$board_sessions <- pins::board_folder(local_storage_dir)
+      if (is.null(board_sessions)) {
+        self$board_sessions <- pins::board_folder(local_storage_dir)
+      } else {
+        self$board_sessions <- board_sessions
+      }
+      
 
       # initialize app checking function for updated session data
       self$bmi_storage <- list(

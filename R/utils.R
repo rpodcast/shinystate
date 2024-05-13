@@ -14,6 +14,10 @@ use_shinystate <- function() {
   )
 }
 
+session_id_from_url <- function(url) {
+  stringr::str_extract(url, "(?<=\\=).*")
+}
+
 saveInterfaceLocal <- function(id, callback) {
   root_dir <- file.path(shiny::getShinyOption("local_storage_dir"))
 
@@ -55,6 +59,24 @@ import_sessions <- function(board_sessions) {
   pins::pin_read(board_sessions, name = "sessions")
 }
 
+upload_sessions <- function(sessions_df, board, name = "sessions", quiet = TRUE) {
+  if (quiet) {
+    suppressMessages(
+      pins::pin_write(
+        board = board,
+        x = sessions_df,
+        name = name
+      )
+    )
+  } else {
+    pins::pin_write(
+      board = board,
+      x = sessions_df,
+      name = name
+    )
+  }
+}
+
 empty_sessions <- function(board_sessions) {
   !"sessions" %in% pins::pin_list(board_sessions)
 }
@@ -74,16 +96,19 @@ create_session_data <- function(url, session_metadata = NULL) {
 }
 
 on_bookmarked <- function(url, session_metadata, pool) {
-  url <- sub("^[^?]+", "", url, perl = TRUE)
-  shiny::updateQueryString(url)
+  url_for_sessions <- sub("^[^?]+", "", url, perl = TRUE)
+  shiny::updateQueryString(url_for_sessions)
 
-  df <- create_session_data(url, session_metadata)
-  suppressMessages(
-    pins::pin_write(
-      board = pool, 
-      x = dplyr::bind_rows(import_sessions(pool), df),
-      name = "sessions"
-    )
+  df <- create_session_data(url_for_sessions, session_metadata)
+  sessions_df <- dplyr::bind_rows(import_sessions(pool), df)
+  upload_sessions(
+    sessions_df,
+    board = pool
+  )
+  upload_bookmark_bundle(
+    local_storage_dir = shiny::getShinyOption("local_storage_dir"),
+    url = url,
+    board = pool
   )
 }
 
@@ -101,4 +126,61 @@ set_onbookmarked <- function(pool) {
 
 save_session <- function(sessions_df, board_sessions) {
   pins::pin_write(board_sessions, sessions_df, name = "sessions")
+}
+
+create_bookmark_bundle <- function(local_storage_dir, url) {
+  shiny_bookmark_id <- session_id_from_url(url)
+  bundle_tmp_path <- fs::path_temp(fs::path_ext_set(shiny_bookmark_id, "tar.gz"))
+  archive::archive_write_dir(
+    bundle_tmp_path,
+    fs::path(local_storage_dir, "shiny_bookmarks", shiny_bookmark_id)
+  )
+  return(bundle_tmp_path)
+}
+
+upload_bookmark_bundle <- function(local_storage_dir, url, board, quiet = TRUE) {
+  pin_name <- session_id_from_url(url)
+  pin_title <- pin_name
+
+  bundle_archive <- create_bookmark_bundle(local_storage_dir, url)
+
+  if (quiet) {
+    suppressMessages(
+      pins::pin_upload(
+        board = board,
+        paths = bundle_archive,
+        name = pin_name,
+        title = pin_title,
+        metadata = list(
+          shiny_bookmark_id = pin_name,
+          timestamp = Sys.time()
+        )
+      )
+    )
+  } else {
+    pins::pin_upload(
+      board = board,
+      paths = bundle_archive,
+      name = pin_name,
+      title = pin_title,
+      metadata = list(
+        shiny_bookmark_id = pin_name,
+        timestamp = Sys.time()
+      )
+    )
+  }
+  unlink(bundle_archive)
+}
+
+download_bookmark_bundle <- function(local_storage_dir, shiny_bookmark_id, board) {
+  bundle_tmp_path <- pins::pin_download(
+    board = board,
+    name = shiny_bookmark_id
+  )
+  bookmark_local_path <- fs::path(local_storage_dir, "shiny_bookmarks", shiny_bookmark_id)
+  if (!fs::dir_exists(bookmark_local_path)) fs::dir_create(bookmark_local_path)
+  archive::archive_extract(
+    archive = bundle_tmp_path,
+    dir = fs::path(local_storage_dir, "shiny_bookmarks", shiny_bookmark_id)
+  )
 }
