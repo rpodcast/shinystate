@@ -68,7 +68,7 @@ StorageClass <- R6::R6Class( # nolint
         download_bookmark_bundle(
           self$local_storage_dir,
           shiny_bookmark_id = id,
-          board = self$bmi_storage$pool
+          board = self$board_sessions
         )
       }
       session$sendCustomMessage("redirect", list(url = url))
