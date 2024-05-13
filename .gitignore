@@ -5,3 +5,5 @@ bookmark_file_dir/*
 !bookmark_file_dir/README.md
 shinysessions/*
 !shinysessions/README.md
+.Renviron
+.DS_Store
