@@ -78,7 +78,12 @@ upload_sessions <- function(sessions_df, board, name = "sessions", quiet = TRUE)
 }
 
 empty_sessions <- function(board_sessions) {
-  !"sessions" %in% pins::pin_list(board_sessions)
+  existing_pins <- pins::pin_list(board_sessions)
+  if (length(existing_pins) > 0) {
+    return(!"sessions" %in% pins::pin_list(board_sessions))
+  } else {
+    return(TRUE)
+  }
 }
 
 create_session_data <- function(url, session_metadata = NULL) {
