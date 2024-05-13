@@ -65,6 +65,16 @@ bookmark_mod <- function(input, output, session, storage) {
     req(input$session_choice)
     storage$restore(input$session_choice)
   })
+
+  observeEvent(input$delete, {
+    req(input$session_choice)
+    storage$delete(input$session_choice)
+    save_trigger(runif(1))
+    removeModal()
+    showNotification(
+      "Session deleted"
+    )
+  })
   
   shiny::setBookmarkExclude(c("show_save_modal", "show_load_modal", "save_name", "save", "session_choice", "restore"))
   
@@ -72,6 +82,7 @@ bookmark_mod <- function(input, output, session, storage) {
     showModal(modalDialog(size = "xl", easyClose = TRUE, title = "Restore session",
       footer = tagList(
         modalButton("Cancel"),
+        actionButton(session$ns("delete"), "Delete Selected", class = "btn-danger"),
         actionButton(session$ns("restore"), "Restore", class = "btn-primary")
       ),
       uiOutput(session$ns("saved_sessions_placeholder"))
@@ -95,6 +106,12 @@ bookmark_mod <- function(input, output, session, storage) {
           stop("Please specify a bookmark name")
         } else {
           removeModal()
+          showNotification(
+            "Saving in progress...",
+            duration = NULL,
+            closeButton = FALSE,
+            id = session$ns("saving_progress")
+          )
           storage$snapshot(
             session_metadata = list(
               save_name = input$save_name,
@@ -102,6 +119,7 @@ bookmark_mod <- function(input, output, session, storage) {
             )
           )
           save_trigger(runif(1))
+          removeNotification(id = session$ns("saving_progress"))
           showNotification(
             "Session successfully saved"
           )
