@@ -11,14 +11,14 @@ source("modules/summarize_module.R")
 
 board_aws <- board_s3(
   bucket = "lly-sic-shinysessions-dev",
-  prefix = "shinystate_testing",
+  prefix = "shinystate_testing/",
   access_key = Sys.getenv("AWS_ACCESS_KEY_ID"),
   secret_access_key = Sys.getenv("AWS_SECRET_ACCESS_KEY"),
   session_token = Sys.getenv("AWS_SESSION_TOKEN"),
   region = Sys.getenv("AWS_REGION")
 )
 
-storage <- StorageClass$new(local_storage_dir = "storage_dir")
+storage <- StorageClass$new(local_storage_dir = "storage_dir", board_sessions = board_aws)
 
 ui <- function(req) {
   tagList(

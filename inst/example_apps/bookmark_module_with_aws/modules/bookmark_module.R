@@ -27,9 +27,10 @@ bookmark_load_ui <- function(id) {
 
 bookmark_mod <- function(input, output, session, storage) {
   ns <- session$ns
+  save_trigger <- reactiveVal(NULL)
   session_df <- reactive({
-    req(storage$bmi_storage$reader())
-    storage$bmi_storage$reader()
+    save_trigger()
+    storage$get_sessions()
   })
   
   output$saved_sessions_placeholder <- renderUI({
@@ -100,6 +101,7 @@ bookmark_mod <- function(input, output, session, storage) {
               timestamp = Sys.time()
             )
           )
+          save_trigger(runif(1))
           showNotification(
             "Session successfully saved"
           )
