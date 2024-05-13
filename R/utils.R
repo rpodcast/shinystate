@@ -95,30 +95,30 @@ create_session_data <- function(url, session_metadata = NULL) {
   return(df)
 }
 
-on_bookmarked <- function(url, session_metadata, pool) {
+on_bookmarked <- function(url, session_metadata, board) {
   url_for_sessions <- sub("^[^?]+", "", url, perl = TRUE)
   shiny::updateQueryString(url_for_sessions)
 
   df <- create_session_data(url_for_sessions, session_metadata)
-  sessions_df <- dplyr::bind_rows(import_sessions(pool), df)
+  sessions_df <- dplyr::bind_rows(import_sessions(board), df)
   upload_sessions(
     sessions_df,
-    board = pool
+    board = board
   )
   upload_bookmark_bundle(
     local_storage_dir = shiny::getShinyOption("local_storage_dir"),
     url = url,
-    board = pool
+    board = board
   )
 }
 
-set_onbookmarked <- function(pool) {
+set_onbookmarked <- function(board) {
   function() {
     onBookmarked(function(url) {
       on_bookmarked(
         url = url,
         session_metadata = shiny::getShinyOption("session_metadata"),
-        pool = pool
+        board = board
       )
     })
   }

@@ -16,12 +16,10 @@ StorageClass <- R6::R6Class( # nolint
 #' @param board_sessions TODO may move to private
   public = list(
     local_storage_dir = NULL,
-    bmi_storage = NULL,
     board_sessions = NULL,
     initialize = function(local_storage_dir = NULL, board_sessions = NULL) {
       if (is.null(local_storage_dir)) {
         local_storage_dir <- fs::path_temp("shinysessions")
-        #local_storage_dir <- fs::file_temp(pattern = "shinysessions")
       }
       self$local_storage_dir <- local_storage_dir
       shiny::shinyOptions(local_storage_dir = local_storage_dir)
@@ -34,26 +32,9 @@ StorageClass <- R6::R6Class( # nolint
       } else {
         self$board_sessions <- board_sessions
       }
-      
-
-      # initialize app checking function for updated session data
-      self$bmi_storage <- list(
-        pool = self$board_sessions,
-        reader = shiny::reactivePoll(
-          intervalMillis = 1000,
-          session = NULL,
-          checkFunc = function() {
-            if (empty_sessions(self$board_sessions)) {
-              return(NULL)
-            } else {
-              pins::pin_meta(self$board_sessions, "sessions")$pin_hash
-            }
-          },
-          valueFunc = function() {
-            import_sessions(self$board_sessions)
-          }
-        )
-      )
+    },
+    get_sessions = function() {
+      import_sessions(self$board_sessions)
     },
   #' @details
   #' Restore a previous bookmarkable state session
@@ -87,8 +68,6 @@ StorageClass <- R6::R6Class( # nolint
   #' @details
   #' Register bookmarkable state storage data collection
     register_metadata = function() {
-      set_onbookmarked(
-        pool = self$board_sessions
-      )()
+      set_onbookmarked(board = self$board_sessions)()
     }
   ))
