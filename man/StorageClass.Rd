@@ -4,15 +4,169 @@
 \alias{StorageClass}
 \title{StorageClass R6 class}
 \description{
-This class provides a set of methods to create a Shiny bookmarkable state
-storage location using R6.
+This class provides a set of methods to create and manage Shiny bookmarkable
+state files.
+}
+\examples{
+
+## ------------------------------------------------
+## Method `StorageClass$new`
+## ------------------------------------------------
+
+\dontrun{
+# beginning of application
+library(shiny)
+library(shinystate)
+
+# Create a StorageClass object with default settings
+storage <- StorageClass$new()
+
+# Use a local directory called "sessions" to store files
+storage <- StorageClass$new(local_storage_dir = "sessions")
+
+# use a custom pins board to store bookmarkable state data
+library(pins)
+board <- board_folder("/path/to/storage_dir")
+storage <- StorageClass$new(board_sessions = board)
+}
+
+## ------------------------------------------------
+## Method `StorageClass$get_sessions`
+## ------------------------------------------------
+
+\dontrun{
+# beginning of application
+library(shiny)
+library(shinystate)
+
+storage <- StorageClass$new()
+
+# application UI for displaying session data
+DT::datatableOutput("session_table")
+
+# server logic for displaying session data
+output$session_table <- DT::renderDT({
+  storage$get_sessions()
+})
+}
+
+## ------------------------------------------------
+## Method `StorageClass$restore`
+## ------------------------------------------------
+
+\dontrun{
+# beginning of application
+library(shiny)
+library(shinystate)
+
+# restoration of last-saved bookmarkable state file
+#
+# beginning of application
+storage <- StorageClass$new()
+
+# application UI to trigger restore
+shiny::actionButton("restore", "Restore State")
+
+# server logic for restoring state
+observeEvent(input$restore, {
+  session_df <- storage$get_sessions()
+  storage$restore(tail(session_df$url, n = 1))
+})
+}
+
+## ------------------------------------------------
+## Method `StorageClass$snapshot`
+## ------------------------------------------------
+
+\dontrun{
+# beginning of application
+library(shiny)
+library(shinystate)
+
+storage <- StorageClass$new()
+
+# application UI to trigger save
+actionButton("save", "Save State")
+
+# server logic for restoring state with timestamp as metadata
+observeEvent(input$save, {
+  storage$snapshot(session_metadata = list(time = Sys.time()))
+})
+}
+
+## ------------------------------------------------
+## Method `StorageClass$delete`
+## ------------------------------------------------
+
+\dontrun{
+# beginning of application
+library(shiny)
+library(shinystate)
+
+storage <- StorageClass$new()
+
+# application UI to let user choose previous session
+uiOutput("previous_sessions_ui")
+
+# application UI to trigger delete
+shiny::actionButton("delete", "Delete Session")
+
+# server logic
+# populate dynamic UI
+output$previous_sessions_ui <- renderUI({
+  session_df <- storage$get_sessions
+  radioButtons(
+    "session_choice",
+    "Choose Session",
+    choices = session_df$url
+  )
+})
+
+# perform session deletion
+observeEvent(input$delete, {
+  req(input$session_choice)
+  storage$delete(input$session_choice)
+})
+}
+
+## ------------------------------------------------
+## Method `StorageClass$register_metadata`
+## ------------------------------------------------
+
+\dontrun{
+# beginning of application
+library(shiny)
+library(shinystate)
+
+storage <- StorageClass$new()
+
+# applicaiton UI code ...
+
+# application server code
+storage$register_metadata()
+}
+}
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{local_storage_dir}}{file path to use for storing bookmarkable state
+files. If not specified, a temporary directory on the host system
+will be used.}
+
+\item{\code{board_sessions}}{Optional pre-created board object created with the
+pins package. If missing, a folder-based pin board will be created using
+the \code{local_storage_dir} path.}
+}
+\if{html}{\out{</div>}}
 }
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-StorageClass-new}{\code{StorageClass$new()}}
+\item \href{#method-StorageClass-get_sessions}{\code{StorageClass$get_sessions()}}
 \item \href{#method-StorageClass-restore}{\code{StorageClass$restore()}}
 \item \href{#method-StorageClass-snapshot}{\code{StorageClass$snapshot()}}
+\item \href{#method-StorageClass-delete}{\code{StorageClass$delete()}}
 \item \href{#method-StorageClass-register_metadata}{\code{StorageClass$register_metadata()}}
 \item \href{#method-StorageClass-clone}{\code{StorageClass$clone()}}
 }
@@ -21,8 +175,9 @@ storage location using R6.
 \if{html}{\out{<a id="method-StorageClass-new"></a>}}
 \if{latex}{\out{\hypertarget{method-StorageClass-new}{}}}
 \subsection{Method \code{new()}}{
+Initialize a \code{StorageClass} object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{StorageClass$new(local_storage_dir = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{StorageClass$new(local_storage_dir = NULL, board_sessions = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -32,14 +187,74 @@ storage location using R6.
 files. If not specified, a temporary directory on the host system
 will be used.}
 
-\item{\code{bmi_storage}}{TODO may move to private}
-
-\item{\code{board_sessions}}{TODO may move to private}
+\item{\code{board_sessions}}{Optional pre-created board object created with the
+pins package. If missing, a folder-based pin board will be created using
+the \code{local_storage_dir} path.}
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Details}{
-Create a new 'StorageClass' object.
+\subsection{Returns}{
+An object with class \code{StorageClass} and the methods described
+in this documentation
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{\dontrun{
+# beginning of application
+library(shiny)
+library(shinystate)
+
+# Create a StorageClass object with default settings
+storage <- StorageClass$new()
+
+# Use a local directory called "sessions" to store files
+storage <- StorageClass$new(local_storage_dir = "sessions")
+
+# use a custom pins board to store bookmarkable state data
+library(pins)
+board <- board_folder("/path/to/storage_dir")
+storage <- StorageClass$new(board_sessions = board)
+}
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-StorageClass-get_sessions"></a>}}
+\if{latex}{\out{\hypertarget{method-StorageClass-get_sessions}{}}}
+\subsection{Method \code{get_sessions()}}{
+Obtain saved bookmarkable state session metadata
+
+Calls \verb{$get_sessions()} on the \code{\link{StorageClass}} object to extract
+the bookmarkable state session metadata. You can leverage this data
+frame in your Shiny application to let the user manage their existing
+bookmarkable state sessions, for example.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{StorageClass$get_sessions()}\if{html}{\out{</div>}}
+}
+
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{\dontrun{
+# beginning of application
+library(shiny)
+library(shinystate)
+
+storage <- StorageClass$new()
+
+# application UI for displaying session data
+DT::datatableOutput("session_table")
+
+# server logic for displaying session data
+output$session_table <- DT::renderDT({
+  storage$get_sessions()
+})
+}
+}
+\if{html}{\out{</div>}}
+
 }
 
 }
@@ -47,6 +262,7 @@ Create a new 'StorageClass' object.
 \if{html}{\out{<a id="method-StorageClass-restore"></a>}}
 \if{latex}{\out{\hypertarget{method-StorageClass-restore}{}}}
 \subsection{Method \code{restore()}}{
+Restore a previous bookmarkable state session
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{StorageClass$restore(url, session = shiny::getDefaultReactiveDomain())}\if{html}{\out{</div>}}
 }
@@ -61,8 +277,30 @@ state session.}
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Details}{
-Restore a previous bookmarkable state session
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{\dontrun{
+# beginning of application
+library(shiny)
+library(shinystate)
+
+# restoration of last-saved bookmarkable state file
+#
+# beginning of application
+storage <- StorageClass$new()
+
+# application UI to trigger restore
+shiny::actionButton("restore", "Restore State")
+
+# server logic for restoring state
+observeEvent(input$restore, {
+  session_df <- storage$get_sessions()
+  storage$restore(tail(session_df$url, n = 1))
+})
+}
+}
+\if{html}{\out{</div>}}
+
 }
 
 }
@@ -70,6 +308,7 @@ Restore a previous bookmarkable state session
 \if{html}{\out{<a id="method-StorageClass-snapshot"></a>}}
 \if{latex}{\out{\hypertarget{method-StorageClass-snapshot}{}}}
 \subsection{Method \code{snapshot()}}{
+Create a snapshot of bookmarkable state
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{StorageClass$snapshot(
   session_metadata = NULL,
@@ -88,8 +327,81 @@ the snapshot. Each element of the list must be a single-length item}
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Details}{
-Create a snapshot of bookmarkable state
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{\dontrun{
+# beginning of application
+library(shiny)
+library(shinystate)
+
+storage <- StorageClass$new()
+
+# application UI to trigger save
+actionButton("save", "Save State")
+
+# server logic for restoring state with timestamp as metadata
+observeEvent(input$save, {
+  storage$snapshot(session_metadata = list(time = Sys.time()))
+})
+}
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-StorageClass-delete"></a>}}
+\if{latex}{\out{\hypertarget{method-StorageClass-delete}{}}}
+\subsection{Method \code{delete()}}{
+Delete a previous snapshot of bookmarkable state
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{StorageClass$delete(url)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{url}}{character with the unique URL assigned to the bookmarkable
+state session.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{\dontrun{
+# beginning of application
+library(shiny)
+library(shinystate)
+
+storage <- StorageClass$new()
+
+# application UI to let user choose previous session
+uiOutput("previous_sessions_ui")
+
+# application UI to trigger delete
+shiny::actionButton("delete", "Delete Session")
+
+# server logic
+# populate dynamic UI
+output$previous_sessions_ui <- renderUI({
+  session_df <- storage$get_sessions
+  radioButtons(
+    "session_choice",
+    "Choose Session",
+    choices = session_df$url
+  )
+})
+
+# perform session deletion
+observeEvent(input$delete, {
+  req(input$session_choice)
+  storage$delete(input$session_choice)
+})
+}
+}
+\if{html}{\out{</div>}}
+
 }
 
 }
@@ -97,12 +409,31 @@ Create a snapshot of bookmarkable state
 \if{html}{\out{<a id="method-StorageClass-register_metadata"></a>}}
 \if{latex}{\out{\hypertarget{method-StorageClass-register_metadata}{}}}
 \subsection{Method \code{register_metadata()}}{
+Register bookmarkable state storage data collection
+
+This method must be called in the application server function to
+perform the necessary customizations to bookmark methods
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{StorageClass$register_metadata()}\if{html}{\out{</div>}}
 }
 
-\subsection{Details}{
-Register bookmarkable state storage data collection
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{\dontrun{
+# beginning of application
+library(shiny)
+library(shinystate)
+
+storage <- StorageClass$new()
+
+# applicaiton UI code ...
+
+# application server code
+storage$register_metadata()
+}
+}
+\if{html}{\out{</div>}}
+
 }
 
 }
