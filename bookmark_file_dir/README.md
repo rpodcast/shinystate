@@ -1,1 +1,0 @@
-Use this directory to prototype bookmark storage. By default the contents of this directory will not be version-controlled.
