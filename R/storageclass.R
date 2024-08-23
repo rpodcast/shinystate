@@ -11,6 +11,7 @@
 #'   pins package. If missing, a folder-based pin board will be created using
 #'   the `local_storage_dir` path.
 #' @export
+#' @importFrom R6 R6Class
 StorageClass <- R6::R6Class( # nolint
   "StorageClass",
   public = list(

@@ -2,7 +2,7 @@ Package: shinystate
 Title: Customization of Shiny Bookmarkable State
 Version: 0.0.0.9000
 Authors@R: 
-    person("Eric", "Nantz", , "nantz_eric@lilly.com", role = c("aut", "cre"))
+    person("Eric", "Nantz", , "theRcast@gmail.com", role = c("aut", "cre"))
 Description: Enhance the bookmarkable state feature of Shiny with additional
     customization such as storage location and storage repositories leveraging
     the pins package.
@@ -14,14 +14,13 @@ Imports:
     archive,
     dplyr,
     fs,
-    glue,
     htmltools,
     pins,
     R6,
-    rlang,
     shiny,
     stringr,
-    withr
+    tibble
 Suggests: 
     DT,
-    lubridate
+    lubridate,
+    rlang

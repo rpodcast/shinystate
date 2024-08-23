@@ -2,4 +2,5 @@
 
 export(StorageClass)
 export(use_shinystate)
+importFrom(R6,R6Class)
 importFrom(htmltools,htmlDependency)

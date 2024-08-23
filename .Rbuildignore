@@ -2,6 +2,7 @@
 \.vscode
 prototyping
 bookmark_file_dir
+storage_dir
 default.nix
 result
 \.gitignore
