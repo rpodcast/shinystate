@@ -59,6 +59,7 @@ let
       zip
       AzureStor
       shinytest2
+      shinyvalidate
       chromote;
   };
     
