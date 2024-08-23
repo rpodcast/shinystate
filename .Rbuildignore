@@ -6,3 +6,4 @@ default.nix
 result
 \.gitignore
 \.Renviron
+\.Rprofile
