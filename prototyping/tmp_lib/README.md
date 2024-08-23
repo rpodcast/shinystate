@@ -1,0 +1,1 @@
+Use this directory as a temporary library path when installing the package in a local area for use with `shinytest2`. By default the contents of this directory other than this README will not be version-controlled.
