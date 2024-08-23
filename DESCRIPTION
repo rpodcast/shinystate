@@ -23,4 +23,7 @@ Imports:
 Suggests: 
     DT,
     lubridate,
-    rlang
+    rlang,
+    shinytest2,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
