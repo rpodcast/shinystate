@@ -105,11 +105,12 @@ empty_sessions <- function(board_sessions) {
 }
 
 create_session_data <- function(url, session_metadata = NULL) {
-  url <- sub("^[^?]+", "", url, perl = TRUE)
-  shiny::updateQueryString(url)
+  # TODO: Verify that updateQueryString is still necessary
+  #url <- sub("^[^?]+", "", url, perl = TRUE)
+  #shiny::updateQueryString(url)
 
   session_metadata <- c(
-    url = url,
+    url = sub("^[^?]+", "", url, perl = TRUE),
     session_metadata
   )
 
@@ -119,10 +120,11 @@ create_session_data <- function(url, session_metadata = NULL) {
 }
 
 on_bookmarked <- function(url, session_metadata, board) {
-  url_for_sessions <- sub("^[^?]+", "", url, perl = TRUE)
-  shiny::updateQueryString(url_for_sessions)
+  #url_for_sessions <- sub("^[^?]+", "", url, perl = TRUE)
+  #shiny::updateQueryString(url_for_sessions)
 
-  df <- create_session_data(url_for_sessions, session_metadata)
+  #df <- create_session_data(url_for_sessions, session_metadata)
+  df <- create_session_data(url, session_metadata)
   sessions_df <- dplyr::bind_rows(import_sessions(board), df)
   upload_sessions(
     sessions_df,
