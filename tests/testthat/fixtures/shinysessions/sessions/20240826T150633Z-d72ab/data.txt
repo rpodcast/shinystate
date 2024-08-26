@@ -1,0 +1,10 @@
+file: sessions.rds
+file_size: 151
+pin_hash: d72ab907bac33ab3
+type: rds
+title: 'sessions: a pinned 1 x 1 data frame'
+description: ~
+tags: ~
+urls: ~
+created: 20240826T150633Z
+api_version: 1
