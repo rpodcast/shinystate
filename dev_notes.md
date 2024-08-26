@@ -5,7 +5,7 @@ When using this project with Nix, we are not able to install any packages in the
 * Install the package using this snippet anytime the code has been updated:
 
 ```r
-withr::with_local("prototyping/tmp_lib", devtools::install())
+withr::with_libpaths("prototyping/tmp_lib", devtools::install())
 ```
 
-* Use the same `withr::with_local()` call above to wrap any call for loading the application code.
+* Use the same `withr::with_libpaths()` call above to wrap any call for loading the application code.
