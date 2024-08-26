@@ -54,9 +54,9 @@ set_bookmark_options <- function(local_storage_dir = NULL) {
   shiny::shinyOptions(load.interface = loadInterfaceLocal)
 }
 
-import_sessions <- function(board_sessions) {
+import_sessions <- function(board_sessions, name = "sessions") {
   if (empty_sessions(board_sessions)) return(NULL)
-  pins::pin_read(board_sessions, name = "sessions")
+  pins::pin_read(board_sessions, name = name)
 }
 
 delete_session <- function(url, board) {
@@ -151,8 +151,8 @@ set_onbookmarked <- function(board) {
   }
 }
 
-save_session <- function(sessions_df, board_sessions) {
-  pins::pin_write(board_sessions, sessions_df, name = "sessions")
+save_session <- function(sessions_df, board_sessions, name = "sessions") {
+  pins::pin_write(board_sessions, sessions_df, name = name)
 }
 
 create_bookmark_bundle <- function(local_storage_dir, url) {
