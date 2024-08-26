@@ -60,20 +60,33 @@ import_sessions <- function(board_sessions, name = "sessions") {
 }
 
 delete_session <- function(url, board) {
+  session_url <- sub("^[^?]+", "", url, perl = TRUE)
   shiny_bookmark_id <- session_id_from_url(url)
   current_sessions_df <- import_sessions(board)
-  if (!url %in% current_sessions_df$url) {
+  if (!session_url %in% current_sessions_df$url) {
     message("selected session not in sessions data frame. Nothing to do")
   } else {
-    new_sessions_df <- dplyr::filter(current_sessions_df, url != !!url)
-    pins::pin_delete(
-      board = board,
-      names = shiny_bookmark_id
-    )
-    upload_sessions(
-      new_sessions_df,
-      board = board
-    )
+    new_sessions_df <- dplyr::filter(current_sessions_df, url != !!session_url)
+    # remove bookmark bundle from pins if available
+    if (shiny_bookmark_id %in% pins::pin_list(board)) {
+      pins::pin_delete(
+        board = board,
+        names = shiny_bookmark_id
+      )
+    }
+    
+    # either remove all of sessions metadata or re-upload new version
+    if (nrow(new_sessions_df) < 1) {
+      pins::pin_delete(
+        board = board,
+        names = "sessions"
+      )
+    } else {
+      upload_sessions(
+        new_sessions_df,
+        board = board
+      )
+    }
   }
 }
 
