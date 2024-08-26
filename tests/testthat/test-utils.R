@@ -40,7 +40,7 @@ test_that("creating session data set with metadata works", {
   expect_type(df[["save_name"]], "character")
 })
 
-test_that("uploading session data to pins board works", {
+test_that("managing session data on pins board works", {
   # create sample session data
   url <- "http://127.0.0.1:8888/?_state_id_=1234567890fa"
   df <- create_session_data(url)
@@ -57,4 +57,59 @@ test_that("uploading session data to pins board works", {
   import_df <- import_sessions(board_sessions)
   expect_s3_class(import_df, "data.frame")
   expect_equal(nrow(import_df), 1L)
+
+  # verify deletion of session data
+  delete_session(url, board_sessions)
+  expect_true(empty_sessions(board_sessions))
+})
+
+test_that("managing bookmark bundles works", {
+  # create fake url with state id matching fixture
+  # TODO: Find way to generalize this
+  url <- "http://127.0.0.1:8888/?_state_id_=500723aea64d9a8e"
+
+  # define storage directory of previously-generated bookmark files
+  local_storage_dir <- test_path("fixtures", "shinysessions")
+
+  # create bundle
+  bundle_path <- create_bookmark_bundle(local_storage_dir, url)
+
+  # verify contents of archive
+  extract_dir <- withr::local_tempdir()
+  archive::archive_extract(bundle_path, dir = extract_dir)
+  input_obj <- readRDS(fs::path(extract_dir, "input.rds"))
+
+  expect_equal(input_obj$n, 60)
+  expect_true(!input_obj$caps)
+  expect_equal(input_obj$txt, "silly")
+
+  # verify upload to pins board
+  storage_dir <- withr::local_tempdir()
+  board_sessions <- pins::board_folder(storage_dir)
+  upload_bookmark_bundle(local_storage_dir, url, board_sessions)
+
+  # obtain metadata
+  # TODO: Find way to use a generalized variable for name
+  bundle_metadata <- pins::pin_meta(board_sessions, name = "500723aea64d9a8e")
+  expect_equal(bundle_metadata$type, "file")
+  expect_identical(names(bundle_metadata$user), c("shiny_bookmark_id", "timestamp"))
+  expect_identical(bundle_metadata$name, bundle_metadata$title)
+
+  # verify download of bookmark bundle
+  download_storage_dir <- withr::local_tempdir()
+  download_bookmark_bundle(download_storage_dir, shiny_bookmark_id = "500723aea64d9a8e", board = board_sessions)
+
+  expect_true(fs::dir_exists(fs::path(download_storage_dir, "shiny_bookmarks")))
+  expect_true(fs::dir_exists(fs::path(download_storage_dir, "shiny_bookmarks", "500723aea64d9a8e")))
+  expect_true(fs::file_exists(fs::path(download_storage_dir, "shiny_bookmarks", "500723aea64d9a8e", "input.rds")))
+  expect_true(fs::file_exists(fs::path(download_storage_dir, "shiny_bookmarks", "500723aea64d9a8e", "values.rds")))
+})
+
+test_that("setting bookmark state options works", {
+  storage_dir <- withr::local_tempdir()
+  set_bookmark_options(storage_dir)
+
+  expect_equal(shiny::getShinyOption("local_storage_dir"), storage_dir)
+  expect_type(shiny::getShinyOption("save.interface"), "closure")
+  expect_type(shiny::getShinyOption("load.interface"), "closure")
 })
