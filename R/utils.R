@@ -80,18 +80,20 @@ delete_session <- function(url, board) {
 upload_sessions <- function(sessions_df, board, name = "sessions", quiet = TRUE) {
   if (quiet) {
     suppressMessages(
-      pins::pin_write(
-        board = board,
-        x = sessions_df,
-        name = name
-      )
+      save_session(sessions_df, board, name)
+      # pins::pin_write(
+      #   board = board,
+      #   x = sessions_df,
+      #   name = name
+      # )
     )
   } else {
-    pins::pin_write(
-      board = board,
-      x = sessions_df,
-      name = name
-    )
+    save_session(sessions_df, board, name)
+    # pins::pin_write(
+    #   board = board,
+    #   x = sessions_df,
+    #   name = name
+    # )
   }
 }
 
