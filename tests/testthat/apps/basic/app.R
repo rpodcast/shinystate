@@ -1,8 +1,11 @@
 library(shiny)
-library(shinystate)
+if (!require("shinystate")) {
+  withr::with_libpaths("../../../../prototyping/tmp_lib", {
+    library(shinystate)
+  })
+}
 
 storage_dir <- fs::path_abs("storage_dir")
-
 storage <- StorageClass$new(local_storage_dir = storage_dir)
 
 ui <- function(request) {
