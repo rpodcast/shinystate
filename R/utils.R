@@ -144,7 +144,7 @@ on_bookmarked <- function(url, session_metadata, board) {
 
 set_onbookmarked <- function(board) {
   function() {
-    onBookmarked(function(url) {
+    shiny::onBookmarked(function(url) {
       on_bookmarked(
         url = url,
         session_metadata = shiny::getShinyOption("session_metadata"),
