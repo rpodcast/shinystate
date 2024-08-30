@@ -1,3 +1,4 @@
+if (!identical(Sys.getenv("NOT_CRAN"), "true")) return()
 library(shiny)
 library(shinytest2)
 
