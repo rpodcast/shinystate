@@ -5,8 +5,7 @@ if (!require("shinystate")) {
   })
 }
 
-storage_dir <- fs::path_abs("storage_dir")
-storage <- StorageClass$new(local_storage_dir = storage_dir)
+storage <- StorageClass$new()
 
 ui <- function(request) {
   fluidPage(
