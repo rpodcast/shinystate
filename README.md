@@ -3,7 +3,7 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-`dhinystate` is an R package that provides additional customization on top of the standard Shiny [bookmarkable state](https://shiny.posit.co/r/articles/share/bookmarking-state/) capabilities.
+`shinystate` is an R package that provides additional customization on top of the standard Shiny [bookmarkable state](https://shiny.posit.co/r/articles/share/bookmarking-state/) capabilities.
 
 ## Installation
 
