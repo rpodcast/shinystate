@@ -18,7 +18,6 @@ Imports:
     pins,
     R6,
     shiny,
-    stringr,
     tibble
 Suggests: 
     DT,

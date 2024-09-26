@@ -15,7 +15,7 @@ use_shinystate <- function() {
 }
 
 session_id_from_url <- function(url) {
-  stringr::str_extract(url, "(?<=\\=).*")
+  sub(".*\\?_state_id_=([a-zA-Z0-9]+).*", "\\1", url)
 }
 
 saveInterfaceLocal <- function(id, callback) {
