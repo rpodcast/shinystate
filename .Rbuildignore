@@ -1,0 +1,15 @@
+\.git
+\.vscode
+prototyping
+bookmark_file_dir
+storage_dir
+default.nix
+result
+\.gitignore
+\.Renviron
+\.Rprofile
+_\.new\.png$
+dev_notes.md
+^.*\.Rproj$
+^\.Rproj\.user$
+^LICENSE\.md$

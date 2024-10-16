@@ -1,0 +1,16 @@
+result
+storage_dir/*
+!storage_dir/README.md
+bookmark_file_dir/*
+!bookmark_file_dir/README.md
+shinysessions/*
+!shinysessions/README.md
+.Renviron
+.DS_Store
+# {shinytest2}: Ignore new debug snapshots for `$expect_values()`
+*_.new.png
+.Rproj.user
+.Rhistory
+prototyping/*
+!prototyping/README.md
+
