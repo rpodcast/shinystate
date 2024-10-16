@@ -10,7 +10,7 @@
 You can install the development version from GitHub with the remotes package:
 
 ```r
-remotes::install_github("rpodcast/shinystate)
+remotes::install_github("rpodcast/shinystate")
 ```
 
 ## Why `shinystate`?
