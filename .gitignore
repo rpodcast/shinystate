@@ -12,5 +12,7 @@ shinysessions/*
 .Rproj.user
 .Rhistory
 prototyping/*
+!prototyping/pkg_dev_lib
+prototyping/pkg_dev_lib/*
 !prototyping/README.md
-
+!prototyping/pkg_dev_lib/.gitkeep
