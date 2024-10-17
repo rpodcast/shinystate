@@ -1,6 +1,6 @@
 library(shiny)
 if (!require("shinystate")) {
-  withr::with_libpaths("../../../../prototyping/tmp_lib", {
+  withr::with_libpaths("../../../../prototyping/pkg_dev_lib", {
     library(shinystate)
   })
 }
