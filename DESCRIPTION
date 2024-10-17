@@ -1,6 +1,6 @@
 Package: shinystate
 Title: Customization of Shiny Bookmarkable State
-Version: 0.0.0.9000
+Version: 0.0.0.9001
 Authors@R: 
     person("Eric", "Nantz", , "theRcast@gmail.com", role = c("aut", "cre"))
 Description: Enhance the bookmarkable state feature of Shiny with additional
