@@ -13,3 +13,4 @@ dev_notes.md
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE\.md$
+^\.github$
