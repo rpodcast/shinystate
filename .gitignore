@@ -16,3 +16,6 @@ prototyping/*
 prototyping/pkg_dev_lib/*
 !prototyping/README.md
 !prototyping/pkg_dev_lib/.gitkeep
+shinystate.Rcheck/
+shinystate*.tar.gz
+shinystate*.tgz
