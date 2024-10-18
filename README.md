@@ -1,4 +1,4 @@
-# shinystate <img src='man/figures/logo.png' align="right" width="25%" min-width="120px"/>
+# shinystate <img src="man/figures/logo.png" align="right" height="139" alt="" />
 
 <!-- badges: start -->
 <!-- badges: end -->
