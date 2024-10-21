@@ -17,7 +17,7 @@ Imports:
     htmltools,
     pins,
     R6,
-    shiny,
+    shiny (>= 0.14),
     tibble
 Suggests: 
     DT,
