@@ -1,8 +1,5 @@
 scatter_plot <- function(dataset, xvar, yvar) {
-  x <- rlang::sym(xvar)
-  y <- rlang::sym(yvar)
-
-  p <- ggplot(dataset, aes(x = !!x, y = !!y)) +
+  p <- ggplot(dataset, aes(x = .data[[xvar]], y = .data[[yvar]])) +
     geom_point() +
     theme(axis.title = element_text(size = rel(1.2)),
           axis.text = element_text(size = rel(1.1)))
@@ -13,15 +10,23 @@ scatter_plot <- function(dataset, xvar, yvar) {
 scatterplot_UI <- function(id) {
   ns <- NS(id)
   tagList(
-    plotOutput(ns("plot"))
+    plotOutput(ns("plot")),
+    verbatimTextOutput(ns("stat"))
   )
 }
 
-scatterplot_Server <- function(id, variables, data) {
-  moduleServer(id, function(input, output, session) {
-    output$plot <- renderPlot({
-      variables$trigger$plot
-      scatter_plot(data$dataset, xvar = variables$varX, yvar = variables$varY)
-    })
+scatterplot_Server <- function(id, variables, count, data) {
+  moduleServer(
+    id, 
+    function(input, output, session) {
+      output$plot <- renderPlot({
+        count$getValue()
+        scatter_plot(dataset = data$dataset, xvar = variables$varX, yvar = variables$varY)
+      })
+
+      output$stat <- renderPrint({
+        count$getValue()
+        cor(data$dataset[[variables$varX]], data$dataset[[variables$varY]])
+      })
   })
 }

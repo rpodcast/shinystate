@@ -8,31 +8,19 @@ source("modules/varselect.R")
 source("modules/scatterplot.R")
 
 storage <- StorageClass$new()
-df <- data(ChickWeight)
 
-Variables <- R6::R6Class(
-  classname = "Variables",
-  public = list(
-    triggers = reactiveValues(plot = 0),
-    trigger_plot = function() {
-      self$triggers$plot <- self$triggers$plot + 1
+reactiveTrigger <- function() {
+  counter <- reactiveVal(0)
+  list(
+    depend = function() {
+      counter()
+      invisible()
     },
-
-    varX = NULL,
-    varY = NULL,
-    set_vars = function(varX, varY) {
-      self$varX <- varX
-      self$varY <- varY
+    trigger = function() {
+      counter( isolate(counter()) + 1 )
     }
   )
-)
-
-DataManager <- R6::R6Class(
-  classname = "DataManager",
-  public = list(
-    dataset = ChickWeight
-  )
-)
+}
 
 ui <- function(request) {
   page_fluid(
@@ -48,15 +36,69 @@ ui <- function(request) {
 }
 
 server <- function(input, output, session) {
+  # https://gist.github.com/bborgesr/3350051727550cfa798cb4c9677adcd4
+  counter <- R6::R6Class(
+    public = list(
+      initialize = function(reactive = FALSE) {
+        private$reactive = reactive
+        private$value = 0
+        private$rxTrigger = reactiveTrigger()
+      },
+      setIncrement = function() {
+        if (private$reactive) private$rxTrigger$trigger()
+        private$value = private$value + 1
+      },
+      setDecrement = function() {
+        if (private$reactive) private$rxTrigger$trigger()
+        private$value = private$value -1
+      },
+      getValue = function() {
+        if (private$reactive) private$rxTrigger$depend()
+        return(private$value)
+      }
+    ),
+    private = list(
+      reactive = NULL,
+      value = NULL,
+      rxTrigger = NULL
+    )
+  )
+  
+  Variables <- R6::R6Class(
+    classname = "Variables",
+    public = list( 
+      varX = NULL,
+      varY = NULL,
+      set_vars = function(varX, varY) {
+        self$varX <- varX
+        self$varY <- varY
+      }
+    )
+  )
+  
+  DataManager <- R6::R6Class(
+    classname = "DataManager",
+    public = list(
+      dataset = data.frame(
+        var1 = rnorm(50),
+        var2 = rnorm(50),
+        var3 = rnorm(50),
+        var4 = rnorm(50)
+      )
+    )
+  )
+
   DataManager <- DataManager$new()
   Variables1 <- Variables$new()
   Variables2 <- Variables$new()
+  count1 <- counter$new(reactive = TRUE)
+  count2 <- counter$new(reactive = TRUE)
 
-  varselect_server("plot1_vars", Variables1)
-  varselect_server("plot2_vars", Variables2)
+  varselect_server("plot1_vars", Variables1, count1)
+  varselect_server("plot2_vars", Variables2, count2)
 
-  scatterplot_Server("plot1", variables = Variables1, data = DataManager)
-  scatterplot_Server("plot2", variables = Variables2, data = DataManager)
+  scatterplot_Server("plot1", variables = Variables1, count = count1, data = DataManager)
+  scatterplot_Server("plot2", variables = Variables2, count = count2, data = DataManager)
 }
 
 shinyApp(ui, server, onStart = function() {
