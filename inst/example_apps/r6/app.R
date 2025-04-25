@@ -31,7 +31,14 @@ ui <- function(request) {
       scatterplot_UI("plot1"),
       varselect_UI("plot2_vars"),
       scatterplot_UI("plot2")
-    )
+    ),
+    layout_column_wrap(
+      width = 1/2,
+      verbatimTextOutput("count1_print"),
+      verbatimTextOutput("count2_print")
+    ),
+    actionButton("bookmark", "Bookmark"),
+    actionButton("restore", "Restore Last Bookmark")
   )
 }
 
@@ -99,6 +106,14 @@ server <- function(input, output, session) {
 
   scatterplot_Server("plot1", variables = Variables1, count = count1, data = DataManager)
   scatterplot_Server("plot2", variables = Variables2, count = count2, data = DataManager)
+
+  output$count1_print <- renderPrint({
+    print(count1$getValue())
+  })
+
+  output$count2_print <- renderPrint({
+    print(count2$getValue())
+  })
 }
 
 shinyApp(ui, server, onStart = function() {
