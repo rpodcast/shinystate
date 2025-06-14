@@ -3,8 +3,9 @@
 prototyping
 bookmark_file_dir
 storage_dir
-default.nix
-result
+^default.nix$
+^build_nixconfig.R
+^result$
 \.gitignore
 \.Renviron
 \.Rprofile
