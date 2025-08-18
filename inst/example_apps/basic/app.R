@@ -1,18 +1,46 @@
 library(shiny)
+library(bslib)
 library(shinystate)
 
-storage <- StorageClass$new()
+storage <- StorageClass$new(local_storage_dir = "storage")
 
 ui <- function(request) {
-  fluidPage(
+  page_sidebar(
+    title = "Basic App",
+    sidebar = sidebar(
+      accordion(
+        open = c("user_inputs", "state"),
+        accordion_panel(
+          id = "user_inputs",
+          "User Inputs",
+          textInput(
+            "txt",
+            label = "Enter Title",
+            placeholder = "change this"
+          ),
+          checkboxInput("caps", "Capitalize"),
+          sliderInput(
+            "bins",
+            label = "Number of bins",
+            min = 1,
+            max = 50,
+            value = 30
+          ),
+          actionButton("add", "Add")
+        ),
+        accordion_panel(
+          id = "state",
+          "Bookmark State",
+          actionButton("bookmark", "Bookmark"),
+          actionButton("restore", "Restore Last Bookmark")
+        )
+      )
+    ),
     use_shinystate(),
-    textInput("txt", "Enter text"),
-    checkboxInput("caps", "Capitalize"),
-    sliderInput("n", "Value to add", min = 0, max = 100, value = 50),
-    actionButton("add", "Add"),
-    verbatimTextOutput("out"),
-    actionButton("bookmark", "Bookmark"),
-    actionButton("restore", "Restore Last Bookmark")
+    card(
+      card_header("App Output"),
+      plotOutput("distPlot")
+    )
   )
 }
 
@@ -20,6 +48,20 @@ server <- function(input, output, session) {
   storage$register_metadata()
 
   vals <- reactiveValues(sum = 0)
+
+  plot_title <- reactive({
+    if (!shiny::isTruthy(input$txt)) {
+      value <- "Default Title"
+    } else {
+      value <- input$txt
+    }
+
+    if (input$caps) {
+      value <- toupper(value)
+    }
+
+    return(value)
+  })
 
   onBookmark(function(state) {
     state$values$currentSum <- vals$sum
@@ -33,15 +75,17 @@ server <- function(input, output, session) {
     vals$sum <- vals$sum + input$n
   })
 
-  output$out <- renderText({
-    if (input$caps) {
-      text <- toupper(input$txt)
-    } else {
-      text <- input$txt
-    }
-    glue::glue(
-      "current text: {text}
-       sum of all previous slider values: {vals$sum}"
+  output$distPlot <- renderPlot({
+    req(plot_title())
+    x <- faithful$waiting
+    bins <- seq(min(x), max(x), length.out = input$bins + 1)
+    hist(
+      x,
+      breaks = bins,
+      col = "#007bc2",
+      border = "white",
+      xlab = "Waiting time to next eruption (in mins)",
+      main = plot_title()
     )
   })
 
