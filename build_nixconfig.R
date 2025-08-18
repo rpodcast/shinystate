@@ -33,5 +33,6 @@ rix(
     "ggplot2"
   ),
   ide = "none",
+  system_pkgs = c("air-formatter"),
   overwrite = TRUE
 )
