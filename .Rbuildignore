@@ -18,3 +18,5 @@ dev_notes.md
 ^shinystate\.Rcheck$
 ^shinystate.*\.tar\.gz$
 ^shinystate.*\.tgz$
+^\.vscode$
+^[.]?air[.]toml$
