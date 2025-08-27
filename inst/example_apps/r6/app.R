@@ -2,118 +2,125 @@ library(shiny)
 library(bslib)
 library(shinystate)
 library(R6)
-library(ggplot2)
 
-source("modules/varselect.R")
-source("modules/scatterplot.R")
-
-storage <- StorageClass$new()
-
-reactiveTrigger <- function() {
-  counter <- reactiveVal(0)
-  list(
-    depend = function() {
-      counter()
-      invisible()
-    },
-    trigger = function() {
-      counter( isolate(counter()) + 1 )
-    }
-  )
-}
+storage <- StorageClass$new(local_storage_dir = "storage")
 
 ui <- function(request) {
-  page_fluid(
+  page_sidebar(
+    title = "Basic App",
+    sidebar = sidebar(
+      accordion(
+        open = c("user_inputs", "state"),
+        accordion_panel(
+          id = "user_inputs",
+          "User Inputs",
+          numericInput(
+            "number",
+            label = "Enter Number",
+            value = 0,
+            min = -9999,
+            max = 9999
+          ),
+          actionButton("add", "Add")
+        ),
+        accordion_panel(
+          id = "state",
+          "Bookmark State",
+          actionButton("bookmark", "Bookmark"),
+          actionButton("restore", "Restore Last Bookmark")
+        )
+      )
+    ),
     use_shinystate(),
-    layout_column_wrap(
-      width = 1/4,
-      varselect_UI("plot1_vars"),
-      scatterplot_UI("plot1"),
-      varselect_UI("plot2_vars"),
-      scatterplot_UI("plot2")
-    ),
-    layout_column_wrap(
-      width = 1/2,
-      verbatimTextOutput("count1_print"),
-      verbatimTextOutput("count2_print")
-    ),
-    actionButton("bookmark", "Bookmark"),
-    actionButton("restore", "Restore Last Bookmark")
+    card(
+      card_header("App Output"),
+      uiOutput("current_sum")
+    )
   )
 }
 
 server <- function(input, output, session) {
-  # https://gist.github.com/bborgesr/3350051727550cfa798cb4c9677adcd4
-  counter <- R6::R6Class(
-    public = list(
-      initialize = function(reactive = FALSE) {
-        private$reactive = reactive
-        private$value = 0
-        private$rxTrigger = reactiveTrigger()
+  storage$register_metadata()
+
+  trigger <- reactiveVal(NULL)
+
+  # R6 class to track sum
+  Accumulator <- R6Class(
+    "Accumulator",
+    list(
+      sum = 0,
+      add = function(x = 1) {
+        self$sum <- self$sum + x
+        invisible(self)
       },
-      setIncrement = function() {
-        if (private$reactive) private$rxTrigger$trigger()
-        private$value = private$value + 1
-      },
-      setDecrement = function() {
-        if (private$reactive) private$rxTrigger$trigger()
-        private$value = private$value -1
-      },
-      getValue = function() {
-        if (private$reactive) private$rxTrigger$depend()
-        return(private$value)
-      }
-    ),
-    private = list(
-      reactive = NULL,
-      value = NULL,
-      rxTrigger = NULL
-    )
-  )
-  
-  Variables <- R6::R6Class(
-    classname = "Variables",
-    public = list( 
-      varX = NULL,
-      varY = NULL,
-      set_vars = function(varX, varY) {
-        self$varX <- varX
-        self$varY <- varY
+      serialize = function() {
+        # Return a list with class definition and instance data
+        list(
+          class_name = "Accumulator",
+          data = list(sum = self$sum),
+          # Store the class definition as text
+          class_def = deparse(substitute(Accumulator))
+        )
       }
     )
   )
-  
-  DataManager <- R6::R6Class(
-    classname = "DataManager",
-    public = list(
-      dataset = data.frame(
-        var1 = rnorm(50),
-        var2 = rnorm(50),
-        var3 = rnorm(50),
-        var4 = rnorm(50)
-      )
-    )
-  )
 
-  DataManager <- DataManager$new()
-  Variables1 <- Variables$new()
-  Variables2 <- Variables$new()
-  count1 <- counter$new(reactive = TRUE)
-  count2 <- counter$new(reactive = TRUE)
+  # Add a static method to recreate from serialized data
+  Accumulator$deserialize <- function(serialized_data) {
+    instance <- Accumulator$new()
+    instance$sum <- serialized_data$data$sum
+    instance
+  }
 
-  varselect_server("plot1_vars", Variables1, count1)
-  varselect_server("plot2_vars", Variables2, count2)
+  x <- Accumulator$new()
 
-  scatterplot_Server("plot1", variables = Variables1, count = count1, data = DataManager)
-  scatterplot_Server("plot2", variables = Variables2, count = count2, data = DataManager)
-
-  output$count1_print <- renderPrint({
-    print(count1$getValue())
+  onBookmark(function(state) {
+    message("entered onBookmark block!")
+    serialized <- x$serialize()
+    saveRDS(serialized, file.path(state$dir, "accumulator_serialized.rds"))
   })
 
-  output$count2_print <- renderPrint({
-    print(count2$getValue())
+  # onRestore(function(state) {
+  #   message("entered onRestore block!")
+  # })
+
+  onRestored(function(state) {
+    message("entered onRestored block!")
+    if (!is.null(state$dir)) {
+      # read saved file
+      if (file.exists(file.path(state$dir, "accumulator_serialized.rds"))) {
+        loaded_data <- readRDS(file.path(
+          state$dir,
+          "accumulator_serialized.rds"
+        ))
+        x <<- Accumulator$deserialize(loaded_data)
+        trigger(rnorm(1))
+      }
+    }
   })
+
+  observeEvent(input$add, {
+    x$add(input$number)
+    trigger(rnorm(1))
+  })
+
+  output$current_sum <- renderUI({
+    trigger()
+    tags$p(paste0("The Current Sum is: ", x$sum))
+  })
+
+  observeEvent(input$bookmark, {
+    serialized <- x$serialize()
+    storage$snapshot()
+    showNotification("Session successfully saved")
+  })
+
+  observeEvent(input$restore, {
+    session_df <- storage$get_sessions()
+    storage$restore(tail(session_df$url, n = 1))
+  })
+
+  setBookmarkExclude(c("add", "number", "bookmark", "restore"))
 }
 
 shinyApp(ui, server, onStart = function() {
