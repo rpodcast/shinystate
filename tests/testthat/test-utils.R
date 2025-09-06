@@ -92,17 +92,38 @@ test_that("managing bookmark bundles works", {
   # TODO: Find way to use a generalized variable for name
   bundle_metadata <- pins::pin_meta(board_sessions, name = "500723aea64d9a8e")
   expect_equal(bundle_metadata$type, "file")
-  expect_identical(names(bundle_metadata$user), c("shiny_bookmark_id", "timestamp"))
+  expect_identical(
+    names(bundle_metadata$user),
+    c("shiny_bookmark_id", "timestamp")
+  )
   expect_identical(bundle_metadata$name, bundle_metadata$title)
 
   # verify download of bookmark bundle
   download_storage_dir <- withr::local_tempdir()
-  download_bookmark_bundle(download_storage_dir, shiny_bookmark_id = "500723aea64d9a8e", board = board_sessions)
+  download_bookmark_bundle(
+    download_storage_dir,
+    shiny_bookmark_id = "500723aea64d9a8e",
+    board = board_sessions
+  )
 
   expect_true(fs::dir_exists(fs::path(download_storage_dir, "shiny_bookmarks")))
-  expect_true(fs::dir_exists(fs::path(download_storage_dir, "shiny_bookmarks", "500723aea64d9a8e")))
-  expect_true(fs::file_exists(fs::path(download_storage_dir, "shiny_bookmarks", "500723aea64d9a8e", "input.rds")))
-  expect_true(fs::file_exists(fs::path(download_storage_dir, "shiny_bookmarks", "500723aea64d9a8e", "values.rds")))
+  expect_true(fs::dir_exists(fs::path(
+    download_storage_dir,
+    "shiny_bookmarks",
+    "500723aea64d9a8e"
+  )))
+  expect_true(fs::file_exists(fs::path(
+    download_storage_dir,
+    "shiny_bookmarks",
+    "500723aea64d9a8e",
+    "input.rds"
+  )))
+  expect_true(fs::file_exists(fs::path(
+    download_storage_dir,
+    "shiny_bookmarks",
+    "500723aea64d9a8e",
+    "values.rds"
+  )))
 })
 
 test_that("setting bookmark state options works", {
