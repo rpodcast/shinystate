@@ -69,7 +69,7 @@ delete_session <- function(url, board) {
     message("selected session not in sessions data frame. Nothing to do")
   } else {
     new_sessions_df <- current_sessions_df[
-      which(current_sessions_df$url != !!session_url),
+      which(current_sessions_df$url != session_url),
       ,
       drop = FALSE
     ]
