@@ -20,3 +20,4 @@ dev_notes.md
 ^shinystate.*\.tgz$
 ^\.vscode$
 ^[.]?air[.]toml$
+^dev$
