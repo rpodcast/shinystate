@@ -21,3 +21,6 @@ dev_notes.md
 ^\.vscode$
 ^[.]?air[.]toml$
 ^dev$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$

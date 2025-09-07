@@ -22,3 +22,4 @@ shinystate*.tgz
 inst/example_apps/basic/storage/*
 inst/example_apps/bookmark_module/storage/*
 inst/example_apps/r6/storage/*
+docs
