@@ -29,7 +29,9 @@ StorageClass <- R6::R6Class(
     #'   in this documentation
     #'
     #' @examples
-    #' \dontrun{
+    #' ## Only run examples in interactive R sessions
+    #' if (interactive()) {
+    #'
     #' # beginning of application
     #' library(shiny)
     #' library(shinystate)
@@ -73,7 +75,9 @@ StorageClass <- R6::R6Class(
     #' bookmarkable state sessions, for example.
     #'
     #' @examples
-    #' \dontrun{
+    #' ## Only run examples in interactive R sessions
+    #' if (interactive()) {
+    #'
     #' # beginning of application
     #' library(shiny)
     #' library(shinystate)
@@ -81,10 +85,10 @@ StorageClass <- R6::R6Class(
     #' storage <- StorageClass$new()
     #'
     #' # application UI for displaying session data
-    #' DT::datatableOutput("session_table")
+    #' tableOutput("session_table")
     #'
     #' # server logic for displaying session data
-    #' output$session_table <- DT::renderDT({
+    #' output$session_table <- renderTable({
     #'   storage$get_sessions()
     #' })
     #' }
@@ -100,7 +104,9 @@ StorageClass <- R6::R6Class(
     #' @param session The Shiny session to associate with the restore operation
     #'
     #' @examples
-    #' \dontrun{
+    #' ## Only run examples in interactive R sessions
+    #' if (interactive()) {
+    #'
     #' # beginning of application
     #' library(shiny)
     #' library(shinystate)
@@ -143,7 +149,9 @@ StorageClass <- R6::R6Class(
     #' @param session The Shiny session to associate with the snapshot operation
     #'
     #' @examples
-    #' \dontrun{
+    #' ## Only run examples in interactive R sessions
+    #' if (interactive()) {
+    #'
     #' # beginning of application
     #' library(shiny)
     #' library(shinystate)
@@ -173,7 +181,9 @@ StorageClass <- R6::R6Class(
     #'   state session.
     #'
     #' @examples
-    #' \dontrun{
+    #' ## Only run examples in interactive R sessions
+    #' if (interactive()) {
+    #'
     #' # beginning of application
     #' library(shiny)
     #' library(shinystate)
@@ -214,7 +224,9 @@ StorageClass <- R6::R6Class(
     #' perform the necessary customizations to bookmark methods
     #'
     #' @examples
-    #' \dontrun{
+    #' ## Only run examples in interactive R sessions
+    #' if (interactive()) {
+    #'
     #' # beginning of application
     #' library(shiny)
     #' library(shinystate)

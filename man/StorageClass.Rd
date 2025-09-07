@@ -13,7 +13,9 @@ state files.
 ## Method `StorageClass$new`
 ## ------------------------------------------------
 
-\dontrun{
+## Only run examples in interactive R sessions
+if (interactive()) {
+
 # beginning of application
 library(shiny)
 library(shinystate)
@@ -34,7 +36,9 @@ storage <- StorageClass$new(board_sessions = board)
 ## Method `StorageClass$get_sessions`
 ## ------------------------------------------------
 
-\dontrun{
+## Only run examples in interactive R sessions
+if (interactive()) {
+
 # beginning of application
 library(shiny)
 library(shinystate)
@@ -42,10 +46,10 @@ library(shinystate)
 storage <- StorageClass$new()
 
 # application UI for displaying session data
-DT::datatableOutput("session_table")
+tableOutput("session_table")
 
 # server logic for displaying session data
-output$session_table <- DT::renderDT({
+output$session_table <- renderTable({
   storage$get_sessions()
 })
 }
@@ -54,7 +58,9 @@ output$session_table <- DT::renderDT({
 ## Method `StorageClass$restore`
 ## ------------------------------------------------
 
-\dontrun{
+## Only run examples in interactive R sessions
+if (interactive()) {
+
 # beginning of application
 library(shiny)
 library(shinystate)
@@ -78,7 +84,9 @@ observeEvent(input$restore, {
 ## Method `StorageClass$snapshot`
 ## ------------------------------------------------
 
-\dontrun{
+## Only run examples in interactive R sessions
+if (interactive()) {
+
 # beginning of application
 library(shiny)
 library(shinystate)
@@ -98,7 +106,9 @@ observeEvent(input$save, {
 ## Method `StorageClass$delete`
 ## ------------------------------------------------
 
-\dontrun{
+## Only run examples in interactive R sessions
+if (interactive()) {
+
 # beginning of application
 library(shiny)
 library(shinystate)
@@ -133,7 +143,9 @@ observeEvent(input$delete, {
 ## Method `StorageClass$register_metadata`
 ## ------------------------------------------------
 
-\dontrun{
+## Only run examples in interactive R sessions
+if (interactive()) {
+
 # beginning of application
 library(shiny)
 library(shinystate)
@@ -199,7 +211,9 @@ in this documentation
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{\dontrun{
+\preformatted{## Only run examples in interactive R sessions
+if (interactive()) {
+
 # beginning of application
 library(shiny)
 library(shinystate)
@@ -237,7 +251,9 @@ bookmarkable state sessions, for example.
 
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{\dontrun{
+\preformatted{## Only run examples in interactive R sessions
+if (interactive()) {
+
 # beginning of application
 library(shiny)
 library(shinystate)
@@ -245,10 +261,10 @@ library(shinystate)
 storage <- StorageClass$new()
 
 # application UI for displaying session data
-DT::datatableOutput("session_table")
+tableOutput("session_table")
 
 # server logic for displaying session data
-output$session_table <- DT::renderDT({
+output$session_table <- renderTable({
   storage$get_sessions()
 })
 }
@@ -279,7 +295,9 @@ state session.}
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{\dontrun{
+\preformatted{## Only run examples in interactive R sessions
+if (interactive()) {
+
 # beginning of application
 library(shiny)
 library(shinystate)
@@ -329,7 +347,9 @@ the snapshot. Each element of the list must be a single-length item}
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{\dontrun{
+\preformatted{## Only run examples in interactive R sessions
+if (interactive()) {
+
 # beginning of application
 library(shiny)
 library(shinystate)
@@ -369,7 +389,9 @@ state session.}
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{\dontrun{
+\preformatted{## Only run examples in interactive R sessions
+if (interactive()) {
+
 # beginning of application
 library(shiny)
 library(shinystate)
@@ -419,7 +441,9 @@ perform the necessary customizations to bookmark methods
 
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{\dontrun{
+\preformatted{## Only run examples in interactive R sessions
+if (interactive()) {
+
 # beginning of application
 library(shiny)
 library(shinystate)
