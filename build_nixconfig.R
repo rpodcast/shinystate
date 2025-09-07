@@ -31,7 +31,8 @@ rix(
     "chromote",
     "zip",
     "ggplot2",
-    "roxy.shinylive"
+    "roxy.shinylive",
+    "rhub"
   ),
   ide = "none",
   system_pkgs = c("air-formatter"),
