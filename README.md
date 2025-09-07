@@ -1,6 +1,7 @@
 # shinystate <img src="man/figures/logo.png" align="right" height="139" alt="" />
 
 <!-- badges: start -->
+[![R-CMD-check](https://github.com/rpodcast/shinystate/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/rpodcast/shinystate/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 `shinystate` is an R package that provides additional customization on top of the standard Shiny [bookmarkable state](https://shiny.posit.co/r/articles/share/bookmarking-state/) capabilities.
