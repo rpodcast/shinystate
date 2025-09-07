@@ -30,7 +30,8 @@ rix(
     "shinyvalidate",
     "chromote",
     "zip",
-    "ggplot2"
+    "ggplot2",
+    "roxy.shinylive"
   ),
   ide = "none",
   system_pkgs = c("air-formatter"),
