@@ -14,7 +14,7 @@ Description: Enhance the bookmarkable state feature of 'shiny' with additional
     the 'pins' package.
 License: MIT + file LICENSE
 Encoding: UTF-8
-Roxygen: list(markdown = TRUE)
+Roxygen: list(markdown = TRUE, packages = c("roxy.shinylive"))
 RoxygenNote: 7.3.2
 Imports: 
     archive,
@@ -26,9 +26,13 @@ Imports:
     tibble
 Suggests: 
     DT,
+    knitr,
     lubridate,
+    rmarkdown,
+    roxy.shinylive,
     testthat (>= 3.0.0),
     withr
 Config/testthat/edition: 3
 URL: https://rpodcast.github.io/shinystate/, https://github.com/rpodcast/shinystate
 BugReports: https://github.com/rpodcast/shinystate/issues
+VignetteBuilder: knitr
