@@ -9,7 +9,16 @@ vignette: >
 
 ### Introduction
 
-Add more here
+`shinystate` is an R package that enables Shiny application developers to customize key features of [bookmarkable state](https://shiny.posit.co/r/articles/share/bookmarking-state/). The bookmarkable state feature included in `shiny` lets an application user save the state of the application (such as the values of inputs), in which the state can either be encoded in a custom URL or saved as objects to a hosting server. For a standard Shiny application with a small number of input controls, the built-in bookmarkable state features will likely suffice. However, a handful of limitations exist for intermediate or complex applications:
+
+* Encoding a large number of input settings using the URL method may reach or surpass the allowable length of a URL in web browsers.
+* Saving bookmarkable state to a server requires a compatible hosting platform (such as Posit Connect or Shiny Server Pro). Even with those hosting providers, the bookmarkable state session files are saved to directories in the hosting server only accessible by system accounts, and not easily shared between users.
+
+Shiny includes the ability to augment bookmarkable state with callback functions as discussed in the [advanced bookmarking](https://shiny.posit.co/r/articles/share/advanced-bookmarking/) article, intended to assist with applications involving a complex reactive structure alongside user inputs. On the surface, these callbacks appear to address different issues than the aforementioned limitations. In the inagural R/Pharma conference held in 2018, Joe Cheng shared a [Shiny application](https://github.com/jcheng5/rpharma-demo) demonstrating small enhancements to managing multiple bookmarkable state sessions for the current user in a development context. The `shinystate` package incorporates novel approaches to offer Shiny developers an intuitive framework to address these limitations:
+
+* Integrate with the`pins` package to offer multiple storage locations to save bookmarkable state files.
+* Add optional metadata to compliment the existing bookmarkable state objects as the time a snapshot is created.
+* Perform bookmarkable state operations using a new `R6` class called `StorageClass`.
 
 ### Example applicaiton
 
