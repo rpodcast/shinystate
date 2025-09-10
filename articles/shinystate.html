@@ -59,9 +59,9 @@
 
     
     
-<div class="section level3">
-<h3 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
-</h3>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
 <p><code>shinystate</code> is an R package that enables Shiny
 application developers to customize key features of <a href="https://shiny.posit.co/r/articles/share/bookmarking-state/" class="external-link">bookmarkable
 state</a>. The bookmarkable state feature included in <code>shiny</code>
@@ -101,9 +101,9 @@ objects as the time a snapshot is created.</li>
 class called <code>StorageClass</code>.</li>
 </ul>
 </div>
-<div class="section level3">
-<h3 id="example-applicaiton">Example applicaiton<a class="anchor" aria-label="anchor" href="#example-applicaiton"></a>
-</h3>
+<div class="section level2">
+<h2 id="example-application">Example application<a class="anchor" aria-label="anchor" href="#example-application"></a>
+</h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.posit.co/" class="external-link">shiny</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/bslib/" class="external-link">bslib</a></span><span class="op">)</span></span>
@@ -212,7 +212,6 @@ class called <code>StorageClass</code>.</li>
 <span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span><span class="va">ui</span>, <span class="va">server</span>, onStart <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/enableBookmarking.html" class="external-link">enableBookmarking</a></span><span class="op">(</span><span class="st">"server"</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
-</div>
 <div class="section level3">
 <h3 id="try-it-out-in-shinylive">Try it out in Shinylive<a class="anchor" aria-label="anchor" href="#try-it-out-in-shinylive"></a>
 </h3>
@@ -220,6 +219,7 @@ class called <code>StorageClass</code>.</li>
 in Shinylive</a></p>
 <iframe src="https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAdzgCMAnRRASwgGdSoAbbgCgDk7ABZsAnpyjkBuAAQM4qIu1kBeWQUHDSpVO0QB6AwyUATAlE4YGAWgCuEFgDc4DdnAym4TmbIHbdfSMFJWsbaksYDCIGAHMBAEoEgB0IbhZGKAYxPhFxFLSMhiycunZ0ugKK4uzc0QgJLnIC1M4YqFi4WQAeG1kAZVJ2zoBhbkt2ABIIOGo+Fog7Fh6+gDMHAlIWEj4FAEc7OE4E2RBU2VlUDrgAfXYWLzosvnOL2S3Sbi71ZLAAIUsLAIsgAguhfrhXhd7o8smpZDD6M8oW8oARiAxTNsIC8IG98bIiKgKPDNL87O4GDc2Kg7KR2BDZL9JORfglIXiCRc0RisSQblcZvwUVyHvDyZTqRBafSISKCb8AKqU2QASWldIZeHl+PIAA9SOqZbiuVzfqQDXLOaa3uM6HBuOKwABRMiuWQAFRYnzgVpt+NQ4wIcGERG4XgYToIwigEE671EWp1b3ZyYu0bgBAA1nQiHqjXSXoQ0Fq5L8RmhvTwWAAvX1gVPW03lB6uAukE3+i6-OhsUtp21Qe2On5gABydhg9sjRFWsl7HD9XdkMDY8IAjBzlyuoHr4QBWAAMW+XTh4h3hAGZDwPG120VsSH86UMcb8oKZTIzfiDP2zk3epo8jEfIQAKsYOp2NpiqOLL1ieNq-H8RBEFmMBZFmAxNPBA4Ptiz46DsPYoWhGHfv8JHoQwWZsghQGbPhL5EWAChtAo5FYEcQwKLIAAylikLIyGoVRNENgB8oFPigEXBStx5A0cHzHRFiYlBbyqaYNzCHAH6uEWYKoLIADydIyrR8qBkQpCmboha-FinAAArcNZ-5NlJsgFAAvqkrSuC4ka9LI6wQAxOw0nSchEGZUUIkc9wkCcZycmx1yTAosQsJwrg3PAXCmFIUDzH5nJntwKjBQoeEuAAaueRy5JO8KHgsFxWaQNwfF8KzyLpDEuHwKX4iwc58AAhApYjMNlHoMHSwg5JFpCTBapBJKc8rlRewW-AAInAqxQHY3CCV6Pq-Ci3myA67ibU2FzbV0wXLatlpNr5EAoqNsh8K9Fh6MlW0Nb1Qx2Og+lPZ5FyfSiCikHYDA4lDrzeW1hIQMJpHUXwoXhTicFA02cGTE9UwEIjChkP0zXBeVUzsJOqPoyQnFsXAuMbI+BPYUT+L05MjMwL1JNk5MFMMFTpA0zAzOlRcRBlAFcDOi4ZB-RqK0fqYcjDW8AtC71BvNQA1LIr1fZyaPy4SsUrY5pAudZvVUxGTsdnrFz7HwHVdd6XzzNDsh7sFR3esI6zcJMETemwsQogulV9O4ex8KuOJ6uyO56nwmdyF8cakMI0R0vCr2J7IZvrkHiYdvKep0RcjC6VmKjqInjcaGGToAMSHoeADsdAEAATEu+K5pi7qjtQoistqD3B3aToAOpQLHcbvCw8DvEQsgzAaN3zag3O-Wu6fsCkC9cuha7qL73Uc0HnnW5bCtKwwLiqxQHbl5RGG6xRGlTogtoB6FDB2IOIgiDUDHNZUaQIpDYiLP0BK2IER2HRAlSO3AxAIigC4L84krYsw-l-NWv9NYZS4jEOAgDiZoP5KYOcwVgFwEmJ0Tq7h2CJQ4CVYm3F0qsW4hzLgLB+DcN4TcZhkxEbcDkHidQ1cX7o3cKQLGolnR6gINwOwXg+BkhQH+PATIwC5hEmRExvxhG0LZD5UqU1DJ8CWHISkgVooQEGFkQS6g8bc3mPdaE9RpqIAoEOL4GiMJxyLG41w7k0ZgG8gAXSAA" width="150%" height="800px" data-external="1" style="position: relative; z-index:1">
 </iframe>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
