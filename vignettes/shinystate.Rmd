@@ -7,7 +7,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-### Introduction
+## Introduction
 
 `shinystate` is an R package that enables Shiny application developers to customize key features of [bookmarkable state](https://shiny.posit.co/r/articles/share/bookmarking-state/). The bookmarkable state feature included in `shiny` lets an application user save the state of the application (such as the values of inputs), in which the state can either be encoded in a custom URL or saved as objects to a hosting server. For a standard Shiny application with a small number of input controls, the built-in bookmarkable state features will likely suffice. However, a handful of limitations exist for intermediate or complex applications:
 
@@ -20,7 +20,7 @@ Shiny includes the ability to augment bookmarkable state with callback functions
 * Add optional metadata to compliment the existing bookmarkable state objects as the time a snapshot is created.
 * Perform bookmarkable state operations using a new `R6` class called `StorageClass`.
 
-### Example applicaiton
+## Example application
 
 ```{r app, eval=FALSE}
 library(shiny)
