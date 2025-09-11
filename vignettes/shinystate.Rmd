@@ -20,7 +20,29 @@ Shiny includes the ability to augment bookmarkable state with callback functions
 * Add optional metadata to compliment the existing bookmarkable state objects as the time a snapshot is created.
 * Perform bookmarkable state operations using a new `R6` class called `StorageClass`.
 
-## Example application
+## Installation
+
+The [shinystate](https://rpodcast.github.io/shinystate/) package can be installed from CRAN:
+
+```{r install-instructions, eval=FALSE}
+install.packages("shinystate")
+```
+
+## Usage
+
+To enable saving bookmarkable state with `shinystate`, you need to:
+
+1. Load the package: `library(shinystate)`
+1. Create an instance of the `StorageClass` class outside of the application user interface and server functions: `StorageClass$new()`
+1. Include `use_shinystate()` in your UI definition
+1. Call the `register_metadata()` method from your instance of the `StorageClass` class at the beginning of the application server function
+1. Enable the save-to-server bookmarking method by adding `enableBookmarking = 'server'` in the call to `shinyApp()`
+1. Call the `snapshot()` method from your instance of the `StorageClass` class to save the state of the Shiny app session
+1. Call the `restore()` method from your instance of the `StorageClass` class to restore a saved session based on the session URL, available in the data frame returned from the `get_sessions()` method.
+
+## Example Application
+
+Below is an example application illustrating the default usage of `shinystate`. The application has a small set of user inputs as well as a reactive value that will also be saved as part of the bookmarkable state session. A pair of action buttons trigger the saving and loading of bookmarkable state within their respective `observeEvent` expressions. In this application, the most recent bookmarkable state session is restored by obtaining the last record's URL value in the session data frame.
 
 ```{r app, eval=FALSE}
 library(shiny)
@@ -127,9 +149,7 @@ server <- function(input, output, session) {
   setBookmarkExclude(c("add", "bookmark", "restore"))
 }
 
-shinyApp(ui, server, onStart = function() {
-  shiny::enableBookmarking("server")
-})
+shinyApp(ui, server, enableBookmarking = "server")
 ```
 
 ### Try it out in Shinylive
