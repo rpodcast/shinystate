@@ -1,9 +1,26 @@
-#' Dependencies
+#' Add shinystate dependency
 #'
-#' Include shinystate dependencies in your Shiny UI
+#' Include shinystate dependencies in your Shiny application UI
 #'
 #' @importFrom htmltools htmlDependency
 #' @export
+#' @examples
+#' ## Only run examples in interactive R sessions
+#' if (interactive()) {
+#'
+#' library(shiny)
+#' library(shinystate)
+#'
+#' storage <- StorageClass$new()
+#'
+#' ui <- function(request) {
+#'   fluidPage(
+#'     use_shinystate(),
+#'     actionButton("bookmark", "Bookmark"),
+#'     actionButton("restore", "Restore Last Bookmark")
+#'   )
+#' }
+#' }
 use_shinystate <- function() {
   htmlDependency(
     "shinystate",

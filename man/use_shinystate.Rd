@@ -2,10 +2,28 @@
 % Please edit documentation in R/utils.R
 \name{use_shinystate}
 \alias{use_shinystate}
-\title{Dependencies}
+\title{Add shinystate dependency}
 \usage{
 use_shinystate()
 }
 \description{
-Include shinystate dependencies in your Shiny UI
+Include shinystate dependencies in your Shiny application UI
+}
+\examples{
+## Only run examples in interactive R sessions
+if (interactive()) {
+
+library(shiny)
+library(shinystate)
+
+storage <- StorageClass$new()
+
+ui <- function(request) {
+  fluidPage(
+    use_shinystate(),
+    actionButton("bookmark", "Bookmark"),
+    actionButton("restore", "Restore Last Bookmark")
+  )
+}
+}
 }
