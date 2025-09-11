@@ -8,9 +8,12 @@
 
 ## Installation
 
-You can install the development version from GitHub with the remotes package:
 
 ```r
+# Install the released version from CRAN
+install.packages("shinystate")
+
+# Or the development version from GitHub:
 remotes::install_github("rpodcast/shinystate")
 ```
 
@@ -26,48 +29,111 @@ However, as applications grow in complexity and are used in high-stakes situatio
  
 The `shinystate` package offers an intuitive class system built upon the `R6` package with methods tailored to the common operations with managing bookmarkable state. 
 
-## Basic Usage
+## How to use it?
 
-Here is the general setup procedure for incorporating `shinystate` in your Shiny application:
+To enable saving bookmarkable state with `shinystate`, you need to:
 
-* Load the package in your application with `library(shinystate)` or other methods used in frameworks such as `golem` or `rhino`.
-* Create a new storage class object in the beginning of your application with `StorageClass$new()`. Optional parameters exist and are discussed in the detailed user guides.
-* Inside the user interface function of your application, add `use_shinystate()`.
-* Inside the server function of your application, execute the `register_metadata()` method.
-* Add a call to `shiny::enableBookmarking("server")` either in the server function or as part of a custom function used for the `onStart` parameter in `shiny::shinyApp()`.  
+1. Load the package: `library(shinystate)`
+1. Create an instance of the `StorageClass` class outside of the application user interface and server functions: `StorageClass$new()`
+1. Include `use_shinystate()` in your UI definition
+1. Call the `register_metadata()` method from your instance of the `StorageClass` class at the beginning of the application server function
+1. Enable the save-to-server bookmarking method by adding `enableBookmarking = 'server'` in the call to `shinyApp()`
+1. Call the `snapshot()` method from your instance of the `StorageClass` class to save the state of the Shiny app session
+1. Call the `restore()` method from your instance of the `StorageClass` class to restore a saved session based on the session URL, available in the data frame returned from the `get_sessions()` method.
 
-Once the setup is complete, you can use the following methods with the storage object to perform common operations:
+Below is an example application illustrating the default usage of `shinystate`. Visit the [Getting Started](https://rpodcast.github.io/shinystate/articles/shinystate.html) for additional details.
 
-* `snapshot()`: Save the state of the application as a set of bookmarkable state files.
-* `restore(url)`: Restore a previously-saved state based on the unique URL of the snapshot
-
-Here is an example Shiny application inspired by the single-file example from the official [introduction to bookmarking state](https://shiny.posit.co/r/articles/share/bookmarking-state/) article that utilizes `shinystate`:
 
 ```r
 library(shiny)
+library(bslib)
 library(shinystate)
 
 storage <- StorageClass$new()
 
 ui <- function(request) {
-  fluidPage(
+  page_sidebar(
+    title = "Basic App",
+    sidebar = sidebar(
+      accordion(
+        open = c("user_inputs", "state"),
+        accordion_panel(
+          id = "user_inputs",
+          "User Inputs",
+          textInput(
+            "txt",
+            label = "Enter Title",
+            placeholder = "change this"
+          ),
+          checkboxInput("caps", "Capitalize"),
+          sliderInput(
+            "bins",
+            label = "Number of bins",
+            min = 1,
+            max = 50,
+            value = 30
+          ),
+          actionButton("add", "Add")
+        ),
+        accordion_panel(
+          id = "state",
+          "Bookmark State",
+          actionButton("bookmark", "Bookmark"),
+          actionButton("restore", "Restore Last Bookmark")
+        )
+      )
+    ),
     use_shinystate(),
-    textInput("txt", "Enter text"),
-    checkboxInput("caps", "Capitalize"),
-    verbatimTextOutput("out"),
-    actionButton("bookmark", "Bookmark"),
-    actionButton("restore", "Restore Last Bookmark")
+    card(
+      card_header("App Output"),
+      plotOutput("distPlot")
+    )
   )
 }
 
 server <- function(input, output, session) {
   storage$register_metadata()
-  output$out <- renderText({
-    if (input$caps) {
-      toupper(input$txt)
+
+  vals <- reactiveValues(sum = 0)
+
+  plot_title <- reactive({
+    if (!shiny::isTruthy(input$txt)) {
+      value <- "Default Title"
     } else {
-      input$txt
+      value <- input$txt
     }
+
+    if (input$caps) {
+      value <- toupper(value)
+    }
+
+    return(value)
+  })
+
+  onBookmark(function(state) {
+    state$values$currentSum <- vals$sum
+  })
+
+  onRestore(function(state) {
+    vals$sum <- state$values$currentSum
+  })
+
+  observeEvent(input$add, {
+    vals$sum <- vals$sum + input$n
+  })
+
+  output$distPlot <- renderPlot({
+    req(plot_title())
+    x <- faithful$waiting
+    bins <- seq(min(x), max(x), length.out = input$bins + 1)
+    hist(
+      x,
+      breaks = bins,
+      col = "#007bc2",
+      border = "white",
+      xlab = "Waiting time to next eruption (in mins)",
+      main = plot_title()
+    )
   })
 
   observeEvent(input$bookmark, {
@@ -80,12 +146,10 @@ server <- function(input, output, session) {
     storage$restore(tail(session_df$url, n = 1))
   })
 
-  setBookmarkExclude(c("bookmark", "restore"))
+  setBookmarkExclude(c("add", "bookmark", "restore"))
 }
 
-shinyApp(ui, server, onStart = function() {
-  shiny::enableBookmarking("server")
-})
+shinyApp(ui, server, enableBookmarking = "server")
 ```
 
 ## Code of Conduct
