@@ -249,6 +249,9 @@ bookmarkable state sessions, for example.
 \if{html}{\out{<div class="r">}}\preformatted{StorageClass$get_sessions()}\if{html}{\out{</div>}}
 }
 
+\subsection{Returns}{
+data frame of bookmarkable session metadata
+}
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{## Only run examples in interactive R sessions
@@ -434,7 +437,7 @@ observeEvent(input$delete, {
 Register bookmarkable state storage data collection
 
 This method must be called in the application server function to
-perform the necessary customizations to bookmark methods
+perform the necessary customizations to bookmarkable state methods
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{StorageClass$register_metadata()}\if{html}{\out{</div>}}
 }

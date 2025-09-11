@@ -74,6 +74,7 @@ StorageClass <- R6::R6Class(
     #' frame in your Shiny application to let the user manage their existing
     #' bookmarkable state sessions, for example.
     #'
+    #' @return data frame of bookmarkable session metadata
     #' @examples
     #' ## Only run examples in interactive R sessions
     #' if (interactive()) {
@@ -221,7 +222,7 @@ StorageClass <- R6::R6Class(
     #' Register bookmarkable state storage data collection
     #'
     #' This method must be called in the application server function to
-    #' perform the necessary customizations to bookmark methods
+    #' perform the necessary customizations to bookmarkable state methods
     #'
     #' @examples
     #' ## Only run examples in interactive R sessions
