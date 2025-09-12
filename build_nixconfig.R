@@ -35,6 +35,6 @@ rix(
     "rhub"
   ),
   ide = "none",
-  system_pkgs = c("air-formatter"),
+  system_pkgs = c("air-formatter", "qpdf"),
   overwrite = TRUE
 )
