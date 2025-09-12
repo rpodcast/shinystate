@@ -33,6 +33,7 @@ Suggests:
     DT,
     knitr,
     lubridate,
+    rlang,
     rmarkdown,
     roxy.shinylive,
     testthat (>= 3.0.0),
