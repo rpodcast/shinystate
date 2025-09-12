@@ -30,6 +30,7 @@ Imports:
     R6,
     shiny (>= 0.14),
 Suggests: 
+    bslib,
     DT,
     knitr,
     lubridate,
