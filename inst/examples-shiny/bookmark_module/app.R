@@ -21,7 +21,7 @@ ui <- function(req) {
         class = "container-fluid",
         tags$div(
           class = "navbar-header",
-          tags$div(class = "navbar-brand", "R/Pharma demo")
+          tags$div(class = "navbar-brand", "Bookmark Module Demo")
         ),
         # Links for restoring/loading sessions
         tags$ul(
