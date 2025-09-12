@@ -39,12 +39,14 @@ StorageClass <- R6::R6Class(
     #' # Create a StorageClass object with default settings
     #' storage <- StorageClass$new()
     #'
-    #' # Use a local directory called "sessions" to store files
-    #' storage <- StorageClass$new(local_storage_dir = "sessions")
+    #' # Use a pre-specified directory to store state files
+    #' # For purposes of this example, use a temporary directory
+    #' storage <- StorageClass$new(local_storage_dir = tempdir())
     #'
     #' # use a custom pins board to store bookmarkable state data
+    #' # For purposes of this example, use a temporary directory
     #' library(pins)
-    #' board <- board_folder("/path/to/storage_dir")
+    #' board <- board_temp()
     #' storage <- StorageClass$new(board_sessions = board)
     #' }
     local_storage_dir = NULL,
@@ -74,24 +76,21 @@ StorageClass <- R6::R6Class(
     #' frame in your Shiny application to let the user manage their existing
     #' bookmarkable state sessions, for example.
     #'
-    #' @return data frame of bookmarkable session metadata
+    #' @return data frame of bookmarkable session metadata if at least one
+    #'   bookmarkable state session has been saved. Otherwise, the return
+    #'   object will be `NULL`.
     #' @examples
     #' ## Only run examples in interactive R sessions
     #' if (interactive()) {
     #'
-    #' # beginning of application
     #' library(shiny)
     #' library(shinystate)
     #'
+    #' # Create a StorageClass object with default settings
     #' storage <- StorageClass$new()
     #'
-    #' # application UI for displaying session data
-    #' tableOutput("session_table")
-    #'
-    #' # server logic for displaying session data
-    #' output$session_table <- renderTable({
-    #'   storage$get_sessions()
-    #' })
+    #' # obtain session data
+    #' storage$get_sessions()
     #' }
     get_sessions = function() {
       import_sessions(self$board_sessions)
@@ -108,23 +107,17 @@ StorageClass <- R6::R6Class(
     #' ## Only run examples in interactive R sessions
     #' if (interactive()) {
     #'
-    #' # beginning of application
-    #' library(shiny)
     #' library(shinystate)
     #'
-    #' # restoration of last-saved bookmarkable state file
-    #' #
-    #' # beginning of application
+    #' # Create a StorageClass object with default settings
     #' storage <- StorageClass$new()
     #'
-    #' # application UI to trigger restore
-    #' shiny::actionButton("restore", "Restore State")
+    #' # obtain session data
+    #' session_df <- storage$get_sessions()
     #'
-    #' # server logic for restoring state
-    #' observeEvent(input$restore, {
-    #'   session_df <- storage$get_sessions()
-    #'   storage$restore(tail(session_df$url, n = 1))
-    #' })
+    #' # restore state
+    #' # typically run inside a shiny observe or observeEvent call
+    #' storage$restore(tail(session_df$url, n = 1))
     #' }
     restore = function(url, session = shiny::getDefaultReactiveDomain()) {
       # download shiny bookmark files from board if not available locally
@@ -153,19 +146,14 @@ StorageClass <- R6::R6Class(
     #' ## Only run examples in interactive R sessions
     #' if (interactive()) {
     #'
-    #' # beginning of application
-    #' library(shiny)
     #' library(shinystate)
     #'
+    #' # Create a StorageClass object with default settings
     #' storage <- StorageClass$new()
     #'
-    #' # application UI to trigger save
-    #' actionButton("save", "Save State")
-    #'
-    #' # server logic for restoring state with timestamp as metadata
-    #' observeEvent(input$save, {
-    #'   storage$snapshot(session_metadata = list(time = Sys.time()))
-    #' })
+    #' # save state with timestamp as metadata
+    #' # typically run inside a shiny observe or observeEvent call
+    #' storage$snapshot(session_metadata = list(time = Sys.time()))
     #' }
     snapshot = function(
       session_metadata = NULL,
@@ -185,34 +173,17 @@ StorageClass <- R6::R6Class(
     #' ## Only run examples in interactive R sessions
     #' if (interactive()) {
     #'
-    #' # beginning of application
-    #' library(shiny)
     #' library(shinystate)
     #'
+    #' # Create a StorageClass object with default settings
     #' storage <- StorageClass$new()
     #'
-    #' # application UI to let user choose previous session
-    #' uiOutput("previous_sessions_ui")
+    #' # obtain session data
+    #' session_df <- storage$get_sessions()
     #'
-    #' # application UI to trigger delete
-    #' shiny::actionButton("delete", "Delete Session")
-    #'
-    #' # server logic
-    #' # populate dynamic UI
-    #' output$previous_sessions_ui <- renderUI({
-    #'   session_df <- storage$get_sessions
-    #'   radioButtons(
-    #'     "session_choice",
-    #'     "Choose Session",
-    #'     choices = session_df$url
-    #'   )
-    #' })
-    #'
-    #' # perform session deletion
-    #' observeEvent(input$delete, {
-    #'   req(input$session_choice)
-    #'   storage$delete(input$session_choice)
-    #' })
+    #' # delete a session
+    #' # typically run inside a shiny observe or observeEvent call
+    #' storage$delete(session_df$url[1])
     #' }
     delete = function(url) {
       delete_session(url, board = self$board_sessions)
@@ -222,22 +193,23 @@ StorageClass <- R6::R6Class(
     #' Register bookmarkable state storage data collection
     #'
     #' This method must be called in the application server function to
-    #' perform the necessary customizations to bookmarkable state methods
+    #' perform the necessary customizations to bookmarkable state methods.
+    #' This function is meant to be called near the beginning of the Shiny
+    #' application server function.
     #'
     #' @examples
     #' ## Only run examples in interactive R sessions
     #' if (interactive()) {
     #'
-    #' # beginning of application
-    #' library(shiny)
     #' library(shinystate)
     #'
+    #' # Create a StorageClass object with default settings
     #' storage <- StorageClass$new()
     #'
-    #' # applicaiton UI code ...
-    #'
     #' # application server code
-    #' storage$register_metadata()
+    #' server <- function(input, output, session) {
+    #'   storage$register_metadata()
+    #' }
     #' }
     register_metadata = function() {
       set_onbookmarked(board = self$board_sessions)()

@@ -23,12 +23,14 @@ library(shinystate)
 # Create a StorageClass object with default settings
 storage <- StorageClass$new()
 
-# Use a local directory called "sessions" to store files
-storage <- StorageClass$new(local_storage_dir = "sessions")
+# Use a pre-specified directory to store state files
+# For purposes of this example, use a temporary directory
+storage <- StorageClass$new(local_storage_dir = tempdir())
 
 # use a custom pins board to store bookmarkable state data
+# For purposes of this example, use a temporary directory
 library(pins)
-board <- board_folder("/path/to/storage_dir")
+board <- board_temp()
 storage <- StorageClass$new(board_sessions = board)
 }
 
@@ -39,19 +41,14 @@ storage <- StorageClass$new(board_sessions = board)
 ## Only run examples in interactive R sessions
 if (interactive()) {
 
-# beginning of application
 library(shiny)
 library(shinystate)
 
+# Create a StorageClass object with default settings
 storage <- StorageClass$new()
 
-# application UI for displaying session data
-tableOutput("session_table")
-
-# server logic for displaying session data
-output$session_table <- renderTable({
-  storage$get_sessions()
-})
+# obtain session data
+storage$get_sessions()
 }
 
 ## ------------------------------------------------
@@ -61,23 +58,17 @@ output$session_table <- renderTable({
 ## Only run examples in interactive R sessions
 if (interactive()) {
 
-# beginning of application
-library(shiny)
 library(shinystate)
 
-# restoration of last-saved bookmarkable state file
-#
-# beginning of application
+# Create a StorageClass object with default settings
 storage <- StorageClass$new()
 
-# application UI to trigger restore
-shiny::actionButton("restore", "Restore State")
+# obtain session data
+session_df <- storage$get_sessions()
 
-# server logic for restoring state
-observeEvent(input$restore, {
-  session_df <- storage$get_sessions()
-  storage$restore(tail(session_df$url, n = 1))
-})
+# restore state
+# typically run inside a shiny observe or observeEvent call
+storage$restore(tail(session_df$url, n = 1))
 }
 
 ## ------------------------------------------------
@@ -87,19 +78,14 @@ observeEvent(input$restore, {
 ## Only run examples in interactive R sessions
 if (interactive()) {
 
-# beginning of application
-library(shiny)
 library(shinystate)
 
+# Create a StorageClass object with default settings
 storage <- StorageClass$new()
 
-# application UI to trigger save
-actionButton("save", "Save State")
-
-# server logic for restoring state with timestamp as metadata
-observeEvent(input$save, {
-  storage$snapshot(session_metadata = list(time = Sys.time()))
-})
+# save state with timestamp as metadata
+# typically run inside a shiny observe or observeEvent call
+storage$snapshot(session_metadata = list(time = Sys.time()))
 }
 
 ## ------------------------------------------------
@@ -109,34 +95,17 @@ observeEvent(input$save, {
 ## Only run examples in interactive R sessions
 if (interactive()) {
 
-# beginning of application
-library(shiny)
 library(shinystate)
 
+# Create a StorageClass object with default settings
 storage <- StorageClass$new()
 
-# application UI to let user choose previous session
-uiOutput("previous_sessions_ui")
+# obtain session data
+session_df <- storage$get_sessions()
 
-# application UI to trigger delete
-shiny::actionButton("delete", "Delete Session")
-
-# server logic
-# populate dynamic UI
-output$previous_sessions_ui <- renderUI({
-  session_df <- storage$get_sessions
-  radioButtons(
-    "session_choice",
-    "Choose Session",
-    choices = session_df$url
-  )
-})
-
-# perform session deletion
-observeEvent(input$delete, {
-  req(input$session_choice)
-  storage$delete(input$session_choice)
-})
+# delete a session
+# typically run inside a shiny observe or observeEvent call
+storage$delete(session_df$url[1])
 }
 
 ## ------------------------------------------------
@@ -146,16 +115,15 @@ observeEvent(input$delete, {
 ## Only run examples in interactive R sessions
 if (interactive()) {
 
-# beginning of application
-library(shiny)
 library(shinystate)
 
+# Create a StorageClass object with default settings
 storage <- StorageClass$new()
 
-# applicaiton UI code ...
-
 # application server code
-storage$register_metadata()
+server <- function(input, output, session) {
+  storage$register_metadata()
+}
 }
 }
 \section{Public fields}{
@@ -221,12 +189,14 @@ library(shinystate)
 # Create a StorageClass object with default settings
 storage <- StorageClass$new()
 
-# Use a local directory called "sessions" to store files
-storage <- StorageClass$new(local_storage_dir = "sessions")
+# Use a pre-specified directory to store state files
+# For purposes of this example, use a temporary directory
+storage <- StorageClass$new(local_storage_dir = tempdir())
 
 # use a custom pins board to store bookmarkable state data
+# For purposes of this example, use a temporary directory
 library(pins)
-board <- board_folder("/path/to/storage_dir")
+board <- board_temp()
 storage <- StorageClass$new(board_sessions = board)
 }
 }
@@ -250,26 +220,23 @@ bookmarkable state sessions, for example.
 }
 
 \subsection{Returns}{
-data frame of bookmarkable session metadata
+data frame of bookmarkable session metadata if at least one
+bookmarkable state session has been saved. Otherwise, the return
+object will be \code{NULL}.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{## Only run examples in interactive R sessions
 if (interactive()) {
 
-# beginning of application
 library(shiny)
 library(shinystate)
 
+# Create a StorageClass object with default settings
 storage <- StorageClass$new()
 
-# application UI for displaying session data
-tableOutput("session_table")
-
-# server logic for displaying session data
-output$session_table <- renderTable({
-  storage$get_sessions()
-})
+# obtain session data
+storage$get_sessions()
 }
 }
 \if{html}{\out{</div>}}
@@ -301,23 +268,17 @@ state session.}
 \preformatted{## Only run examples in interactive R sessions
 if (interactive()) {
 
-# beginning of application
-library(shiny)
 library(shinystate)
 
-# restoration of last-saved bookmarkable state file
-#
-# beginning of application
+# Create a StorageClass object with default settings
 storage <- StorageClass$new()
 
-# application UI to trigger restore
-shiny::actionButton("restore", "Restore State")
+# obtain session data
+session_df <- storage$get_sessions()
 
-# server logic for restoring state
-observeEvent(input$restore, {
-  session_df <- storage$get_sessions()
-  storage$restore(tail(session_df$url, n = 1))
-})
+# restore state
+# typically run inside a shiny observe or observeEvent call
+storage$restore(tail(session_df$url, n = 1))
 }
 }
 \if{html}{\out{</div>}}
@@ -353,19 +314,14 @@ the snapshot. Each element of the list must be a single-length item}
 \preformatted{## Only run examples in interactive R sessions
 if (interactive()) {
 
-# beginning of application
-library(shiny)
 library(shinystate)
 
+# Create a StorageClass object with default settings
 storage <- StorageClass$new()
 
-# application UI to trigger save
-actionButton("save", "Save State")
-
-# server logic for restoring state with timestamp as metadata
-observeEvent(input$save, {
-  storage$snapshot(session_metadata = list(time = Sys.time()))
-})
+# save state with timestamp as metadata
+# typically run inside a shiny observe or observeEvent call
+storage$snapshot(session_metadata = list(time = Sys.time()))
 }
 }
 \if{html}{\out{</div>}}
@@ -395,34 +351,17 @@ state session.}
 \preformatted{## Only run examples in interactive R sessions
 if (interactive()) {
 
-# beginning of application
-library(shiny)
 library(shinystate)
 
+# Create a StorageClass object with default settings
 storage <- StorageClass$new()
 
-# application UI to let user choose previous session
-uiOutput("previous_sessions_ui")
+# obtain session data
+session_df <- storage$get_sessions()
 
-# application UI to trigger delete
-shiny::actionButton("delete", "Delete Session")
-
-# server logic
-# populate dynamic UI
-output$previous_sessions_ui <- renderUI({
-  session_df <- storage$get_sessions
-  radioButtons(
-    "session_choice",
-    "Choose Session",
-    choices = session_df$url
-  )
-})
-
-# perform session deletion
-observeEvent(input$delete, {
-  req(input$session_choice)
-  storage$delete(input$session_choice)
-})
+# delete a session
+# typically run inside a shiny observe or observeEvent call
+storage$delete(session_df$url[1])
 }
 }
 \if{html}{\out{</div>}}
@@ -437,7 +376,9 @@ observeEvent(input$delete, {
 Register bookmarkable state storage data collection
 
 This method must be called in the application server function to
-perform the necessary customizations to bookmarkable state methods
+perform the necessary customizations to bookmarkable state methods.
+This function is meant to be called near the beginning of the Shiny
+application server function.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{StorageClass$register_metadata()}\if{html}{\out{</div>}}
 }
@@ -447,16 +388,15 @@ perform the necessary customizations to bookmarkable state methods
 \preformatted{## Only run examples in interactive R sessions
 if (interactive()) {
 
-# beginning of application
-library(shiny)
 library(shinystate)
 
+# Create a StorageClass object with default settings
 storage <- StorageClass$new()
 
-# applicaiton UI code ...
-
 # application server code
-storage$register_metadata()
+server <- function(input, output, session) {
+  storage$register_metadata()
+}
 }
 }
 \if{html}{\out{</div>}}
