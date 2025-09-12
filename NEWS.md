@@ -1,5 +1,6 @@
-# shinystate (development version)
+# shinystate 0.1.0
 
+* Initial CRAN release
 * Fix typo in test for session ID extraction
 * Clean up basic app example and leverage `{bslib}` for user interface
 * Streamline example application utilizing R6 classes, along with a new feature to save and restore state of the R6 object. 
