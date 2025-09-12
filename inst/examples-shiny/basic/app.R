@@ -26,8 +26,7 @@ ui <- function(request) {
             min = 1,
             max = 50,
             value = 30
-          ),
-          actionButton("add", "Add")
+          )
         ),
         accordion_panel(
           id = "state",
@@ -48,8 +47,6 @@ ui <- function(request) {
 server <- function(input, output, session) {
   storage$register_metadata()
 
-  vals <- reactiveValues(sum = 0)
-
   plot_title <- reactive({
     if (!shiny::isTruthy(input$txt)) {
       value <- "Default Title"
@@ -62,18 +59,6 @@ server <- function(input, output, session) {
     }
 
     return(value)
-  })
-
-  onBookmark(function(state) {
-    state$values$currentSum <- vals$sum
-  })
-
-  onRestore(function(state) {
-    vals$sum <- state$values$currentSum
-  })
-
-  observeEvent(input$add, {
-    vals$sum <- vals$sum + input$n
   })
 
   output$distPlot <- renderPlot({
