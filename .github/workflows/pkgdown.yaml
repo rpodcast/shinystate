@@ -3,6 +3,10 @@
 on:
   push:
     branches: [main, master]
+    paths:
+      - '**'
+      - '!build_nixconfig.R'
+      - '!default.nix'
   pull_request:
   release:
     types: [published]
