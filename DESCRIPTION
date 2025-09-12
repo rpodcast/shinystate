@@ -1,5 +1,5 @@
 Package: shinystate
-Title: Customization of 'Shiny' Bookmarkable State
+Title: Customization of Shiny Bookmarkable State
 Version: 0.1.0
 Authors@R: c(
     person(
