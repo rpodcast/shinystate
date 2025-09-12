@@ -1,14 +1,18 @@
 Package: shinystate
 Title: Customization of 'Shiny' Bookmarkable State
 Version: 0.0.0.9003
-Authors@R: 
+Authors@R: c(
     person(
       "Eric",
       "Nantz",
       email = "theRcast@gmail.com",
       role = c("aut", "cre"),
       comment = c(ORCID = '0000-0001-8104-7510')
-    )
+    ),
+    person(
+      family = "Eli Lilly and Company",
+      role = c("cph", "fnd")
+    ))
 Description: Enhance the bookmarkable state feature of 'shiny' with additional
     customization such as storage location and storage repositories leveraging
     the 'pins' package.
