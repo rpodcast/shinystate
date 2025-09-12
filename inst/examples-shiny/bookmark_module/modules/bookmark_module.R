@@ -32,9 +32,7 @@ bookmark_mod <- function(input, output, session, storage) {
   })
 
   output$saved_sessions_placeholder <- renderUI({
-    fluidRow(
-      DT::dataTableOutput(session$ns("saved_sessions_table"))
-    )
+    DT::dataTableOutput(session$ns("saved_sessions_table"))
   })
 
   output$saved_sessions_table <- DT::renderDataTable({
@@ -77,7 +75,9 @@ bookmark_mod <- function(input, output, session, storage) {
         modalButton("Cancel"),
         actionButton(session$ns("restore"), "Restore", class = "btn-primary")
       ),
-      uiOutput(session$ns("saved_sessions_placeholder"))
+      tagList(
+        uiOutput(session$ns("saved_sessions_placeholder"))
+      )
     ))
   })
 
