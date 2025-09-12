@@ -2,14 +2,15 @@ library(shiny)
 library(bslib)
 library(shinystate)
 
-storage <- StorageClass$new(local_storage_dir = "storage")
+# recommended to define a directory for storage or a pins board
+storage <- StorageClass$new()
 
 ui <- function(request) {
   page_sidebar(
     title = "Basic App",
     sidebar = sidebar(
       accordion(
-        open = c("user_inputs", "state"),
+        open = TRUE,
         accordion_panel(
           id = "user_inputs",
           "User Inputs",

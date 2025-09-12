@@ -3,14 +3,15 @@ library(bslib)
 library(shinystate)
 library(R6)
 
-storage <- StorageClass$new(local_storage_dir = "storage")
+# recommended to define a directory for storage or a pins board
+storage <- StorageClass$new()
 
 ui <- function(request) {
   page_sidebar(
     title = "Basic App",
     sidebar = sidebar(
       accordion(
-        open = c("user_inputs", "state"),
+        open = TRUE,
         accordion_panel(
           id = "user_inputs",
           "User Inputs",
@@ -80,12 +81,7 @@ server <- function(input, output, session) {
     saveRDS(serialized, file.path(state$dir, "accumulator_serialized.rds"))
   })
 
-  # onRestore(function(state) {
-  #   message("entered onRestore block!")
-  # })
-
   onRestored(function(state) {
-    message("entered onRestored block!")
     if (!is.null(state$dir)) {
       # read saved file
       if (file.exists(file.path(state$dir, "accumulator_serialized.rds"))) {
