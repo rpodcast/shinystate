@@ -3,26 +3,29 @@ library(shinystate)
 library(dplyr)
 library(DT)
 
-source("helpers/format.R")
 source("helpers/utils.R")
 source("modules/select_module.R")
 source("modules/filter_module.R")
 source("modules/bookmark_module.R")
 source("modules/summarize_module.R")
 
-storage <- StorageClass$new(local_storage_dir = "storage_dir")
-#storage <- StorageClass$new(local_storage_dir = "storage_dir")
+#  recommended to define a directory for storage or a pins board
+storage <- StorageClass$new()
 
 ui <- function(req) {
   tagList(
     # Bootstrap header
-    tags$header(class = "navbar navbar-default navbar-static-top",
-      tags$div(class = "container-fluid",
-        tags$div(class = "navbar-header",
+    tags$header(
+      class = "navbar navbar-default navbar-static-top",
+      tags$div(
+        class = "container-fluid",
+        tags$div(
+          class = "navbar-header",
           tags$div(class = "navbar-brand", "R/Pharma demo")
         ),
         # Links for restoring/loading sessions
-        tags$ul(class = "nav navbar-nav navbar-right",
+        tags$ul(
+          class = "nav navbar-nav navbar-right",
           tags$li(
             bookmark_modal_load_ui("bookmark")
           ),
@@ -32,11 +35,12 @@ ui <- function(req) {
         )
       )
     ),
-    #tags$script(src = "redirect.js"),
     fluidPage(
       use_shinystate(),
-      sidebarLayout(position = "right",
-        column(width = 4,
+      sidebarLayout(
+        position = "right",
+        column(
+          width = 4,
           wellPanel(
             select_vars_ui("select")
           ),
@@ -45,16 +49,11 @@ ui <- function(req) {
           )
         ),
         mainPanel(
-          tabsetPanel(id = "tabs",
-            tabPanel("Plot", tags$br(),
-              plotOutput("plot", height = 600)
-            ),
-            tabPanel("Summary", tags$br(),
-              verbatimTextOutput("summary")
-            ),
-            tabPanel("Table", tags$br(),
-              tableOutput("table")
-            )
+          tabsetPanel(
+            id = "tabs",
+            tabPanel("Plot", tags$br(), plotOutput("plot", height = 600)),
+            tabPanel("Summary", tags$br(), verbatimTextOutput("summary")),
+            tabPanel("Table", tags$br(), tableOutput("table"))
           )
         )
       )
@@ -67,9 +66,13 @@ server <- function(input, output, session) {
   storage$register_metadata()
   datasetExpr <- reactive(expr(mtcars %>% mutate(cyl = factor(cyl))))
   filterExpr <- callModule(filter_mod, "filter", datasetExpr)
-  selectExpr <- callModule(select_vars, "select",
-    reactive(names(eval_clean(datasetExpr()))), filterExpr)
-  
+  selectExpr <- callModule(
+    select_vars,
+    "select",
+    reactive(names(eval_clean(datasetExpr()))),
+    filterExpr
+  )
+
   data <- reactive({
     resultExpr <- selectExpr()
     df <- eval_clean(resultExpr)
@@ -77,22 +80,25 @@ server <- function(input, output, session) {
     df
   })
 
-  output$table <- renderTable({
-    data()
-  }, rownames = TRUE)
-  
+  output$table <- renderTable(
+    {
+      data()
+    },
+    rownames = TRUE
+  )
+
   do_plot <- function() {
     plot(data())
   }
-  
+
   output$plot <- renderPlot({
     do_plot()
   })
-  
+
   output$summary <- renderPrint({
     summary(data())
   })
-  
+
   output$code <- renderText({
     format_tidy_code(selectExpr())
   })
