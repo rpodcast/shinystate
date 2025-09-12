@@ -23,7 +23,6 @@ Imports:
     pins,
     R6,
     shiny (>= 0.14),
-    tibble
 Suggests: 
     DT,
     knitr,
