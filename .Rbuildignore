@@ -25,3 +25,5 @@ dev_notes.md
 ^docs$
 ^pkgdown$
 ^cran-comments\.md$
+^CRAN-SUBMISSION$
+
