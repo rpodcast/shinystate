@@ -2,3 +2,9 @@ url: https://rpodcast.github.io/shinystate/
 template:
   bootstrap: 5
 
+news:
+  releases:
+  - text: "shinystate 0.1.0"
+    href: https://shinydevseries.com/blog/2025-09-24-shinystate-cran/
+
+
