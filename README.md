@@ -7,7 +7,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 [![The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![Monthly Downloads](https://cranlogs.r-pkg.org/badges/shinystate](https://CRAN.R-project.org/package=shinystate)
+[![Monthly Downloads](https://cranlogs.r-pkg.org/badges/shinystate)](https://CRAN.R-project.org/package=shinystate)
 [![Total Downloads](https://cranlogs.r-pkg.org/badges/grand-total/shinystate)](https://CRAN.R-project.org/package=shinystate)
 <!-- badges: end -->
 
