@@ -1,15 +1,16 @@
-# shinystate <img src="man/figures/logo.png" align="right" height="139" alt="" />
+# shinystate <img src="man/figures/logo.png" align="right" height="139"/>
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/rpodcast/shinystate/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/rpodcast/shinystate/actions/workflows/R-CMD-check.yaml)
+
+[![R-CMD-check](https://github.com/rpodcast/shinystate/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/rpodcast/shinystate/actions/workflows/R-CMD-check.yaml) [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html) [![CRAN status](https://www.r-pkg.org/badges/version/shinystate)](https://CRAN.R-project.org/package=shinystate) [![r-universe](https://rpodcast.r-universe.dev/badges/shinystate)](https://rpodcast.r-universe.dev/shinystate)
+
 <!-- badges: end -->
 
 `shinystate` is an R package that provides additional customization on top of the standard Shiny [bookmarkable state](https://shiny.posit.co/r/articles/share/bookmarking-state/) capabilities.
 
 ## Installation
 
-
-```r
+``` r
 # Install the released version from CRAN
 install.packages("shinystate")
 
@@ -19,32 +20,31 @@ remotes::install_github("rpodcast/shinystate")
 
 ## Why `shinystate`?
 
-If your Shiny application leverages bookmarkable state and the default feature set is working for your use case, then `shinystate` is likely not value-added. 
+If your Shiny application leverages bookmarkable state and the default feature set is working for your use case, then `shinystate` is likely not value-added.
 
 However, as applications grow in complexity and are used in high-stakes situations, you may wish your application could support the following features:
 
-* Flexible configuration of where bookmarkable state files are stored, whether on the same file system as the server running the application, or in a separate repository such as cloud storage.
-* Allow users to save multiple bookmarkable state sessions, tailored to situations such as multiple "projects" inside the same application.
-* Augment the bookmarkable state artifacts with metadata of your choosing. Possible metadata could include custom names and timestamps.
- 
-The `shinystate` package offers an intuitive class system built upon the `R6` package with methods tailored to the common operations with managing bookmarkable state. 
+-   Flexible configuration of where bookmarkable state files are stored, whether on the same file system as the server running the application, or in a separate repository such as cloud storage.
+-   Allow users to save multiple bookmarkable state sessions, tailored to situations such as multiple "projects" inside the same application.
+-   Augment the bookmarkable state artifacts with metadata of your choosing. Possible metadata could include custom names and timestamps.
+
+The `shinystate` package offers an intuitive class system built upon the `R6` package with methods tailored to the common operations with managing bookmarkable state.
 
 ## How to use it?
 
 To enable saving bookmarkable state with `shinystate`, you need to:
 
-1. Load the package: `library(shinystate)`
-1. Create an instance of the `StorageClass` class outside of the application user interface and server functions: `StorageClass$new()`
-1. Include `use_shinystate()` in your UI definition
-1. Call the `register_metadata()` method from your instance of the `StorageClass` class at the beginning of the application server function
-1. Enable the save-to-server bookmarking method by adding `enableBookmarking = 'server'` in the call to `shinyApp()`
-1. Call the `snapshot()` method from your instance of the `StorageClass` class to save the state of the Shiny app session
-1. Call the `restore()` method from your instance of the `StorageClass` class to restore a saved session based on the session URL, available in the data frame returned from the `get_sessions()` method.
+1.  Load the package: `library(shinystate)`
+2.  Create an instance of the `StorageClass` class outside of the application user interface and server functions: `StorageClass$new()`
+3.  Include `use_shinystate()` in your UI definition
+4.  Call the `register_metadata()` method from your instance of the `StorageClass` class at the beginning of the application server function
+5.  Enable the save-to-server bookmarking method by adding `enableBookmarking = 'server'` in the call to `shinyApp()`
+6.  Call the `snapshot()` method from your instance of the `StorageClass` class to save the state of the Shiny app session
+7.  Call the `restore()` method from your instance of the `StorageClass` class to restore a saved session based on the session URL, available in the data frame returned from the `get_sessions()` method.
 
 Below is an example application illustrating the default usage of `shinystate`. Visit the [Getting Started](https://rpodcast.github.io/shinystate/articles/shinystate.html) for additional details.
 
-
-```r
+``` r
 library(shiny)
 library(bslib)
 library(shinystate)
