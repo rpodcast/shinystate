@@ -1,5 +1,7 @@
 # shinystate (development version)
 
+* Removed committed storage from inst/examples-shiny/r6
+
 # shinystate 0.1.0
 
 * Initial CRAN release
