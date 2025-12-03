@@ -3,11 +3,11 @@ library(shinystate)
 library(dplyr)
 library(DT)
 
-source("helpers/utils.R")
-source("modules/select_module.R")
-source("modules/filter_module.R")
-source("modules/bookmark_module.R")
-source("modules/summarize_module.R")
+source("inst/examples-shiny/bookmark_module/helpers/utils.R")
+source("inst/examples-shiny/bookmark_module/modules/select_module.R")
+source("inst/examples-shiny/bookmark_module/modules/filter_module.R")
+source("inst/examples-shiny/bookmark_module/modules/bookmark_module.R")
+source("inst/examples-shiny/bookmark_module/modules/summarize_module.R")
 
 #  recommended to define a directory for storage or a pins board
 storage <- StorageClass$new()

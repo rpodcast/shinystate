@@ -27,18 +27,38 @@ bookmark_load_ui <- function(id) {
 
 bookmark_mod <- function(input, output, session, storage) {
   ns <- session$ns
-  session_df <- reactive({
-    storage$get_sessions()
-  })
+
+  # Trigger for refreshing session list
+  refresh_trigger <- reactiveVal(0)
+
+  # Use reactive_sessions with trigger - refreshes on:
+  # 1. Modal open (input$show_load_modal changes)
+  # 2. After save (refresh_trigger increments)
+  # 3. After delete (refresh_trigger increments)
+  session_df <- storage$reactive_sessions(
+    trigger = reactive(list(refresh_trigger(), input$show_load_modal))
+  )
 
   output$saved_sessions_placeholder <- renderUI({
     DT::dataTableOutput(session$ns("saved_sessions_table"))
   })
 
   output$saved_sessions_table <- DT::renderDataTable({
-    req(session_df())
+    sessions <- session_df()
+
+    # Show message if no sessions exist
+    if (is.null(sessions) || nrow(sessions) == 0) {
+      # Return empty data frame with message
+      return(DT::datatable(
+        data.frame(Message = "No saved sessions found. Save a session first!"),
+        options = list(dom = 't'),
+        rownames = FALSE,
+        selection = 'none'
+      ))
+    }
+
     DT::datatable(
-      session_df(),
+      sessions,
       escape = FALSE,
       selection = "single"
     )
@@ -63,7 +83,8 @@ bookmark_mod <- function(input, output, session, storage) {
     "save_name",
     "save",
     "session_choice",
-    "restore"
+    "restore",
+    "delete"
   ))
 
   observeEvent(input$show_load_modal, {
@@ -72,6 +93,7 @@ bookmark_mod <- function(input, output, session, storage) {
       easyClose = TRUE,
       title = "Restore session",
       footer = tagList(
+        actionButton(session$ns("delete"), "Delete", class = "btn-danger"),
         modalButton("Cancel"),
         actionButton(session$ns("restore"), "Restore", class = "btn-primary")
       ),
@@ -101,14 +123,36 @@ bookmark_mod <- function(input, output, session, storage) {
           removeModal()
           storage$snapshot(
             session_metadata = list(
-              save_name = input$save_name,
-              timestamp = Sys.time()
+              save_name = input$save_name
             )
           )
+          # Trigger refresh so user sees their new bookmark
+          refresh_trigger(refresh_trigger() + 1)
           showNotification(
             "Session successfully saved"
           )
         }
+      },
+      error = function(e) {
+        showNotification(
+          conditionMessage(e),
+          type = "error"
+        )
+      }
+    )
+  })
+
+  # Delete handler
+  observeEvent(input$delete, ignoreInit = TRUE, {
+    tryCatch(
+      {
+        req(session_choice())
+        storage$delete(session_choice())
+        # Trigger refresh so deleted bookmark disappears from list
+        refresh_trigger(refresh_trigger() + 1)
+        showNotification(
+          "Session deleted"
+        )
       },
       error = function(e) {
         showNotification(
