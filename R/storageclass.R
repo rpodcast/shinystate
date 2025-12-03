@@ -4,6 +4,12 @@
 #' This class provides a set of methods to create and manage Shiny bookmarkable
 #' state files.
 #'
+#' @details
+#' Session metadata is stored directly in each bookmark pin's metadata field
+#' rather than in a separate shared "sessions" pin. This approach eliminates
+#' race conditions from concurrent read-modify-write operations and leverages
+#' pins' built-in local caching for fast repeated reads.
+#'
 #' @field local_storage_dir file path to use for storing bookmarkable state
 #'   files. If not specified, a temporary directory on the host system
 #'   will be used.
@@ -97,6 +103,49 @@ StorageClass <- R6::R6Class(
     },
 
     #' @description
+    #' Create a reactive sessions data.frame for Shiny
+    #'
+    #' Returns a reactive expression that refreshes the sessions list when
+    #' the provided trigger reactive changes. Useful for refreshing after
+    #' saves or when a modal opens.
+    #'
+    #' @param trigger A reactive expression that triggers refresh when changed.
+    #' @return A reactive expression returning sessions data.frame
+    #'
+    #' @examples
+    #' ## Only run examples in interactive R sessions
+    #' if (interactive()) {
+    #'
+    #' library(shiny)
+    #' library(shinystate)
+    #'
+    #' storage <- StorageClass$new()
+    #'
+    #' server <- function(input, output, session) {
+    #'   refresh_trigger <- reactiveVal(0)
+    #'
+    #'   session_df <- storage$reactive_sessions(
+    #'     trigger = reactive(list(refresh_trigger(), input$show_load_modal))
+    #'   )
+    #'
+    #'   observeEvent(input$save, {
+    #'     storage$snapshot(session_metadata = list(name = input$save_name))
+    #'     refresh_trigger(refresh_trigger() + 1)
+    #'   })
+    #' }
+    #' }
+    reactive_sessions = function(trigger = NULL) {
+      storage_self <- self
+
+      shiny::reactive({
+        if (!is.null(trigger)) {
+          trigger()
+        }
+        storage_self$get_sessions()
+      })
+    },
+
+    #' @description
     #' Restore a previous bookmarkable state session
     #'
     #' @param url character with the unique URL assigned to the bookmarkable
@@ -155,10 +204,8 @@ StorageClass <- R6::R6Class(
     #' # typically run inside a shiny observe or observeEvent call
     #' storage$snapshot(session_metadata = list(time = Sys.time()))
     #' }
-    snapshot = function(
-      session_metadata = NULL,
-      session = shiny::getDefaultReactiveDomain()
-    ) {
+    snapshot = function(session_metadata = NULL,
+                        session = shiny::getDefaultReactiveDomain()) {
       shiny::shinyOptions(session_metadata = session_metadata)
       session$doBookmark()
     },
