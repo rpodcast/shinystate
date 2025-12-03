@@ -221,9 +221,19 @@ migrate_legacy_sessions <- function(board_sessions) {
     }
 
     # Build new metadata combining old user metadata with session data
+    # Preserve the original timestamp from the pin metadata
+    original_timestamp <- existing_meta$user$timestamp
+    if (is.null(original_timestamp)) {
+      # If no timestamp exists, use current time
+      original_timestamp <- format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")
+    } else if (inherits(original_timestamp, "POSIXct")) {
+      # Convert POSIXct to ISO 8601 string if needed
+      original_timestamp <- format(original_timestamp, "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")
+    }
+    
     new_user_meta <- list(
       shiny_bookmark_id = bookmark_id,
-      timestamp = format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC"),
+      timestamp = original_timestamp,
       url = sub("^[^?]+", "", session_row$url, perl = TRUE)
     )
 
