@@ -135,7 +135,7 @@ server <- function(input, output, session) {
 
   observeEvent(input$restore, {
     session_df <- storage$get_sessions()
-    storage$restore(head(session_df$url, n = 1))
+    storage$restore(tail(session_df$url, n = 1))
   })
 
   setBookmarkExclude(c("add", "bookmark", "restore"))

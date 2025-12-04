@@ -117,9 +117,9 @@ import_sessions <- function(board_sessions) {
 
   result <- bind_rows_base(rows)
   
-  # Sort by timestamp in descending order (newest first)
+  # Sort by timestamp in descending order (newest last)
   if (!is.null(result) && "timestamp" %in% names(result)) {
-    result <- result[order(result$timestamp, decreasing = TRUE), ]
+    result <- result[order(result$timestamp, decreasing = FALSE), ]
     rownames(result) <- NULL
   }
   
