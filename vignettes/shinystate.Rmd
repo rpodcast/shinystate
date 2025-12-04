@@ -42,7 +42,7 @@ To enable saving bookmarkable state with `shinystate`, you need to:
 
 ## Example Application
 
-Below is an example application illustrating the default usage of `shinystate`. The application has a small set of user inputs as well as a reactive value that will also be saved as part of the bookmarkable state session. A pair of action buttons trigger the saving and loading of bookmarkable state within their respective `observeEvent` expressions. In this application, the most recent bookmarkable state session is restored by obtaining the last record's URL value in the session data frame.
+Below is an example application illustrating the default usage of `shinystate`. The application has a small set of user inputs as well as a reactive value that will also be saved as part of the bookmarkable state session. A pair of action buttons trigger the saving and loading of bookmarkable state within their respective `observeEvent` expressions. In this application, the most recent bookmarkable state session is restored by obtaining the most recent record's URL value in the session data frame.
 
 ```{r app, eval=FALSE}
 library(shiny)
@@ -73,7 +73,8 @@ ui <- function(request) {
             max = 50,
             value = 30
           ),
-          actionButton("add", "Add")
+          actionButton("add", "Add"),
+          tags$p(tags$strong("Current Sum:"), textOutput("sum", inline = TRUE))
         ),
         accordion_panel(
           id = "state",
@@ -115,11 +116,17 @@ server <- function(input, output, session) {
   })
 
   onRestore(function(state) {
-    vals$sum <- state$values$currentSum
+    if (!is.null(state$values$currentSum)) {
+      vals$sum <- state$values$currentSum
+    }
   })
 
   observeEvent(input$add, {
-    vals$sum <- vals$sum + input$n
+    vals$sum <- vals$sum + 1
+  })
+
+  output$sum <- renderText({
+    as.character(vals$sum)
   })
 
   output$distPlot <- renderPlot({
@@ -169,4 +176,4 @@ cat(sprintf("[Open in Shinylive](%s)\n\n", url))
 
 ```{r shinylive_iframe, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
 knitr::include_url(url, height = "800px")
-
+```

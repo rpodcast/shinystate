@@ -115,7 +115,15 @@ import_sessions <- function(board_sessions) {
     return(NULL)
   }
 
-  bind_rows_base(rows)
+  result <- bind_rows_base(rows)
+  
+  # Sort by timestamp in descending order (newest first)
+  if (!is.null(result) && "timestamp" %in% names(result)) {
+    result <- result[order(result$timestamp, decreasing = TRUE), ]
+    rownames(result) <- NULL
+  }
+  
+  result
 }
 
 delete_session <- function(url, board) {
