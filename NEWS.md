@@ -5,6 +5,7 @@
 * Remove committed storage from the `inst/examples-shiny/r6` directory.
 * Add the `{golem}` package to the Suggests field and Nix development environment. 
 * Updated unit tests to cover new functionality and edge cases as well as migration from legacy session storage
+* Add John Brothers as package contributor. 
 
 ## New Features
 
