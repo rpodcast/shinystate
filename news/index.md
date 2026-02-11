@@ -9,6 +9,7 @@
   Suggests field and Nix development environment.
 - Updated unit tests to cover new functionality and edge cases as well
   as migration from legacy session storage
+- Add John Brothers as package contributor.
 
 ### New Features
 
