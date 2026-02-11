@@ -32,9 +32,12 @@ rix(
     "zip",
     "ggplot2",
     "roxy.shinylive",
-    "rhub"
+    "rhub",
+    "golem",
+    "rhino",
+    "attachment"
   ),
   ide = "none",
-  system_pkgs = c("air-formatter", "qpdf"),
+  system_pkgs = c("air-formatter", "qpdf", "git"),
   overwrite = TRUE
 )
