@@ -26,3 +26,4 @@ docs
 inst/doc
 renv.lock
 renv/*
+.claude
