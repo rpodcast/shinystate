@@ -1,6 +1,13 @@
 # shinystate (development version)
 
-* Removed committed storage from inst/examples-shiny/r6
+## Infrastructure
+
+* Remove committed storage from the `inst/examples-shiny/r6` directory.
+* Add the `{golem}` package to the Suggests field and Nix development environment. 
+
+## New Features
+
+* Export the `saveInterfaceLocal` and `loadInterfaceLocal` functions to facilitate the use of `{shinystate}` with applications creeated with the `{golem}` package. The callbacks defined by these two functions must be executed as part of the `onStart` function defined in `shiny::runApp()` in `{golem}` applications.
 
 # shinystate 0.1.0
 
