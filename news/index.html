@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">shinystate</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9001</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,8 +44,16 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="shinystate-development-version">shinystate (development version)<a class="anchor" aria-label="anchor" href="#shinystate-development-version"></a></h2>
-<ul><li>Removed committed storage from inst/examples-shiny/r6</li>
+<div class="section level3">
+<h3 id="infrastructure-development-version">Infrastructure<a class="anchor" aria-label="anchor" href="#infrastructure-development-version"></a></h3>
+<ul><li>Remove committed storage from the <code>inst/examples-shiny/r6</code> directory.</li>
+<li>Add the <a href="https://thinkr-open.github.io/golem/" class="external-link">golem</a> package to the Suggests field and Nix development environment.</li>
 </ul></div>
+<div class="section level3">
+<h3 id="new-features-development-version">New Features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<ul><li>Export the <code>saveInterfaceLocal</code> and <code>loadInterfaceLocal</code> functions to facilitate the use of <a href="https://rpodcast.github.io/shinystate/">shinystate</a> with applications creeated with the <a href="https://thinkr-open.github.io/golem/" class="external-link">golem</a> package. The callbacks defined by these two functions must be executed as part of the <code>onStart</code> function defined in <code><a href="https://rdrr.io/pkg/shiny/man/runApp.html" class="external-link">shiny::runApp()</a></code> in <a href="https://thinkr-open.github.io/golem/" class="external-link">golem</a> applications.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0" id="shinystate-010">shinystate 0.1.0<a class="anchor" aria-label="anchor" href="#shinystate-010"></a></h2><p class="text-muted">CRAN release: 2025-09-18</p>
 <ul><li>Initial CRAN release</li>
@@ -69,7 +77,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>
