@@ -48,10 +48,21 @@
 <h3 id="infrastructure-development-version">Infrastructure<a class="anchor" aria-label="anchor" href="#infrastructure-development-version"></a></h3>
 <ul><li>Remove committed storage from the <code>inst/examples-shiny/r6</code> directory.</li>
 <li>Add the <a href="https://thinkr-open.github.io/golem/" class="external-link">golem</a> package to the Suggests field and Nix development environment.</li>
+<li>Updated unit tests to cover new functionality and edge cases as well as migration from legacy session storage</li>
 </ul></div>
 <div class="section level3">
 <h3 id="new-features-development-version">New Features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
 <ul><li>Export the <code>saveInterfaceLocal</code> and <code>loadInterfaceLocal</code> functions to facilitate the use of <a href="https://rpodcast.github.io/shinystate/">shinystate</a> with applications creeated with the <a href="https://thinkr-open.github.io/golem/" class="external-link">golem</a> package. The callbacks defined by these two functions must be executed as part of the <code>onStart</code> function defined in <code><a href="https://rdrr.io/pkg/shiny/man/runApp.html" class="external-link">shiny::runApp()</a></code> in <a href="https://thinkr-open.github.io/golem/" class="external-link">golem</a> applications.</li>
+<li>Session metadata is now stored in each bookmark pin’s metadata field instead of a separate shared “sessions” pin. This eliminates race conditions from concurrent writes. Legacy sessions from v0.1.0 and earlier are automatically migrated on first use.</li>
+<li>Added <code>reactive_sessions()</code> method to <code>StorageClass</code> for reactive bookmark lists that refresh based on triggers</li>
+<li>Added <code>validate_session_metadata()</code> to ensure metadata fields are scalar values</li>
+<li>Session timestamp is now automatically added by the system in ISO 8601 format if not provided by the user</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-development-version">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
+<ul><li>Fixed race condition where multiple concurrent bookmark saves could result in metadata loss and orphaned bookmark data</li>
+<li>In <code>examples-shiny</code>, fixed bookmark module example to properly refresh session list after save/delete operations</li>
+<li>In <code>examples-shiny</code>, fixed filter module to handle NULL parameter values during bookmark restoration</li>
 </ul></div>
 </div>
     <div class="section level2">

@@ -82,8 +82,8 @@ a reactive value that will also be saved as part of the bookmarkable
 state session. A pair of action buttons trigger the saving and loading
 of bookmarkable state within their respective `observeEvent`
 expressions. In this application, the most recent bookmarkable state
-session is restored by obtaining the last record’s URL value in the
-session data frame.
+session is restored by obtaining the most recent record’s URL value in
+the session data frame.
 
 ``` r
 library(shiny)
@@ -114,7 +114,8 @@ ui <- function(request) {
             max = 50,
             value = 30
           ),
-          actionButton("add", "Add")
+          actionButton("add", "Add"),
+          tags$p(tags$strong("Current Sum:"), textOutput("sum", inline = TRUE))
         ),
         accordion_panel(
           id = "state",
@@ -156,11 +157,17 @@ server <- function(input, output, session) {
   })
 
   onRestore(function(state) {
-    vals$sum <- state$values$currentSum
+    if (!is.null(state$values$currentSum)) {
+      vals$sum <- state$values$currentSum
+    }
   })
 
   observeEvent(input$add, {
-    vals$sum <- vals$sum + input$n
+    vals$sum <- vals$sum + 1
+  })
+
+  output$sum <- renderText({
+    as.character(vals$sum)
   })
 
   output$distPlot <- renderPlot({
@@ -196,4 +203,4 @@ shinyApp(ui, server, enableBookmarking = "server")
 ### Try it out in Shinylive
 
 [Open in
-Shinylive](https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAdzgCMAnRRASwgGdSoAbbgCgDk7ABZsAnpyjkBuAAQM4qIu1kBeWQUHDSpVO0QB6AwyUATAlE4YGAWgCuEFgDc4DdnAym4TmbIHbdfSMFJWsbaksYDCIGAHMBAEoEgB0IbhZGKAYxPhFxFLSMhiycunZ0ugKK4uzc0QgJLnIC1M4YqFi4WQAeG1kAZVJ2zoBhbkt2ABIIOGo+Fog7Fh6+gDMHAlIWEj4FAEc7OE4E2RBU2VlUDrgAfXYWLzosvnOL2S3Sbi71ZLAAIUsLAIsgAguhfrhXhd7o8smpZDD6M8oW8oARiAxTNsIC8IG98bIiKgKPDNL87O4GDc2Kg7KR2BDZL9JORfglIXiCRc0RisSQblcZvwUVyHvDyZTqRBafSISKCb8AKqU2QASWldIZeHl+PIAA9SOqZbiuVzfqQDXLOaa3uM6HBuOKwABRMiuWQAFRYnzgVpt+NQ4wIcGERG4XgYToIwigEE671EWp1b3ZyYu0bgBAA1nQiHqjXSXoQ0Fq5L8RmhvTwWAAvX1gVPW03lB6uAukE3+i6-OhsUtp21Qe2On5gABydhg9sjRFWsl7HD9XdkMDY8IAjBzlyuoHr4QBWAAMW+XTh4h3hAGZDwPG120VsSH86UMcb8oKZTIzfiDP2zk3epo8jEfIQAKsYOp2NpiqOLL1ieNq-H8RBEFmMBZFmAxNPBA4Ptiz46DsPYoWhGHfv8JHoQwWZsghQGbPhL5EWAChtAo5FYEcQwKLIAAylikLIyGoVRNENgB8oFPigEXBStx5A0cHzHRFiYlBbyqaYNzCHAH6uEWYKoLIADydIyrR8qBkQpCmboha-FinAAArcNZ-5NlJsgFAAvqkrSuC4ka9LI6wQAxOw0nSchEGZUUIkc9wkCcZycmx1yTAosQsJwrg3PAXCmFIUDzH5nJntwKjBQoeEuAAaueRy5JO8KHgsFxWaQNwfF8KzyLpDEuHwKX4iwc58AAhApYjMNlHoMHSwg5JFpCTBapBJKc8rlRewW-AAInAqxQHY3CCV6Pq-Ci3myA67ibU2FzbV0wXLatlpNr5EAoqNsh8K9Fh6MlW0Nb1Qx2Og+lPZ5FyfSiCikHYDA4lDrzeW1hIQMJpHUXwoXhTicFA02cGTE9UwEIjChkP0zXBeVUzsJOqPoyQnFsXAuMbI+BPYUT+L05MjMwL1JNk5MFMMFTpA0zAzOlRcRBlAFcDOi4ZB-RqK0fqYcjDW8AtC71BvNQA1LIr1fZyaPy4SsUrY5pAudZvVUxGTsdnrFz7HwHVdd6XzzNDsh7sFR3esI6zcJMETemwsQogulV9O4ex8KuOJ6uyO56nwmdyF8cakMI0R0vCr2J7IZvrkHiYdvKep0RcjC6VmKjqInjcaGGToAMSHoeADsdAEAATEu+K5pi7qjtQoistqD3B3aToAOpQLHcbvCw8DvEQsgzAaN3zag3O-Wu6fsCkC9cuha7qL73Uc0HnnW5bCtKwwLiqxQHbl5RGG6xRGlTogtoB6FDB2IOIgiDUDHNZUaQIpDYiLP0BK2IER2HRAlSO3AxAIigC4L84krYsw-l-NWv9NYZS4jEOAgDiZoP5KYOcwVgFwEmJ0Tq7h2CJQ4CVYm3F0qsW4hzLgLB+DcN4TcZhkxEbcDkHidQ1cX7o3cKQLGolnR6gINwOwXg+BkhQH+PATIwC5hEmRExvxhG0LZD5UqU1DJ8CWHISkgU5AUCHF8DRGE45Ojca4NkYBvIAF0gA)
+Shinylive](https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAdzgCMAnRRASwgGdSoAbbgCgDk7ABZsAnpyjkBuAAQM4qIu1kBeWQUHDSpVO0QB6AwyUATAlE4YGAWgCuEFgDc4DdnAym4TmbIHbdfSMFJWsbaksYDCIGAHMBAEoEgB0IbhZGKAYxPhFxFLSMhiycunZ0ugKK4uzc0QgJLnIC1M4YqFi4WQAeG1kAZVJ2zoBhbkt2ABIIOGo+Fog7Fh6+gDMHAlIWEj4FAEc7OE4E2RBU2VlUDrgAfXYWLzosvnOL2S3Sbi71ZLAAIUsLAIsgAguhfrhXhd7o8smpZDD6M8oW8oARiAxTNsIC8IG98bIiKgKPDNL87O4GDc2Kg7KR2BDZL9JORfglIXiCRc0RisSQblcZvwUVyHvDyZTqRBafSISKCb8AKqU2QASWldIZeHl+PIAA9SOqZbiuVzfqQDXLOaa3uM6HBuOKwABRMiuWQAFRYnzgVpt+NQ4wIcGERG4XgYToIwigEE671EWp1b3ZyYu0bgBAA1nQiHqjXSXoQ0Fq5L8RmhvTwWAAvX1gVPW03lB6uAukE3+i6-OhsUtp21Qe2On5gABydhg9sjRFWsl7HD9XdkMDY8IAjBzlyuoHr4QBWAAMW+XTh4h3hAGZDwPG120VsSH86UMcb8oKZTIzfiDP2yTzaXCxFMqB8EBUycAwJCxEWIx2AwChkAMk6IP+7xwAaADydLGsyk6Mmw6QzPCHpYIqzpJMmd6mjyMR8hAAqxg6nY2mKo4svWAGmr8fxEEQWYwFkWYDE0nEDg+2LPjoOw9nxAlCd+-xyYJDBZv+4mbJJL4yWAChtAoilYEcQwKLIAAylikLIvH8SpakNlR8oFPi1EXBStx5A0HHzFxFiYixbx+aYNzCHAH6uEWYKoLI2G6HS6lNhcgZEKQsW4WAWKcAACtwKVsiizmyAUAC+qStK4LiRr0sjrBAmk7DSdJyEQOFNQiRz3CQJxnJy+nXJMCixCwnCuDc8BcKYUhQPMZWcme3AqNVCgSS4ABq55HLkk7woeCxJblpA3B8XwrPIYWaS4fA9fiLBznwACEnliMww0egwdLCDkjWkJMFqkEkpzyvNF7Vb8AAicCrFAdjcFZXo+r8KLFbIDruIDiWyMDXTVd9v2Wk2pUQCit2yHwuMWHo3VAxtp1DHY6ARVjhUXITKIKKQ8E4kzrzFXthIQDZ8mqXwtX1TiHFU02HGTFjUwEPBiGkP023VfNEH4ZyvOzRcJBGfpcAixsj7i6Jks3Xd93DRgiy8LkokyxtcsKxQSuTgD10EmrkzsCrfTS7LkzywhLvKzASM83zRBlBVcDOi4ZBkxqP0fqYcgexcXs+zAp2Z9tADUsjrhH2uEq1P1Z6diERh6GEdunsiWBg0ZZA+jM8OrMCFVrROci1cU-ZlpA5SllcUBGw912zcB7HwyWHcdBuUU2e7VVD3rCOs3CTBE3psLEKILotfvT3wq44nq7I7nqfAX3IXxxqQwjRHS8K44fsgF+uzOyImHbynqXELiMDClmFQ6hD6AI0GGJ0ABiQ8h4ADsdACAACYlz4lzJid0o5qCiFZNqDGeo7ROgAOpQF3nGd4LB4DvCILIGYBoUbvVQMbUma4z7sBSAQrkgk1zqDnkdb0XwZpNi7pHaODAXBxxdonGUkxcy2SEmnFEfVOje2gHoUMHZv4iCINQMcKVbpAikNiIs-QOrYgRHYdEHVN7cDEAiKALgvwOU1uIykUj44dlxnpEycBlFSwsfyUwc5qqqLgJMToh13DsE6hwER+JwkDWMjEA2XAWD8BiXEm4ITJjwW4HIPE6gv5iJLu4Uggs7LOj1AQbgdgvB8DJCgP8eAmRgAUULeyZZdIpIMg2Eqs0npRT4EsOQHjXByAoEOL4lShJ7ydOMhgbIwDFQALpAA)

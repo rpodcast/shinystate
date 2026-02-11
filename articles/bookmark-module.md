@@ -28,7 +28,7 @@ If you are viewing this package vignette in a web browser, the
 application can also be viewed using the Shinylive service:
 
 [Open in
-Shinylive](https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAdzgCMAnRRASwgGdSoAbbgCgDk7ABZsAnpyjkBuAAQM4qIu1kBeWQUHDSpVO0QB6AwyUATAlE4YGAWgCuEFgDc4DdnAym4TmbIHbdfSMFJWsbaksYDCIGAHMBAEoEgB0IAGIBWQBRJx47KThZKAhZOAAPVAV2dhYSWTYi2QAzKuFSiCcWBhJ4MlSM-syAGRYAa0LvHgB9UhZTMTk6O1JZahZSNtMWJqbXChWvJqg7blJ2DFkAITFZQ+PTuTZOOChTWSIm+QdHCFjB+pKG0KFl4riE7U63QgvVIjxWDAcKgaUGarQhXR6+ww-wAAuUlAxSKlJtwpgRuC8SgAeGzNBwEWYkPj4hhyChONSybgsTh8BJsiDk5Sc8mUqbsvkJWQgVKyUq5UmzebMiqsiECoXsFIQAC+qX+AGEFAVGqLiuioTDBobjeQVCiIHBqBbMWRVsJlIVUFAFG6ebIgbJYtwiHQeC7oVjcfiYkTBRTiuKOrIaXTBYyIHzpbLZI7qBgJd7fSt1MHQzwJUlUnqIP8AFJEBog7hIshERqoFioODcx3E1VTTvd3uFVNNekZvgYadyDDczic+ekKfTpLZkqlVUqVNznlxuXbWR8Cm-DYqypatTqAAMUplG7lClIdgYmYAcgBVIZDbVyms5llt1pBhuGKWJmCaUCdAoc83G1ACtxTWkADEWFOVw+DfOBYgKPgeQwCATm4flNwveCN0PY8KFiM9AKlVQbzvHNHzgZ9X0wr8fxzf8NywOBTDsAg4D4Zi0wZWpM3gGAiDZVUmIfOVSIYPgAEIVKk9sAFIAD5NNkNSWV-RSdVwUSuDQ2D2DkGwAEZ+VEwDgGAGyAF0XJzbUeJaFgKFMbgxBmFh4CQsTJ1IeS5RWVNugcUwplMXDYVkZIwHcYgIFMdgUqMiAiGdaKiFi+LcIAZQkDBZngPk5BStKSEy7L9Q3KA6HYYqAq2HYQpa9g+ASsQ+Fy6gpVpfq+HCoyoFiUdaSG2RaTjHMeqmKaZqKVq+FWozxzYtbVv09RltWnMtgYELth7dw+B2l84BqsAWiIGBczylL7qmohGtrDcmhiGApCmBRuBC8d0wkvgal+E4fTkVBuBfcN1G9Z5rwhthYmhtVauyiLFLKbrzjYchpuUmKMvGoK4CmE8aOETbWpW6a5EhjHQIYJIjLldhKiJpoRLATS3k0lRhbe2QykeXYW2E-GGNkGzmfRzHYfhhgeBI06jJ4g8pau0Sjumq9ZDqjLetvUyFJSt9XrwUSLulkSFLlA3R1kGA2GWOBersi3FMU36GH+0hAZ7fmTdMbLfb9+pdeE0S-ZdlNZA9F9vfsp3-b+gGgf593CPISP48U+29YzhOGf2qlk8Ktw+AANnT6Po4DoOQ-4FKU4YQuy8UtJZCGL2VA2c0ACYABZq9TuRijeASGHRgNhEKdhYGBCsMp9W4oDEIu-ZLuOe-LtrK63iQ+Ds2QADJ1ra-r4u2T45evKOm79zgGCaSrhKSlLNIASUQJpAAsoAkqshNKoG7q-aO+9HbQKbonKu-VeoAGZG7wLfqQD+X9xr3U0iif+gCQGaTARAqBGDFLv0-pTXByUBYAE0DCaRgEwoWADgGgPAZAsAnN4G8KbvwxSgjeFGU8qkOgRAiCjH+gwUYUxpIJVJCvFwUw7AsBBhOcGcxcYcBCm+EqeFTDkUilNEYvJ9biRICMCAoxBq9Vqh6agUxlFUwUTwSOdCSpQBcMbQeEkvpyjEd9CRUiZFyLcaSEMrxVHqLHJopk2j1xyl0amfRhjjEBlMXuOBikoCWIgNY2xHAw6OOpkQaJESPEpT4pwGIy8-EkACbIIJ4jJHSJ9HIqJcU1EaLBgkoxSTcxAVkGk7ROYuCxDMcuUSaiADyyxUDLDsWHbx-FnENI4DjDy1YmohPabI+RRA3hxL6ZmNgiykqFV0MsZmGzmakBiFtQZKTaTuGqBJAAJJsjcbyagkHip8aKLxxIuD4PeTBjzpofOmsHX5ElepawyVci5HyXFxThSQNqcM8lwA9NwLwZ0gUZVcB+P+YLRIABEAAqzAEpcCpS1Ck8zrnLgxRAL59jUqrPRRstqXA6AUi2RuHUSKFnLFRdy9Z7zMUzEZWtalzBfQEopVIKADKBXCXBYpBQABHCGGyAWSkpTSxAdLVUapyW-A1pg+boL9l7Cw3ZOTIQAIJDBKlkF+lCexwHyZyWq6NBVgFEoipqXMDUEA9CwISIVjQgs1aJXV+rpUQENVWBSSbznirRVKv5HBZUasBnlNq7gKQMn4rw2JtIs2kAlS4HlKa+VyqLdQEtPry0RwUi+YGqY2VpuACwe63aUruQzaxF8mZu2hu+nKUM7gGAuByPsPCEAUVVAeQoOQWqWJ6r7ZGxsQkjUKVqWrKF666nJrzWSKNh701-gySIcQzB3CkEuG0sJWQyjkjsF4PgmhRIOLys41ZhzFFvQA6lUpXTQPuNtpbLlKjoDwHA-BlxKG-a1QjTeuA6HFIpXPQoFKHkkWtVcIulwZAV0opEEB6DESt2iRo9QIBRyeB8AiRSlgPAiCxEtZQlgAAvQo6gUplG4Lh+1lgxAGhDO4TkVKsAfk9UXWYpAKT+rADUjd9SU0SczkQcgZ11ATKmXxv2ETLjLAeZmFKBpihCXEzwr1Cd8mWZ0EyNlHL+YEZw05uhWm6li3JJYFQImwB0FIBAGwPMZE7x4UXO1ikTPZN3rIOZYrWUbK87VSVbKsWgSEniglQqBEhunTmOdZG4BLsozW1FpSXEwe4Ax49jiWOKPY6x7gnHuO8aLi8dg0nZPCdkAppTzmAzlFIH-VdSzPPFJy4h1eVSwAAHFnCFA2P6NljQkO+cS3KX6BnXCcmS+YnuFmrNMls-Zns5CEGuau5mebnK0N+ZSl4lwQXQLVA0xFqLMWfRxeEWV7iJH53keXXVlxjxYi5QUDN9Y8nFOesGZFBg0mpCRrM2jmBnxVI8ipQiDYA1ocgb22ubdr9amoH5gABQTHJ7mvrtg3BRHssJuZlvxZ7jqUo0tcdNwUNJFw7W2OCIhaeuAqLoB6A9NMw+3qU3yNYq8VVi4UuK7fuT1enIydLfgBN6BX9JAwFQJyMq5wcES+jjbwJqWuaOOtrMJo0apDgwd3hsAJUNnG0EkJao45eA3DRURxXNuaxNxMv1hg3QjOhXBnAXGTcmPO+2G7ycnv0pbAzEAweq1mQHejqQMQTqwuuDj2H6BgjI9CLBzsiArv0IMBib0-J6TnnDNGUYsNmTJma79lsJwhjOQLYemhQzZISDmUdF3HhiW8kZjc9Z5ZgGnFN8n1sXrUx-srZdaYN4G-XBNJaY3ifrhQNt8nDWuQyKbm+JTXIM14o5Kd5Ci93vL632hI6Z+79v7-1IMgMj8W8t8QxYgd9IsxYUpXg4oQDIDax59e94DXcexMoQolw+Qcx-pxg+JF8NtLg2Athfh+YUCfJ8UsoecKsIBv99lbFQZ29JByBk9jYuByAPkFQ7AvYPkyC0Cpg9thkBDrpz8W9UCKDysNwSAAsFBrp4lns2Ck9cdeD8V+DV5hkmDpdODuDlC4oBDRIA4jwxDTA9sARmgRCpgjDVD4BLwqdnYD9UJm9hC0CKdRJa8RVe9KsF1qsKNlxodSl4CwCeMECWsE5cg0Jm0jDBC1DmQFQyQExMxn8WRJQpQdJNIi4wx3Bn1WJOo+YhCdCtQMlHc8oxd+AOMuNwCcdVN1Mwt99D8RCUMi41YtgiBl9MVV9x9m8LDyCI53swBUI0CAx2wQCxZvEoBwjC1Ij04i4jtDNTsslztoFLt3MbMwA7NBQ7snNUt8CSBWjMwx9YCujOjd9ejaizDm8mk-YREJDZ1SMvCatfDZta0Dj4D-sQjcl7CRCqNxUdDeFhciBRcussDhUMlYCHDZiTl28jCKdcc5gQpkZyBUYUp4CpgxYoTV5CizjwTaQCBbQ4AwSMIi4zVOQSQ4jKQ+pVUX9KhJQnI0T4A3IJtYT1BiltEJtaSRs2SQ1e9DsFA4AhM8D40AA1PIYSG-eoHvGdYuDgVwUgUlHHeEuAREsANIMWMfeA9KGfY-efCbFKOgOAAOarDKPTOUPuKlWZClWZRAUodgR1ZebsAgcojQYQH0RfVwVsMw5w5bDOEAj5NRTkiUw7EQj5GtP+Y5atTtP2fImk7ovbNyFMMceo4VXvONWYUFKnKoE4YOFkEKRI1UIEu2fHGmM8fI+iRiQXeQcddidM04Sk9mVwrk2QPuVbKQJeM6Owc3HgYGEApSXlByRCVMUCdAfyQaaI4suQBgycaE2wzEk7eMzoyIpyGM0dJufGVMSwDAQbGACRfgaEtIG1Bc1eNyIuIsWAc6R4qM5vJyFKYMnotyQ8jObPGskGEQy8jowzT9SoEdFyPgWWcWWGZ056JGf8wRSiFSfCQiXgP9eqGsynVLKszM1UOM2kJItSOCx81I6c5SNSB8wyGvIuNgToGoC1Xhdw-08s9gDMms+vXUJqHEl4cgfEwlWkcc8GM1R4UwMc6M9EwZD8dwPPDYI5fmWigoBir6HiIS+ikQjASNZ08tRihPJkVisUjij0+AXGTAmZdRYzKbGbC5QxZS-FPbe6e7DC98+PZipkCWWQY8mAFgnWI8FSCAATaS5SaymCnuT8b8IuPnS6QoKcuUJI2IEIfgNSayuQNSSylgOHOpKSywEbMbVHV3MofiZHJTO9aOWvP8bZai76cSvEySwieAeeAgK-Fi1VNi-S4wrirVdSrtTS42bkAlHSpZPC9i6Yziw3IuPOTkPOckrgIvf6H8ga3qqAIvLQzkNWX4YSM1ERL1EA0yzkcyzMSy1yss5ClSfGbSdQEK-85yFyK+fSdalMLalSay4AEeFyYirKsS3EhijAImbCGc7Em6-KuwQq6NGi565vDAI4BkGIEqhSsqpS90gyqqnMGtA0afboHtatAs6iM8CkFwFsYatcbSWQBuXHUtX1abR4vS4Gyqw3LkbwS6ZGuQZyl05Sc2N2DMrsao0bFHLWfnOTKnSNX1UYCRMoVbGKVAJq3w9ivGwywmxG3qaarWXvGqv2HpdQcGyGogZrfQkQ+a9QRa78v8tWGyssyiQsumFap+WyxSDyoYLyxm3y1LNa-GTSNgPSbatW3ChSWvU-XK26unWZEqP+AADSiieroryq+oKtcHeqlLLWDlyDcFbwhOvwGS1ReRGQMTGQ3DOwVwlpYGZV0rHxDral9KQI3FP0xoZCmHTv+rOUeNvwy1uUf1kHTqfwpMMjf17Sy2+Qqwyw4J9AzqrXLOJQYFlKpxaDgF5LgH5JTLgCFPhhFOLroXTouN8SDp5vaInt6KFPnjlSHnbC2G5lAjizkHTuqiptOBprivptEjSBZoIDZqIA5q5pnrTpbpWwXq4w1UoLkCEOmtuSDuSqZOiJFqopzGTI23JQUk1rhrpjq3TpLNkFvDLJzKpOIuNtWtzLUkgeUhSN0inqxtUjUg3N6mAZbo5jrOBIb1SHIpgBkUEyph6XDq0UjpzGju7yMgTr43SxZXaMIeIaExiRK2aXwY4FepYdcSOULq+MuVLofzzU3pbqrq4GgsGTv1rWYZ9BIbDuAl8hJTJSp2jo-1IroaLlzuxt0tSzH0CsKlQB32ByNzoU5sMdkDoA3tS33WjS9k5C3qLzlBgGprhn3qUwSwm20Znr0c5SIG7DVgzGMow2924aB3eACfd0aTg2gUAPgGKGgNSlesSeIAcCJB5wES8fbR0eap7n2NiECuwgKGCa9xKjCYxwruFKNMUlsYDwcZbuqlSxcd3rcZSqyASz9PvSTOBUHr-r9lQqzNTAQaBL3lhtPCAceOhS5uMalFRvAanIGYQtTDWsWcqHAWQYMbbOMbQZUgwYEamcMZmbSsyv-rGdpn2amkKZwmYNkDmb1v8ffzWFIGx1Szq38dcCiYgFMfiZKHUB1TsGO3Y0pCcb9wAtkH+cBcIZBdSbdD+YBfIConGZBwzkuZrOGQHLhlJ0mcuYUGubunkszBDr1rlGIFJBMKGcUBbuEiSLQY3P2fecCYkiSFpbEBgD4CJZwZ7jWtJasMKEQHUDQf8YSBZbZY5Zr0EVWbkpWa9goqzPQtkfniujUhUlRbokurHXIurJZCoprG5EYCBwhlEAgDEG1D1bVgx0NfEA0NNZYH1YtdMExdrIgDNYNepRtbtYGhAjAndfNYGnhkYDmAKHIj7nLOICIaUbeAeVuD1LYEKBRFOixpiBuAMJPX2j+pRE7F0QkR9E7VTcNlTBKg3VWhkxCy+SdDzMIjbuVt1Vxk0YUj7m-zOCwTQGTheGKwUgmXYA+SXleAJPvJ+1CzoWgCcDDDOmHdHZsDuAzK5xHZ9BsCYOjRsAeW4Qm07Y+SHxxxJYHY03VLGNnxsEgjUR6NMbXY3az23bC3HbnZ7eKxifgVPecD-QvaHe8Qnf1cNLwDoVoM53axOEKApTgGkknsuNMb7kKRUAMII3RgMC6QXjy1SzXZOE3ZqefZSmHZnYnfQ6vdsHnliG0Gqb9jXe5GQ79g5w6SazKWiTUX5jI9kWA9t1MZMViC7eI89zlFo-CS62AxUWo51PfQ6Xo8uNS2RZA-0PhjmDpwLyLjsHcGcSNYkAUMaYzhqC8FHaGG3iuWQ6UBqAzA01w-w7vablJdeps0VzWFMA2E5DHkY9WB7G4Ek8dHbi1xQbzvTpiTDmycE6ERs9oF4Ac9DjY4wvc6RPqIyb4WE++b3f86c4wX5RfWi5I+LjeDCzi4I+LxagS5SgZwMzFjXcYG3rhgMxTuarAEK-SbkCXkiu0E5DrmvFvBBcI4y+KAC9CaIaB1y6mi7fy5IhcAYDDEqipSm2K+mSSba4xxxhs5MToEy7AHVSDTkDy8QYW7lWG-5n5SDWOdfhtxE7r2zs4Yh0eoJYEZLpZTLrzVxmbF-YpD4A49A3ug47FjzaTxzCe4+Vxb3Av3gC4DNRGa3i4BfXmqBXwNBSSJgGeZbvWb0hccU4IDEGBiVsXxiD-Th45m2gVqWexI7Ku+EngIUXumGM-bNQB7khe+ycB8x94Gx7420fzrEYg20b0x-tBSEJJLNASNVWJ6gY5lmvR4-L24lKJKB-jT6e1RldOHJ5c9IFMt+7lBtRClZ-iL4DgtMt4QVEDYRcdH4kGm6GoD6iaFmbAfumtj+5RCDhZqHiXgwvYdl6aC-skKbvW7WiVVcDm4Pj9inJ++Iq9R14ELaaypOiIEHBDE9qO5YLK+GqPROcbpZQ+TK9jSUYYGy+XCp1MED-D+uPeCboVZuCJQJTp3nkoyp2z4j7SpIuj5RWIC8Hj47sG7KGT-0KzmDiVACkr+Em0el9L5zvk5dXQD4DUVuS8LVBIELZ9BLFD8GUfWNeYAoDlW-Y6XRg88H9Eu1DAB1BciAA)
+Shinylive](https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAdzgCMAnRRASwgGdSoAbbgCgDk7ABZsAnpyjkBuAAQM4qIu1kBeWQUHDSpVO0QB6AwyUATAlE4YGAWgCuEFgDc4DdnAym4TmbIHbdfSMFJWsbaksYDCIGAHMBAEoEsABfAF0gA)
 
 ## Application Code
 
@@ -48,14 +48,18 @@ used in this example application:
   [`DT::datatable()`](https://rdrr.io/pkg/DT/man/datatable.html) with
   the ability to select the row used to restore a saved session. This is
   just one approach to display sessions in a Shiny application.
+- The `reactive_sessions()` method is used with a trigger to
+  automatically refresh the session list when the modal opens, after
+  saving, or after deleting a session.
 - A reactive object `session_choice` corresponding to the `url` value of
   the selected row in the sessions table is supplied to the `restore()`
   method of the `StorageClass` instance.
-- Additional information corresponding to the session name entered in a
-  text input as well as the current time are saved as part of the
-  bookmarkable state snapshot metadata, assembled as a
+- A custom bookmark name entered in a text input plus the bookmark id
+  and a timestamp are saved as part of the bookmarkable state snapshot
+  metadata. These are assembled as a
   [`list()`](https://rdrr.io/r/base/list.html) object with named
-  elements for each variable.
+  elements for each variable. Other custom scalar metadata about the
+  bookmark could also be captured.
 
 ### `app.R`
 
@@ -64,8 +68,6 @@ library(shiny)
 library(shinystate)
 library(dplyr)
 library(DT)
-library(rlang)
-library(lubridate)
 
 #  recommended to define a directory for storage or a pins board
 storage <- StorageClass$new()
@@ -170,6 +172,10 @@ shinyApp(ui, server, onStart = function() {
 ### `bookmark_modules.R`
 
 ``` r
+library(shiny)
+library(dplyr)
+library(lubridate)
+
 bookmark_modal_save_ui <- function(id) {
   ns <- NS(id)
 
@@ -195,18 +201,38 @@ bookmark_load_ui <- function(id) {
 
 bookmark_mod <- function(input, output, session, storage) {
   ns <- session$ns
-  session_df <- reactive({
-    storage$get_sessions()
-  })
+
+  # Trigger for refreshing session list
+  refresh_trigger <- reactiveVal(0)
+
+  # Use reactive_sessions with trigger - refreshes on:
+  # 1. Modal open (input$show_load_modal changes)
+  # 2. After save (refresh_trigger increments)
+  # 3. After delete (refresh_trigger increments)
+  session_df <- storage$reactive_sessions(
+    trigger = reactive(list(refresh_trigger(), input$show_load_modal))
+  )
 
   output$saved_sessions_placeholder <- renderUI({
     DT::dataTableOutput(session$ns("saved_sessions_table"))
   })
 
   output$saved_sessions_table <- DT::renderDataTable({
-    req(session_df())
+    sessions <- session_df()
+
+    # Show message if no sessions exist
+    if (is.null(sessions) || nrow(sessions) == 0) {
+      # Return empty data frame with message
+      return(DT::datatable(
+        data.frame(Message = "No saved sessions found. Save a session first!"),
+        options = list(dom = 't'),
+        rownames = FALSE,
+        selection = 'none'
+      ))
+    }
+
     DT::datatable(
-      session_df(),
+      sessions,
       escape = FALSE,
       selection = "single"
     )
@@ -231,7 +257,8 @@ bookmark_mod <- function(input, output, session, storage) {
     "save_name",
     "save",
     "session_choice",
-    "restore"
+    "restore",
+    "delete"
   ))
 
   observeEvent(input$show_load_modal, {
@@ -240,6 +267,7 @@ bookmark_mod <- function(input, output, session, storage) {
       easyClose = TRUE,
       title = "Restore session",
       footer = tagList(
+        actionButton(session$ns("delete"), "Delete", class = "btn-danger"),
         modalButton("Cancel"),
         actionButton(session$ns("restore"), "Restore", class = "btn-primary")
       ),
@@ -269,14 +297,36 @@ bookmark_mod <- function(input, output, session, storage) {
           removeModal()
           storage$snapshot(
             session_metadata = list(
-              save_name = input$save_name,
-              timestamp = Sys.time()
+              save_name = input$save_name
             )
           )
+          # Trigger refresh so user sees their new bookmark
+          refresh_trigger(refresh_trigger() + 1)
           showNotification(
             "Session successfully saved"
           )
         }
+      },
+      error = function(e) {
+        showNotification(
+          conditionMessage(e),
+          type = "error"
+        )
+      }
+    )
+  })
+
+  # Delete handler
+  observeEvent(input$delete, ignoreInit = TRUE, {
+    tryCatch(
+      {
+        req(session_choice())
+        storage$delete(session_choice())
+        # Trigger refresh so deleted bookmark disappears from list
+        refresh_trigger(refresh_trigger() + 1)
+        showNotification(
+          "Session deleted"
+        )
       },
       error = function(e) {
         showNotification(
@@ -292,6 +342,10 @@ bookmark_mod <- function(input, output, session, storage) {
 ### `filter_module.R`
 
 ``` r
+library(shiny)
+library(dplyr)
+library(rlang)
+
 filter_ui <- function(id) {
   ns <- NS(id)
 
@@ -321,13 +375,13 @@ filter_mod <- function(input, output, session, data_expr) {
   })
 
   observeEvent(input$show_filter_dialog_btn, {
-    available_fields <- names(eval_clean(data_expr())) %>%
-      base::setdiff(names(filter_fields))
+    available_fields <- names(eval_clean(data_expr())) %>% base::setdiff(names(filter_fields))
 
     showModal(modalDialog(
       title = "Add filter",
 
-      radioButtons(ns("filter_field"), "Field to filter", available_fields),
+      radioButtons(ns("filter_field"), "Field to filter",
+        available_fields),
 
       footer = tagList(
         modalButton("Cancel"),
@@ -347,8 +401,7 @@ filter_mod <- function(input, output, session, data_expr) {
     filter <- createFilter(
       data = eval_clean(data_expr())[[fieldname]],
       id = ns(id),
-      fieldname = fieldname
-    )
+      fieldname = fieldname)
 
     freezeReactiveValue(input, id)
 
@@ -374,7 +427,7 @@ filter_mod <- function(input, output, session, data_expr) {
     exprs <- lapply(names(filter_fields), function(name) {
       filter <- filter_fields[[name]]
       x <- as.symbol(name) #df[[name]]
-      param <- input[[filter[["inputId"]]]]
+      param <- input[[ filter[["inputId"]] ]]
       cond_expr <- filter[["filterExpr"]](x = x, param = param)
       if (!is.null(cond_expr)) {
         result_expr <<- expr(!!result_expr %>% filter(!!cond_expr))
@@ -405,15 +458,14 @@ createFilter.character <- function(data, id, fieldname) {
 
 createFilter.numeric <- function(data, id, fieldname) {
   list(
-    ui = sliderInput(
-      id,
-      fieldname,
-      min = min(data),
-      max = max(data),
-      value = range(data)
-    ),
+    ui = sliderInput(id, fieldname, min = min(data), max = max(data),
+      value = range(data)),
     filterExpr = function(x, param) {
-      expr(!!x >= !!param[1] & !!x <= !!param[2])
+      if (is.null(param) || length(param) == 0) {
+        NULL
+      } else {
+        expr(!!x >= !!param[1] & !!x <= !!param[2])
+      }
     }
   )
 }
@@ -430,11 +482,10 @@ createFilter.factor <- function(data, id, fieldname) {
   list(
     ui = inputControl,
     filterExpr = function(x, param) {
-      if (length(param) == 0) {
+      if (length(param) == 0)
         NULL
-      } else {
+      else
         expr(!!x %in% !!param)
-      }
     }
   )
 }
@@ -445,6 +496,10 @@ createFilter.POSIXt <- createFilter.numeric
 ### `select_module.R`
 
 ``` r
+library(shiny)
+library(dplyr)
+library(rlang)
+
 select_vars_ui <- function(id) {
   ns <- NS(id)
   tagList(
@@ -460,7 +515,7 @@ select_vars <- function(input, output, session, vars, data_expr) {
     selectInput(ns("vars"), "Variables to display", vars(), multiple = TRUE)
     #checkboxGroupInput(ns("vars"), "Variables", names(data), selected = names(data))
   })
-
+  
   reactive({
     if (length(input$vars) == 0) {
       data_expr()
@@ -474,6 +529,10 @@ select_vars <- function(input, output, session, vars, data_expr) {
 ### `summarize_module.R`
 
 ``` r
+library(shiny)
+library(dplyr)
+library(rlang)
+
 summarize_ui <- function(id) {
   ns <- NS(id)
   tagList(
@@ -484,36 +543,21 @@ summarize_ui <- function(id) {
 summarize_mod <- function(input, output, session, vars, data_expr) {
   output$summarize_ui <- renderUI({
     ns <- session$ns
-
+    
     tagList(
-      selectInput(
-        ns("group_by"),
-        "Group by",
-        choices = vars(),
-        multiple = TRUE
-      ),
-      selectInput(
-        ns("operation"),
-        "Summary operation",
-        c("mean", "sum", "count")
-      ),
-      selectInput(
-        ns("aggregate"),
-        "Summary value",
-        choices = vars(),
-        multiple = TRUE
-      )
+      selectInput(ns("group_by"), "Group by", choices = vars(), multiple = TRUE),
+      selectInput(ns("operation"), "Summary operation", c("mean", "sum", "count")),
+      selectInput(ns("aggregate"), "Summary value", choices = vars(), multiple = TRUE)
     )
   })
-
+  
   reactive({
     result_expr <- data_expr()
     if (length(input$group_by) > 0) {
       result_expr <- expr(!!result_expr %>% group_by(!!!syms(input$group_by)))
     }
     if (length(input$aggregate) > 0) {
-      op <- switch(
-        input$operation,
+      op <- switch(input$operation,
         mean = quote(mean),
         sum = quote(sum),
         count = quote(length)
@@ -532,6 +576,8 @@ summarize_mod <- function(input, output, session, vars, data_expr) {
 ### `utils.R`
 
 ``` r
+library(rlang)
+
 #' Evaluate an expression in a fresh environment
 #'
 #' Like eval_tidy, but with different defaults. By default, instead of running

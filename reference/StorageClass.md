@@ -3,6 +3,13 @@
 This class provides a set of methods to create and manage Shiny
 bookmarkable state files.
 
+## Details
+
+Session metadata is stored directly in each bookmark pin's metadata
+field rather than in a separate shared "sessions" pin. This approach
+eliminates race conditions from concurrent read-modify-write operations
+and leverages pins' built-in local caching for fast repeated reads.
+
 ## Public fields
 
 - `local_storage_dir`:
@@ -23,6 +30,8 @@ bookmarkable state files.
 - [`StorageClass$new()`](#method-StorageClass-new)
 
 - [`StorageClass$get_sessions()`](#method-StorageClass-get_sessions)
+
+- [`StorageClass$reactive_sessions()`](#method-StorageClass-reactive_sessions)
 
 - [`StorageClass$restore()`](#method-StorageClass-restore)
 
@@ -119,6 +128,54 @@ state session has been saved. Otherwise, the return object will be
 
     # obtain session data
     storage$get_sessions()
+    }
+
+------------------------------------------------------------------------
+
+### Method `reactive_sessions()`
+
+Create a reactive sessions data.frame for Shiny
+
+Returns a reactive expression that refreshes the sessions list when the
+provided trigger reactive changes. Useful for refreshing after saves or
+when a modal opens.
+
+#### Usage
+
+    StorageClass$reactive_sessions(trigger = NULL)
+
+#### Arguments
+
+- `trigger`:
+
+  A reactive expression that triggers refresh when changed.
+
+#### Returns
+
+A reactive expression returning sessions data.frame
+
+#### Examples
+
+    ## Only run examples in interactive R sessions
+    if (interactive()) {
+
+    library(shiny)
+    library(shinystate)
+
+    storage <- StorageClass$new()
+
+    server <- function(input, output, session) {
+      refresh_trigger <- reactiveVal(0)
+
+      session_df <- storage$reactive_sessions(
+        trigger = reactive(list(refresh_trigger(), input$show_load_modal))
+      )
+
+      observeEvent(input$save, {
+        storage$snapshot(session_metadata = list(name = input$save_name))
+        refresh_trigger(refresh_trigger() + 1)
+      })
+    }
     }
 
 ------------------------------------------------------------------------
@@ -325,6 +382,32 @@ storage <- StorageClass$new()
 
 # obtain session data
 storage$get_sessions()
+}
+
+## ------------------------------------------------
+## Method `StorageClass$reactive_sessions`
+## ------------------------------------------------
+
+## Only run examples in interactive R sessions
+if (interactive()) {
+
+library(shiny)
+library(shinystate)
+
+storage <- StorageClass$new()
+
+server <- function(input, output, session) {
+  refresh_trigger <- reactiveVal(0)
+
+  session_df <- storage$reactive_sessions(
+    trigger = reactive(list(refresh_trigger(), input$show_load_modal))
+  )
+
+  observeEvent(input$save, {
+    storage$snapshot(session_metadata = list(name = input$save_name))
+    refresh_trigger(refresh_trigger() + 1)
+  })
+}
 }
 
 ## ------------------------------------------------
