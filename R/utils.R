@@ -35,6 +35,21 @@ session_id_from_url <- function(url) {
   sub(".*\\?_state_id_=([a-zA-Z0-9]+).*", "\\1", url)
 }
 
+#' Set saving and loading interfaces for shiny bookmarking local storage
+#'
+#' The `saveInterfaceLocal` and `loadInterfaceLocal` functions provide
+#' implementations for saving and loading Shiny bookmark state to a
+#' local directory. These functions can be set as the saving and
+#' loading interfaces for Shiny bookmarking using
+#' `shiny::shinyOptions()`.. While these callback functions are
+#' set by default when initializing a new instance of `StorageClass`,
+#' certain Shiny application structures such as applications created
+#' with the `golem` R package require these callbacks to be defined
+#' as part of the `onStart` argument in `shiny::runApp()`.
+#'
+#' @param id character string for session ID.
+#' @param callback function to call with the path to save/load the bookmark state.
+#' @export
 saveInterfaceLocal <- function(id, callback) {
   root_dir <- file.path(shiny::getShinyOption("local_storage_dir"))
 
@@ -51,6 +66,8 @@ saveInterfaceLocal <- function(id, callback) {
   callback(stateDir)
 }
 
+#' @rdname saveInterfaceLocal
+#' @export
 loadInterfaceLocal <- function(id, callback) {
   root_dir <- file.path(shiny::getShinyOption("local_storage_dir"))
 
